@@ -9,20 +9,20 @@ OrderBookL2::OrderBookL2(SymbolId symbol, std::size_t initial_capacity)
     : symbol_(symbol),
       sides_{detail::LevelContainer{Side::Buy, initial_capacity},
              detail::LevelContainer{Side::Sell, initial_capacity}},
-      observers_() {
+      observers_(),
+      cached_tob_() {
+    // Initialize cached top-of-book
+    cached_tob_.symbol = symbol_;
 }
 
 void OrderBookL2::updateLevel(Side side, Price price, Quantity quantity, Timestamp timestamp) {
     SLICK_ASSERT(side < SideCount);
 
-    // Capture old top-of-book for change detection
-    const auto old_tob = getTopOfBook();
-
     if (quantity == 0) {
         // Delete level - only notify if it existed
         if (deleteLevel(side, price)) {
             notifyPriceLevelUpdate(side, price, 0, timestamp);
-            notifyTopOfBookIfChanged(old_tob, timestamp);
+            notifyTopOfBookIfChanged(timestamp);
         }
     } else {
         // Insert or update level
@@ -30,7 +30,7 @@ void OrderBookL2::updateLevel(Side side, Price price, Quantity quantity, Timesta
 
         // Notify observers
         notifyPriceLevelUpdate(side, price, quantity, timestamp);
-        notifyTopOfBookIfChanged(old_tob, timestamp);
+        notifyTopOfBookIfChanged(timestamp);
     }
 }
 
@@ -105,18 +105,32 @@ void OrderBookL2::notifyPriceLevelUpdate(Side side, Price price, Quantity quanti
     observers_.notifyPriceLevelUpdate(update);
 }
 
-void OrderBookL2::notifyTopOfBookIfChanged(const TopOfBook& old_tob, Timestamp timestamp) const {
-    auto new_tob = getTopOfBook();
+void OrderBookL2::notifyTopOfBookIfChanged(Timestamp timestamp) {
+    // Compute current top-of-book
+    const auto* bid = getBestBid();
+    const auto* ask = getBestAsk();
+
+    Price new_best_bid = bid ? bid->price : 0;
+    Quantity new_bid_qty = bid ? bid->quantity : 0;
+    Price new_best_ask = ask ? ask->price : 0;
+    Quantity new_ask_qty = ask ? ask->quantity : 0;
 
     // Check if best bid or ask changed
-    const bool bid_changed = (old_tob.best_bid != new_tob.best_bid) ||
-                            (old_tob.bid_quantity != new_tob.bid_quantity);
-    const bool ask_changed = (old_tob.best_ask != new_tob.best_ask) ||
-                            (old_tob.ask_quantity != new_tob.ask_quantity);
+    const bool bid_changed = (cached_tob_.best_bid != new_best_bid) ||
+                            (cached_tob_.bid_quantity != new_bid_qty);
+    const bool ask_changed = (cached_tob_.best_ask != new_best_ask) ||
+                            (cached_tob_.ask_quantity != new_ask_qty);
 
     if (bid_changed || ask_changed) {
-        new_tob.timestamp = timestamp;
-        observers_.notifyTopOfBookUpdate(new_tob);
+        // Update cached values
+        cached_tob_.best_bid = new_best_bid;
+        cached_tob_.bid_quantity = new_bid_qty;
+        cached_tob_.best_ask = new_best_ask;
+        cached_tob_.ask_quantity = new_ask_qty;
+        cached_tob_.timestamp = timestamp;
+
+        // Notify observers
+        observers_.notifyTopOfBookUpdate(cached_tob_);
     }
 }
 

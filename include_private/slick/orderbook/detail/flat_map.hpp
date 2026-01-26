@@ -4,25 +4,37 @@
 #pragma once
 
 #include <slick/orderbook/config.hpp>
-#include <flat_map>
+#include <version>
+
+// Check for C++23 flat_map support
+#if defined(__cpp_lib_flat_map)
+    #include <flat_map>
+    #define SLICK_HAS_FLAT_MAP 1
+#else
+    #include <map>
+    #define SLICK_HAS_FLAT_MAP 0
+#endif
 
 SLICK_DETAIL_NAMESPACE_BEGIN
 
-/// Alias for std::flat_map - cache-friendly associative container
+/// Cache-friendly sorted map
 ///
-/// std::flat_map (C++23) provides:
+/// Uses std::flat_map (C++23) if available, which provides:
 /// - Excellent cache locality (contiguous storage)
 /// - Fast iteration (sequential memory access)
 /// - Binary search for lookups (O(log n))
-/// - Better performance than std::map for typical orderbook sizes (< 100 elements)
 ///
-/// This is a thin alias to allow future customization if needed while
-/// keeping the codebase clean.
+/// Falls back to std::map on compilers without C++23 flat_map support.
 ///
 /// @tparam Key Key type (must be comparable)
 /// @tparam Value Value type
 /// @tparam Compare Comparison function (default: std::less<Key>)
+#if SLICK_HAS_FLAT_MAP
 template<typename Key, typename Value, typename Compare = std::less<Key>>
 using FlatMap = std::flat_map<Key, Value, Compare>;
+#else
+template<typename Key, typename Value, typename Compare = std::less<Key>>
+using FlatMap = std::map<Key, Value, Compare>;
+#endif
 
 SLICK_DETAIL_NAMESPACE_END

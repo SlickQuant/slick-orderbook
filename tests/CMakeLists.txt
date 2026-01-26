@@ -25,6 +25,7 @@ add_executable(slick_orderbook_tests
     unit/test_intrusive_list.cpp
     unit/test_memory_pool.cpp
     unit/test_orderbook_l2.cpp
+    unit/test_orderbook_l3.cpp
 )
 
 target_link_libraries(slick_orderbook_tests

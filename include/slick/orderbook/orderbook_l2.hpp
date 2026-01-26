@@ -128,11 +128,13 @@ private:
     void notifyPriceLevelUpdate(Side side, Price price, Quantity quantity, Timestamp timestamp) const;
 
     /// Notify observers of top-of-book update if best changed
-    void notifyTopOfBookIfChanged(const TopOfBook& old_tob, Timestamp timestamp) const;
+    /// Updates cached_tob_ after notification
+    void notifyTopOfBookIfChanged(Timestamp timestamp);
 
     SymbolId symbol_;                                                    // Symbol identifier
     std::array<detail::LevelContainer, SideCount> sides_;              // Bid and ask sides (indexed by Side enum)
     ObserverManager observers_;                                          // Observer notifications
+    TopOfBook cached_tob_;                                              // Cached top-of-book for efficient change detection
 };
 
 SLICK_NAMESPACE_END

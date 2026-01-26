@@ -51,16 +51,18 @@ struct OrderUpdate {
 
 /// Trade event - represents an executed trade
 struct Trade {
-    SymbolId symbol;        // Symbol identifier
-    Price price;            // Trade price
-    Quantity quantity;      // Trade quantity
-    Timestamp timestamp;    // Trade timestamp
-    Side aggressor_side;    // Side that initiated the trade (Buy = uptick, Sell = downtick)
+    SymbolId symbol;                // Symbol identifier
+    Price price;                    // Trade price
+    Quantity quantity;              // Trade quantity
+    Timestamp timestamp;            // Trade timestamp
+    OrderId aggressive_order_id;    // OrderId of the aggressive (incoming) order
+    OrderId passive_order_id;       // OrderId of the passive (resting) order
+    Side aggressor_side;            // Side that initiated the trade (Buy = uptick, Sell = downtick)
 
     Trade() noexcept = default;
 
-    Trade(SymbolId sym, Price p, Quantity q, Timestamp ts, Side aggressor) noexcept
-        : symbol(sym), price(p), quantity(q), timestamp(ts), aggressor_side(aggressor) {}
+    Trade(SymbolId sym, Price p, Quantity q, Timestamp ts, Side aggressor, OrderId passive = 0, OrderId aggressive = 0) noexcept
+        : symbol(sym), price(p), quantity(q), timestamp(ts), aggressive_order_id(aggressive), passive_order_id(passive), aggressor_side(aggressor) {}
 };
 
 /// Top-of-book snapshot - best bid and ask

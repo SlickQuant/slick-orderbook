@@ -11,7 +11,7 @@ option(SLICK_ORDERBOOK_HEADER_ONLY "Build as header-only library" OFF)
 option(SLICK_ORDERBOOK_BUILD_SHARED "Build shared library" OFF)
 option(SLICK_ORDERBOOK_BUILD_TESTS "Build tests" ON)
 option(SLICK_ORDERBOOK_BUILD_BENCHMARKS "Build benchmarks" OFF)
-option(SLICK_ORDERBOOK_BUILD_EXAMPLES "Build examples" OFF)
+option(SLICK_ORDERBOOK_BUILD_EXAMPLES "Build examples" ON)
 
 # Optimization flags
 if(NOT CMAKE_BUILD_TYPE)
@@ -29,6 +29,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
 elseif(MSVC)
     add_compile_options(
         /W4
+        /std:c++latest  # Enable C++23 features including flat_map
         $<$<CONFIG:Release>:/O2>
         $<$<CONFIG:Release>:/GL>  # Whole program optimization
     )
@@ -37,6 +38,7 @@ endif()
 # Source files for compiled library
 set(SLICK_ORDERBOOK_SOURCES
     src/core/orderbook_l2.cpp
+    src/core/orderbook_l3.cpp
 )
 
 # Header files
