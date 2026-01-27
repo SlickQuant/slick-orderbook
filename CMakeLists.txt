@@ -27,6 +27,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         $<$<CONFIG:Release>:-flto>
     )
 elseif(MSVC)
+    add_definitions(-D_WIN32_WINNT=0x0601)
     add_compile_options(
         /W4
         /std:c++latest  # Enable C++23 features including flat_map
