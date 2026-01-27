@@ -35,6 +35,15 @@ public:
     /// Called when top-of-book changes
     virtual void onTopOfBookUpdate([[maybe_unused]] const TopOfBook& tob) {
     }
+
+    /// Called when snapshot processing begins
+    /// Followed by multiple onPriceLevelUpdate() or onOrderUpdate() calls
+    virtual void onSnapshotBegin([[maybe_unused]] SymbolId symbol, [[maybe_unused]] Timestamp timestamp) {
+    }
+
+    /// Called when snapshot processing completes
+    virtual void onSnapshotEnd([[maybe_unused]] SymbolId symbol, [[maybe_unused]] Timestamp timestamp) {
+    }
 };
 
 /// Observer manager for notifying multiple observers
@@ -105,6 +114,20 @@ public:
     void notifyTopOfBookUpdate(const TopOfBook& tob) const {
         for (const auto& observer : observers_) {
             observer->onTopOfBookUpdate(tob);
+        }
+    }
+
+    /// Notify all observers that snapshot processing is beginning
+    void notifySnapshotBegin(SymbolId symbol, Timestamp timestamp) const {
+        for (const auto& observer : observers_) {
+            observer->onSnapshotBegin(symbol, timestamp);
+        }
+    }
+
+    /// Notify all observers that snapshot processing is complete
+    void notifySnapshotEnd(SymbolId symbol, Timestamp timestamp) const {
+        for (const auto& observer : observers_) {
+            observer->onSnapshotEnd(symbol, timestamp);
         }
     }
 

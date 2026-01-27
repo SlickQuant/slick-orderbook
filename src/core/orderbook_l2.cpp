@@ -19,17 +19,39 @@ void OrderBookL2::updateLevel(Side side, Price price, Quantity quantity, Timesta
     SLICK_ASSERT(side < SideCount);
 
     if (quantity == 0) {
-        // Delete level - only notify if it existed
-        if (deleteLevel(side, price)) {
-            notifyPriceLevelUpdate(side, price, 0, timestamp);
+        // Find level index before deletion
+        auto it = sides_[side].find(price);
+        if (it != sides_[side].end()) {
+            uint16_t level_idx = static_cast<uint16_t>(std::distance(sides_[side].begin(), it));
+
+            // Delete the level
+            sides_[side].erase(it);
+
+            // Notify with level_index and flags (deletion = both price and quantity changed)
+            PriceLevelUpdate update{symbol_, side, price, 0, timestamp, level_idx, PriceChanged | QuantityChanged};
+            observers_.notifyPriceLevelUpdate(update);
             notifyTopOfBookIfChanged(timestamp);
         }
     } else {
         // Insert or update level
-        sides_[side].insertOrUpdate(price, quantity, timestamp);
+        auto [it, inserted] = sides_[side].insertOrUpdate(price, quantity, timestamp);
+
+        // Calculate level index
+        uint16_t level_idx = static_cast<uint16_t>(std::distance(sides_[side].begin(), it));
+
+        // Determine change flags
+        uint8_t flags = 0;
+        if (inserted) {
+            // New level: both price and quantity changed
+            flags = PriceChanged | QuantityChanged;
+        } else {
+            // Existing level: only quantity changed
+            flags = QuantityChanged;
+        }
 
         // Notify observers
-        notifyPriceLevelUpdate(side, price, quantity, timestamp);
+        PriceLevelUpdate update{symbol_, side, price, quantity, timestamp, level_idx, flags};
+        observers_.notifyPriceLevelUpdate(update);
         notifyTopOfBookIfChanged(timestamp);
     }
 }
@@ -100,11 +122,6 @@ bool OrderBookL2::isEmpty() const noexcept {
     return sides_[Side::Buy].empty() && sides_[Side::Sell].empty();
 }
 
-void OrderBookL2::notifyPriceLevelUpdate(Side side, Price price, Quantity quantity, Timestamp timestamp) const {
-    PriceLevelUpdate update{symbol_, side, price, quantity, timestamp};
-    observers_.notifyPriceLevelUpdate(update);
-}
-
 void OrderBookL2::notifyTopOfBookIfChanged(Timestamp timestamp) {
     // Compute current top-of-book
     const auto* bid = getBestBid();
@@ -132,6 +149,44 @@ void OrderBookL2::notifyTopOfBookIfChanged(Timestamp timestamp) {
         // Notify observers
         observers_.notifyTopOfBookUpdate(cached_tob_);
     }
+}
+
+void OrderBookL2::emitSnapshot(Timestamp timestamp) {
+    // Notify snapshot begin
+    observers_.notifySnapshotBegin(symbol_, timestamp);
+
+    // Emit all bid levels
+    uint16_t level_idx = 0;
+    for (const auto& level : sides_[Side::Buy]) {
+        PriceLevelUpdate update{
+            symbol_,
+            Side::Buy,
+            level.price,
+            level.quantity,
+            timestamp,
+            level_idx++,
+            static_cast<uint8_t>(PriceChanged | QuantityChanged)
+        };
+        observers_.notifyPriceLevelUpdate(update);
+    }
+
+    // Emit all ask levels
+    level_idx = 0;
+    for (const auto& level : sides_[Side::Sell]) {
+        PriceLevelUpdate update{
+            symbol_,
+            Side::Sell,
+            level.price,
+            level.quantity,
+            timestamp,
+            level_idx++,
+            static_cast<uint8_t>(PriceChanged | QuantityChanged)
+        };
+        observers_.notifyPriceLevelUpdate(update);
+    }
+
+    // Notify snapshot end
+    observers_.notifySnapshotEnd(symbol_, timestamp);
 }
 
 SLICK_NAMESPACE_END

@@ -8,6 +8,12 @@
 
 SLICK_NAMESPACE_BEGIN
 
+/// Change flags for price level and order updates (regular enum for bitwise operations)
+enum PriceLevelChangeFlag : uint8_t {
+    PriceChanged = 0x01,    // Price level was added/moved
+    QuantityChanged = 0x02, // Quantity at level changed
+};
+
 /// Level 2 price level update event
 /// Note: quantity = 0 implies the price level should be deleted
 struct PriceLevelUpdate {
@@ -16,36 +22,75 @@ struct PriceLevelUpdate {
     Price price;            // Price level
     Quantity quantity;      // New total quantity at this level (0 = delete)
     Timestamp timestamp;    // Update timestamp
+    uint16_t level_index;   // 0-based index in sorted order (0 = best, 1 = second best, etc.)
+    uint8_t change_flags;   // Bitset of PriceLevelChangeFlag
 
     PriceLevelUpdate() noexcept = default;
 
-    PriceLevelUpdate(SymbolId sym, Side s, Price p, Quantity q, Timestamp ts) noexcept
-        : symbol(sym), side(s), price(p), quantity(q), timestamp(ts) {}
+    PriceLevelUpdate(SymbolId sym, Side s, Price p, Quantity q, Timestamp ts,
+                     uint16_t idx = 0, uint8_t flags = 0) noexcept
+        : symbol(sym), side(s), price(p), quantity(q), timestamp(ts),
+          level_index(idx), change_flags(flags) {}
 
     /// Check if this is a delete action
     [[nodiscard]] constexpr bool isDelete() const noexcept {
         return quantity == 0;
+    }
+
+    /// Check if price changed (level was added or moved)
+    [[nodiscard]] constexpr bool priceChanged() const noexcept {
+        return (change_flags & PriceChanged) != 0;
+    }
+
+    /// Check if quantity changed
+    [[nodiscard]] constexpr bool quantityChanged() const noexcept {
+        return (change_flags & QuantityChanged) != 0;
+    }
+
+    /// Check if this update affects the top N levels
+    [[nodiscard]] constexpr bool isTopN(uint16_t n) const noexcept {
+        return level_index < n;
     }
 };
 
 /// Level 3 order update event
 /// Note: quantity = 0 implies the order should be deleted
 struct OrderUpdate {
-    SymbolId symbol;        // Symbol identifier
-    OrderId order_id;       // Unique order identifier
-    Side side;              // Buy or Sell
-    Price price;            // Order price
-    Quantity quantity;      // Order quantity (0 = delete)
-    Timestamp timestamp;    // Update timestamp
+    SymbolId symbol;            // Symbol identifier
+    OrderId order_id;           // Unique order identifier
+    Side side;                  // Buy or Sell
+    Price price;                // Order price
+    Quantity quantity;          // Order quantity (0 = delete)
+    Timestamp timestamp;        // Update timestamp
+    uint16_t price_level_index; // Index of the price level this order belongs to
+    uint64_t priority;          // Order priority (typically timestamp or sequence number)
+    uint8_t change_flags;       // Bitset of PriceLevelChangeFlag
 
     OrderUpdate() noexcept = default;
 
-    OrderUpdate(SymbolId sym, OrderId id, Side s, Price p, Quantity q, Timestamp ts) noexcept
-        : symbol(sym), order_id(id), side(s), price(p), quantity(q), timestamp(ts) {}
+    OrderUpdate(SymbolId sym, OrderId id, Side s, Price p, Quantity q, Timestamp ts,
+                uint16_t idx = 0, uint64_t prio = 0, uint8_t flags = 0) noexcept
+        : symbol(sym), order_id(id), side(s), price(p), quantity(q), timestamp(ts),
+          price_level_index(idx), priority(prio), change_flags(flags) {}
 
     /// Check if this is a delete action
     [[nodiscard]] constexpr bool isDelete() const noexcept {
         return quantity == 0;
+    }
+
+    /// Check if price changed (order was added or moved to different price)
+    [[nodiscard]] constexpr bool priceChanged() const noexcept {
+        return (change_flags & PriceChanged) != 0;
+    }
+
+    /// Check if quantity changed
+    [[nodiscard]] constexpr bool quantityChanged() const noexcept {
+        return (change_flags & QuantityChanged) != 0;
+    }
+
+    /// Check if this order's price level is in the top N levels
+    [[nodiscard]] constexpr bool isTopN(uint16_t n) const noexcept {
+        return price_level_index < n;
     }
 };
 

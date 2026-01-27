@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: MIT
 
 #include <slick/orderbook/orderbook_l3.hpp>
+#include <limits>
 
 SLICK_NAMESPACE_BEGIN
 
@@ -47,7 +48,7 @@ bool OrderBookL3::addOrModifyOrder(OrderId order_id, Side side, Price price, Qua
     order = order_pool_.construct(order_id, price, quantity, side, timestamp, priority);
 
     // Get or create price level
-    detail::PriceLevelL3* level = getOrCreateLevel(side, price);
+    auto [level, level_idx, is_new] = getOrCreateLevel(side, price);
 
     // Insert order into level (maintains priority order)
     level->insertOrder(order);
@@ -55,9 +56,13 @@ bool OrderBookL3::addOrModifyOrder(OrderId order_id, Side side, Price price, Qua
     // Add to order map
     order_map_.insert(order);
 
-    // Notify observers
-    notifyOrderUpdate(order, 0, 0, timestamp);
-    notifyPriceLevelUpdate(side, price, level->getTotalQuantity(), timestamp);
+    // Notify observers (new order: both price and quantity changed)
+    notifyOrderUpdate(order, 0, 0, timestamp, level_idx, PriceChanged | QuantityChanged);
+    uint8_t level_change_flag = QuantityChanged;
+    if (is_new) {
+        level_change_flag |= PriceChanged;
+    }
+    notifyPriceLevelUpdate(side, price, level->getTotalQuantity(), timestamp, level_idx, level_change_flag);
     notifyTopOfBookIfChanged(timestamp);
 
     return true;
@@ -100,13 +105,19 @@ bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price, Quantity new_qu
 
     if (price_changed) {
         // Price changed - remove from old level (if exists) and add to new level
-        detail::PriceLevelL3* old_level = getLevel(side, old_price);
+        auto [old_level, old_level_idx] = getLevel(side, old_price);
         Quantity old_level_total = 0;
 
         if (old_level) {
             // Remove from old level
             old_level->removeOrder(order);
             old_level_total = old_level->getTotalQuantity();
+
+            uint8_t old_level_change_flags = QuantityChanged;
+            if (removeLevelIfEmpty(side, old_price)) {
+                old_level_change_flags |= PriceChanged;
+            }
+            notifyPriceLevelUpdate(side, old_price, old_level_total, timestamp, old_level_idx, old_level_change_flags);
         }
 
         // Update order fields
@@ -114,35 +125,40 @@ bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price, Quantity new_qu
         order->quantity = new_quantity;
 
         // Get or create new level
-        detail::PriceLevelL3* new_level = getOrCreateLevel(side, new_price);
+        auto [new_level, new_level_idx, is_new] = getOrCreateLevel(side, new_price);
 
         // Insert into new level
         new_level->insertOrder(order);
 
-        // Remove old level if empty
-        if (old_level) {
-            removeLevelIfEmpty(side, old_price);
+        // Notify observers (price changed: both price and quantity flags)
+        uint8_t flags = PriceChanged;
+        if (quantity_changed) {
+            flags |= QuantityChanged;
         }
-
-        // Notify observers
-        notifyOrderUpdate(order, old_quantity, old_price, timestamp);
-        if (old_level) {
-            notifyPriceLevelUpdate(side, old_price, old_level_total, timestamp);
+        
+        notifyOrderUpdate(order, old_quantity, old_price, timestamp, new_level_idx, flags);
+        uint8_t new_level_change_flags = QuantityChanged;
+        if (is_new) {
+            new_level_change_flags |= PriceChanged;
         }
-        notifyPriceLevelUpdate(side, new_price, new_level->getTotalQuantity(), timestamp);
+        notifyPriceLevelUpdate(side, new_price, new_level->getTotalQuantity(), timestamp, new_level_idx, new_level_change_flags);
         notifyTopOfBookIfChanged(timestamp);
 
     } else {
         // Only quantity changed
-        detail::PriceLevelL3* level = getOrCreateLevel(side, old_price);
+        auto [level, level_index, is_new] = getOrCreateLevel(side, old_price);
 
         // Update quantity
         level->updateOrderQuantity(old_quantity, new_quantity);
         order->quantity = new_quantity;
 
-        // Notify observers
-        notifyOrderUpdate(order, old_quantity, old_price, timestamp);
-        notifyPriceLevelUpdate(side, old_price, level->getTotalQuantity(), timestamp);
+        // Notify observers (only quantity changed)
+        notifyOrderUpdate(order, old_quantity, old_price, timestamp, level_index, QuantityChanged);
+        uint8_t level_change_flags = QuantityChanged;
+        if (is_new) [[unlikely]] {
+            level_change_flags |= PriceChanged;
+        }
+        notifyPriceLevelUpdate(side, old_price, level->getTotalQuantity(), timestamp, level_index, level_change_flags);
         notifyTopOfBookIfChanged(timestamp);
     }
 
@@ -161,11 +177,11 @@ bool OrderBookL3::deleteOrder(OrderId order_id) noexcept {
     const Side side = order->side;
 
     // Get level
-    detail::PriceLevelL3* level = getLevel(side, price);
+    auto [level, level_idx] = getLevel(side, price);
     if (!level) {
         // Level doesn't exist - data structure inconsistency
-        // Notify deletion, then clean up
-        notifyOrderDelete(order, timestamp);
+        // Notify deletion, then clean up (use max index since level not found)
+        notifyOrderDelete(order, timestamp, std::numeric_limits<uint16_t>::max());
         order_map_.erase(order_id);
         order_pool_.destroy(order);
         return false;
@@ -179,11 +195,13 @@ bool OrderBookL3::deleteOrder(OrderId order_id) noexcept {
     order_map_.erase(order_id);
 
     // Notify observers (before destroying order)
-    notifyOrderDelete(order, timestamp);
-    notifyPriceLevelUpdate(side, price, level_total, timestamp);
+    notifyOrderDelete(order, timestamp, level_idx);
 
-    // Remove level if empty
-    removeLevelIfEmpty(side, price);
+    uint8_t level_change_flags = QuantityChanged;
+    if (removeLevelIfEmpty(side, price)) {
+        level_change_flags |= PriceChanged;
+    }
+    notifyPriceLevelUpdate(side, price, level_total, timestamp, level_idx, level_change_flags);
 
     // Destroy order
     order_pool_.destroy(order);
@@ -299,16 +317,26 @@ std::vector<detail::PriceLevelL2> OrderBookL3::getLevelsL2(Side side, std::size_
     return result;
 }
 
-const detail::PriceLevelL3* OrderBookL3::getLevel(Side side, Price price) const noexcept {
+std::pair<const detail::PriceLevelL3*, uint16_t> OrderBookL3::getLevel(Side side, Price price) const noexcept {
     SLICK_ASSERT(side < SideCount);
-    auto it = levels_[side].find(price);
-    return (it != levels_[side].end()) ? &it->second : nullptr;
+    const auto& level_map = levels_[side];
+    auto it = level_map.find(price);
+    if (it != level_map.end()) {
+        uint16_t index = static_cast<uint16_t>(std::distance(level_map.begin(), it));
+        return {&it->second, index};
+    }
+    return {nullptr, std::numeric_limits<uint16_t>::max()};
 }
 
-detail::PriceLevelL3* OrderBookL3::getLevel(Side side, Price price) noexcept {
+std::pair<detail::PriceLevelL3*, uint16_t> OrderBookL3::getLevel(Side side, Price price) noexcept {
     SLICK_ASSERT(side < SideCount);
-    auto it = levels_[side].find(price);
-    return (it != levels_[side].end()) ? &it->second : nullptr;
+    auto& level_map = levels_[side];
+    auto it = level_map.find(price);
+    if (it != level_map.end()) {
+        uint16_t index = static_cast<uint16_t>(std::distance(level_map.begin(), it));
+        return {&it->second, index};
+    }
+    return {nullptr, std::numeric_limits<uint16_t>::max()};
 }
 
 std::size_t OrderBookL3::levelCount(Side side) const noexcept {
@@ -355,23 +383,25 @@ void OrderBookL3::clear() noexcept {
     clearSide(Side::Sell);
 }
 
-detail::PriceLevelL3* OrderBookL3::getOrCreateLevel(Side side, Price price) {
+std::tuple<detail::PriceLevelL3*, uint16_t, bool> OrderBookL3::getOrCreateLevel(Side side, Price price) {
     SLICK_ASSERT(side < SideCount);
 
     auto& level_map = levels_[side];
     auto it = level_map.find(price);
 
     if (it != level_map.end()) {
-        return &it->second;
+        uint16_t index = static_cast<uint16_t>(std::distance(level_map.begin(), it));
+        return {&it->second, index, false};
     }
 
     // Create new level
     auto [new_it, inserted] = level_map.emplace(price, detail::PriceLevelL3{price});
     SLICK_ASSERT(inserted);
-    return &new_it->second;
+    uint16_t index = static_cast<uint16_t>(std::distance(level_map.begin(), new_it));
+    return {&new_it->second, index, true};
 }
 
-void OrderBookL3::removeLevelIfEmpty(Side side, Price price) noexcept {
+bool OrderBookL3::removeLevelIfEmpty(Side side, Price price) noexcept {
     SLICK_ASSERT(side < SideCount);
 
     auto& level_map = levels_[side];
@@ -379,30 +409,55 @@ void OrderBookL3::removeLevelIfEmpty(Side side, Price price) noexcept {
 
     if (it != level_map.end() && it->second.isEmpty()) {
         level_map.erase(it);
+        return true;
     }
+    return false;
+}
+
+uint16_t OrderBookL3::calculateLevelIndex(Side side, Price price) const noexcept {
+    SLICK_ASSERT(side < SideCount);
+    const auto& level_map = levels_[side];
+
+    // Find the price level using lower_bound
+    auto it = level_map.lower_bound(price);
+
+    // If exact match, calculate its index
+    if (it != level_map.end() && it->first == price) {
+        return static_cast<uint16_t>(std::distance(level_map.begin(), it));
+    }
+
+    // Price not found - return the index where it would be inserted
+    return static_cast<uint16_t>(std::distance(level_map.begin(), it));
 }
 
 void OrderBookL3::notifyOrderUpdate(const detail::Order* order, [[maybe_unused]] Quantity old_quantity,
-                                    [[maybe_unused]] Price old_price, Timestamp timestamp) const {
+                                    [[maybe_unused]] Price old_price, Timestamp timestamp,
+                                    uint16_t level_index, uint8_t change_flags) const {
     OrderUpdate update{
         symbol_,
         order->order_id,
         order->side,
         order->price,
         order->quantity,
-        timestamp
+        timestamp,
+        level_index,
+        order->priority,
+        change_flags
     };
     observers_.notifyOrderUpdate(update);
 }
 
-void OrderBookL3::notifyOrderDelete(const detail::Order* order, Timestamp timestamp) const {
+void OrderBookL3::notifyOrderDelete(const detail::Order* order, Timestamp timestamp, uint16_t level_index) const {
     OrderUpdate update{
         symbol_,
         order->order_id,
         order->side,
         order->price,
         0,  // quantity = 0 means delete
-        timestamp
+        timestamp,
+        level_index,
+        order->priority,
+        static_cast<uint8_t>(PriceChanged | QuantityChanged)  // Deletion = both changed
     };
     observers_.notifyOrderUpdate(update);
 }
@@ -423,13 +478,16 @@ void OrderBookL3::notifyTrade(OrderId passive_order_id, OrderId aggressive_order
 }
 
 void OrderBookL3::notifyPriceLevelUpdate(Side side, Price price, Quantity total_quantity,
-                                         Timestamp timestamp) const {
+                                         Timestamp timestamp, uint16_t level_index,
+                                         uint8_t change_flags) const {
     PriceLevelUpdate update{
         symbol_,
         side,
         price,
         total_quantity,
-        timestamp
+        timestamp,
+        level_index,
+        change_flags
     };
     observers_.notifyPriceLevelUpdate(update);
 }

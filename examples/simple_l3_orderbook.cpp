@@ -74,7 +74,7 @@ void printOrderBook(const OrderBookL3& book) {
 }
 
 void printOrdersAtPrice(const OrderBookL3& book, Side side, Price price) {
-    const auto* level = book.getLevel(side, price);
+    const auto [level, level_index] = book.getLevel(side, price);
     if (!level) {
         std::cout << "No orders at " << (side == Side::Buy ? "bid" : "ask")
                   << " price " << price << "\n\n";

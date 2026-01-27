@@ -123,10 +123,13 @@ public:
         return observers_.observerCount();
     }
 
-private:
-    /// Notify observers of price level update
-    void notifyPriceLevelUpdate(Side side, Price price, Quantity quantity, Timestamp timestamp) const;
+    /// Emit complete orderbook snapshot to observers
+    /// Useful for replaying full book state to a new observer
+    /// Calls onSnapshotBegin(), followed by onPriceLevelUpdate() for each level, then onSnapshotEnd()
+    /// @param timestamp Snapshot timestamp
+    void emitSnapshot(Timestamp timestamp);
 
+private:
     /// Notify observers of top-of-book update if best changed
     /// Updates cached_tob_ after notification
     void notifyTopOfBookIfChanged(Timestamp timestamp);

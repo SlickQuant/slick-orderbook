@@ -16,6 +16,7 @@
 #include <memory>
 #include <vector>
 #include <array>
+#include <tuple>
 
 SLICK_NAMESPACE_BEGIN
 
@@ -165,10 +166,10 @@ public:
     /// Access the orders at this price via level->orders (IntrusiveList)
     /// @param side Buy or Sell
     /// @param price Price level
-    /// @return Pointer to L3 price level, or nullptr if not found
-    [[nodiscard]] const detail::PriceLevelL3* getLevel(Side side, Price price) const noexcept;
+    /// @return Pair of pointer to L3 price level (or nullptr if not found) and level index
+    [[nodiscard]] std::pair<const detail::PriceLevelL3*, uint16_t> getLevel(Side side, Price price) const noexcept;
 
-    [[nodiscard]] detail::PriceLevelL3* getLevel(Side side, Price price) noexcept;
+    [[nodiscard]] std::pair<detail::PriceLevelL3*, uint16_t> getLevel(Side side, Price price) noexcept;
 
     /// Get number of price levels on a side
     /// @param side Buy or Sell
@@ -217,25 +218,35 @@ public:
         return observers_.observerCount();
     }
 
+    /// Emit complete orderbook snapshot to observers (L3 MBO)
+    /// Useful for replaying full book state to a new observer
+    /// Calls onSnapshotBegin(), followed by onOrderUpdate() for each order, then onSnapshotEnd()
+    /// @param timestamp Snapshot timestamp
+    void emitSnapshot(Timestamp timestamp);
+
 private:
-    /// Get or create price level
-    detail::PriceLevelL3* getOrCreateLevel(Side side, Price price);
+    /// Get or create price level, returns pointer, index and if new level created
+    std::tuple<detail::PriceLevelL3*, uint16_t, bool> getOrCreateLevel(Side side, Price price);
 
     /// Remove price level if empty
-    void removeLevelIfEmpty(Side side, Price price) noexcept;
+    bool removeLevelIfEmpty(Side side, Price price) noexcept;
 
-    /// Notify observers of order update
-    void notifyOrderUpdate(const detail::Order* order, Quantity old_quantity, Price old_price, Timestamp timestamp) const;
+    /// Notify observers of order update with level index and change flags
+    void notifyOrderUpdate(const detail::Order* order, Quantity old_quantity, Price old_price,
+                          Timestamp timestamp, uint16_t level_index, uint8_t change_flags) const;
 
-    /// Notify observers of order delete
-    void notifyOrderDelete(const detail::Order* order, Timestamp timestamp) const;
+    /// Notify observers of order delete with level index
+    void notifyOrderDelete(const detail::Order* order, Timestamp timestamp, uint16_t level_index) const;
+
+    /// Calculate price level index for a given side and price
+    [[nodiscard]] uint16_t calculateLevelIndex(Side side, Price price) const noexcept;
 
     /// Notify observers of trade
     void notifyTrade(OrderId passive_order_id, OrderId aggressive_order_id,
                      Side aggressor_side, Price price, Quantity quantity, Timestamp timestamp) const;
 
     /// Notify observers of price level update (L2 aggregated view)
-    void notifyPriceLevelUpdate(Side side, Price price, Quantity total_quantity, Timestamp timestamp) const;
+    void notifyPriceLevelUpdate(Side side, Price price, Quantity total_quantity,  Timestamp timestamp, uint16_t level_index, uint8_t change_flags) const;
 
     /// Notify observers of top-of-book update if best changed
     /// Updates cached_tob_ after notification

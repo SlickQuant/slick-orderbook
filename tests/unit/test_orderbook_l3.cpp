@@ -223,11 +223,11 @@ TEST_F(OrderBookL3Test, ModifyOrderPrice) {
     EXPECT_EQ(order->price, kPrice101);
 
     // Old level should be gone
-    const auto* old_level = book.getLevel(Side::Buy, kPrice100);
+    const auto *old_level = book.getLevel(Side::Buy, kPrice100).first;
     EXPECT_EQ(old_level, nullptr);
 
     // New level should exist
-    const auto* new_level = book.getLevel(Side::Buy, kPrice101);
+    const auto *new_level = book.getLevel(Side::Buy, kPrice101).first;
     ASSERT_NE(new_level, nullptr);
     EXPECT_EQ(new_level->getTotalQuantity(), kQty10);
 }
@@ -243,7 +243,7 @@ TEST_F(OrderBookL3Test, ModifyOrderPriceAndQuantity) {
     EXPECT_EQ(order->price, kPrice101);
     EXPECT_EQ(order->quantity, kQty20);
 
-    const auto* new_level = book.getLevel(Side::Buy, kPrice101);
+    const auto *new_level = book.getLevel(Side::Buy, kPrice101).first;
     ASSERT_NE(new_level, nullptr);
     EXPECT_EQ(new_level->getTotalQuantity(), kQty20);
 }
@@ -321,7 +321,7 @@ TEST_F(OrderBookL3Test, DeleteLastOrderRemovesLevel) {
     EXPECT_TRUE(book.deleteOrder(kOrder1));
 
     EXPECT_EQ(book.levelCount(Side::Buy), 0);
-    EXPECT_EQ(book.getLevel(Side::Buy, kPrice100), nullptr);
+    EXPECT_EQ(book.getLevel(Side::Buy, kPrice100).first, nullptr);
 }
 
 // ============================================================================
@@ -513,7 +513,7 @@ TEST_F(OrderBookL3Test, GetLevelByPrice) {
 
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
 
-    const auto* level = book.getLevel(Side::Buy, kPrice100);
+    const auto* level = book.getLevel(Side::Buy, kPrice100).first;
     ASSERT_NE(level, nullptr);
     EXPECT_EQ(level->price, kPrice100);
     EXPECT_EQ(level->getTotalQuantity(), kQty10);
@@ -522,7 +522,7 @@ TEST_F(OrderBookL3Test, GetLevelByPrice) {
 TEST_F(OrderBookL3Test, GetNonExistentLevel) {
     OrderBookL3 book(kSymbol);
 
-    const auto* level = book.getLevel(Side::Buy, kPrice100);
+    const auto* level = book.getLevel(Side::Buy, kPrice100).first;
     EXPECT_EQ(level, nullptr);
 }
 
@@ -533,7 +533,7 @@ TEST_F(OrderBookL3Test, IterateOrdersAtLevel) {
     EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice100, kQty20, kTs2, kPriority1));
     EXPECT_TRUE(book.addOrder(kOrder3, Side::Buy, kPrice100, kQty30, kTs3, kPriority3));
 
-    const auto* level = book.getLevel(Side::Buy, kPrice100);
+    const auto* level = book.getLevel(Side::Buy, kPrice100).first;
     ASSERT_NE(level, nullptr);
 
     // Iterate through orders (should be in priority order)
