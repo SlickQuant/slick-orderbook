@@ -35,23 +35,29 @@ target_include_directories(simple_l3_orderbook
         ${CMAKE_SOURCE_DIR}/include_private
 )
 
+# Multi-Symbol OrderBook Example
+add_executable(multi_symbol_orderbook
+    multi_symbol_orderbook.cpp
+)
+
+target_link_libraries(multi_symbol_orderbook
+    PRIVATE
+        slick::orderbook
+)
+
+target_include_directories(multi_symbol_orderbook
+    PRIVATE
+        ${CMAKE_SOURCE_DIR}/include
+        ${CMAKE_SOURCE_DIR}/include_private
+)
+
 # Set output directory for examples
-set_target_properties(simple_l2_orderbook simple_l2_orderbook
+set_target_properties(simple_l2_orderbook simple_l3_orderbook multi_symbol_orderbook
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples
 )
 
 # # Install examples (optional)
-# install(TARGETS simple_l2_orderbook simple_l2_orderbook
-#     RUNTIME DESTINATION examples
-# )
-
-set_target_properties(simple_l3_orderbook simple_l3_orderbook
-    PROPERTIES
-    RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples
-)
-
-# # Install examples (optional)
-# install(TARGETS simple_l3_orderbook simple_l3_orderbook
+# install(TARGETS simple_l2_orderbook simple_l3_orderbook multi_symbol_orderbook
 #     RUNTIME DESTINATION examples
 # )

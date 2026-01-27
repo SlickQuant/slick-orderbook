@@ -134,11 +134,11 @@ int main() {
 
     // Get best bid and ask
     std::cout << "=== Best Bid/Ask Details ===\n";
-    const auto* best_bid = book.getBestBid();
-    if (best_bid) {
-        std::cout << "Best Bid: Price=" << best_bid->price
-                  << " Qty=" << best_bid->quantity
-                  << " Timestamp=" << best_bid->timestamp << "\n";
+    const auto* bid = book.getBestBid();
+    if (bid) {
+        std::cout << "Best Bid: Price=" << bid->price
+                  << " Qty=" << bid->quantity
+                  << " Timestamp=" << bid->timestamp << "\n";
     }
 
     const auto* best_ask = book.getBestAsk();

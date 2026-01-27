@@ -39,6 +39,7 @@ endif()
 set(SLICK_ORDERBOOK_SOURCES
     src/core/orderbook_l2.cpp
     src/core/orderbook_l3.cpp
+    src/core/orderbook_manager.cpp
 )
 
 # Header files
