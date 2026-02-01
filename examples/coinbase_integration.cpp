@@ -46,6 +46,9 @@ public:
         // 1. Not in snapshot (avoid printing during snapshot load)
         // 2. Update affects top 10 levels
         if (!in_snapshot_ && update.isTopN(TOP_N_LEVELS)) {
+            if (update.change_flags == 0) {
+                std::cout << "!!!! UNCHANGED UPDATE" << std::endl;
+            }
             printTopLevels();
         }
     }
@@ -190,11 +193,11 @@ public:
             auto side = toSide(update.side);
             auto price = toPrice(update.price_level);
             auto qty = toQuantity(update.new_quantity);
-            auto ts = toTimestamp(update.event_time);
+            // auto ts = toTimestamp(update.event_time);
 
             // Quantity of 0 means delete the level
             // Observer will be notified with level_index and change_flags
-            orderbook_.updateLevel(side, price, qty, ts);
+            orderbook_.updateLevel(side, price, qty, update.event_time);
         }
     }
 

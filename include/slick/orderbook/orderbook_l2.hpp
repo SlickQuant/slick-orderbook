@@ -141,3 +141,9 @@ private:
 };
 
 SLICK_NAMESPACE_END
+
+// Include implementation for header-only mode
+#ifdef SLICK_ORDERBOOK_HEADER_ONLY
+#include <slick/orderbook/detail/impl/orderbook_l2_impl.hpp>
+#endif
+

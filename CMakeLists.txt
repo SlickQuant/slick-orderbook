@@ -53,7 +53,6 @@ set(SLICK_ORDERBOOK_HEADERS
     include/slick/orderbook/orderbook_l2.hpp
     include/slick/orderbook/orderbook_l3.hpp
     include/slick/orderbook/orderbook_manager.hpp
-    include/slick/orderbook/feed_adapter.hpp
     include/slick/orderbook/orderbook.hpp
 )
 

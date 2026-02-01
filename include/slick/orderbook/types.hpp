@@ -23,7 +23,7 @@ using Quantity = int64_t;
 using OrderId = uint64_t;
 
 /// Symbol identifier - can be hash or sequential ID
-using SymbolId = uint32_t;
+using SymbolId = uint16_t;
 
 /// Timestamp in nanoseconds since epoch
 using Timestamp = uint64_t;

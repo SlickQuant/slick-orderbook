@@ -54,36 +54,6 @@ struct PriceLevelL2 {
     }
 };
 
-/// Comparator for sorting bid levels (descending price)
-struct BidComparator {
-    [[nodiscard]] constexpr bool operator()(const PriceLevelL2& a, const PriceLevelL2& b) const noexcept {
-        return a.price > b.price;  // Descending: highest bid first
-    }
-
-    [[nodiscard]] constexpr bool operator()(Price a, const PriceLevelL2& b) const noexcept {
-        return a > b.price;
-    }
-
-    [[nodiscard]] constexpr bool operator()(const PriceLevelL2& a, Price b) const noexcept {
-        return a.price > b;
-    }
-};
-
-/// Comparator for sorting ask levels (ascending price)
-struct AskComparator {
-    [[nodiscard]] constexpr bool operator()(const PriceLevelL2& a, const PriceLevelL2& b) const noexcept {
-        return a.price < b.price;  // Ascending: lowest ask first
-    }
-
-    [[nodiscard]] constexpr bool operator()(Price a, const PriceLevelL2& b) const noexcept {
-        return a < b.price;
-    }
-
-    [[nodiscard]] constexpr bool operator()(const PriceLevelL2& a, Price b) const noexcept {
-        return a.price < b;
-    }
-};
-
 /// Price level for Level 3 orderbook (order-by-order)
 /// Maintains a queue of individual orders at this price level
 struct PriceLevelL3 {
@@ -161,6 +131,68 @@ struct PriceLevelL3 {
 
     [[nodiscard]] constexpr bool operator>(const PriceLevelL3& other) const noexcept {
         return price > other.price;
+    }
+};
+
+/// Comparator for sorting bid levels (descending price)
+struct BidComparator {
+    [[nodiscard]] constexpr bool operator()(const PriceLevelL2& a, const PriceLevelL2& b) const noexcept {
+        return a.price > b.price;  // Descending: highest bid first
+    }
+
+    [[nodiscard]] constexpr bool operator()(Price a, const PriceLevelL2& b) const noexcept {
+        return a > b.price;
+    }
+
+    [[nodiscard]] constexpr bool operator()(const PriceLevelL2& a, Price b) const noexcept {
+        return a.price > b;
+    }
+
+    [[nodiscard]] constexpr bool operator()(const PriceLevelL3& a, const PriceLevelL3& b) const noexcept {
+        return a.price > b.price;   // Descending: highest bid first
+    }
+
+    [[nodiscard]] constexpr bool operator()(Price a, const PriceLevelL3& b) const noexcept {
+        return a > b.price;
+    }
+
+    [[nodiscard]] constexpr bool operator()(const PriceLevelL3& a, Price b) const noexcept {
+        return a.price > b;
+    }
+
+    [[nodiscard]] constexpr bool operator()(Price a, Price b) const noexcept {
+        return a > b;
+    }
+};
+
+/// Comparator for sorting ask levels (ascending price)
+struct AskComparator {
+    [[nodiscard]] constexpr bool operator()(const PriceLevelL2& a, const PriceLevelL2& b) const noexcept {
+        return a.price < b.price;  // Ascending: lowest ask first
+    }
+
+    [[nodiscard]] constexpr bool operator()(Price a, const PriceLevelL2& b) const noexcept {
+        return a < b.price;
+    }
+
+    [[nodiscard]] constexpr bool operator()(const PriceLevelL2& a, Price b) const noexcept {
+        return a.price < b;
+    }
+
+    [[nodiscard]] constexpr bool operator()(const PriceLevelL3& a, const PriceLevelL3& b) const noexcept {
+        return a.price < b.price;  // Ascending: lowest ask first
+    }
+
+    [[nodiscard]] constexpr bool operator()(Price a, const PriceLevelL3& b) const noexcept {
+        return a < b.price;
+    }
+
+    [[nodiscard]] constexpr bool operator()(const PriceLevelL3& a, Price b) const noexcept {
+        return a.price < b;
+    }
+
+    [[nodiscard]] constexpr bool operator()(Price a, Price b) const noexcept {
+        return a < b;
     }
 };
 

@@ -14,9 +14,11 @@
 #include <slick/orderbook/detail/flat_map.hpp>
 #include <slick/orderbook/detail/intrusive_list.hpp>
 #include <memory>
+#include <algorithm>
 #include <vector>
 #include <array>
 #include <tuple>
+#include <functional>
 
 SLICK_NAMESPACE_BEGIN
 
@@ -55,7 +57,20 @@ SLICK_NAMESPACE_BEGIN
 /// @endcode
 class OrderBookL3 {
 public:
-    using PriceLevelMap = detail::FlatMap<Price, detail::PriceLevelL3>;
+    struct PriceComparator {
+        using Comparator = std::function<bool(Price, Price)>;
+        Comparator compare_;
+        explicit PriceComparator(Side side)
+            : compare_(side == Side::Buy
+                ? Comparator{detail::BidComparator{}}
+                : Comparator{detail::AskComparator{}}
+            )
+        {}
+        bool operator()(Price a, Price b) const noexcept {
+            return compare_(a, b);
+        }
+    };
+    using PriceLevelMap = detail::FlatMap<Price, detail::PriceLevelL3, PriceComparator>;
 
     /// Constructor
     /// @param symbol Symbol identifier
@@ -261,3 +276,9 @@ private:
 };
 
 SLICK_NAMESPACE_END
+
+// Include implementation for header-only mode
+#ifdef SLICK_ORDERBOOK_HEADER_ONLY
+#include <slick/orderbook/detail/impl/orderbook_l3_impl.hpp>
+#endif
+

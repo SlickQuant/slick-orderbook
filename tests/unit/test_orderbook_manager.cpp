@@ -322,17 +322,17 @@ TEST_F(OrderBookManagerL2Test, ConcurrentGetOrCreate) {
 
 TEST_F(OrderBookManagerL3Test, ConcurrentDifferentSymbols) {
     OrderBookManager<OrderBookL3> manager;
-    constexpr int kNumThreads = 4;
-    constexpr int kSymbolsPerThread = 25;
+    constexpr int16_t kNumThreads = 4;
+    constexpr int16_t kSymbolsPerThread = 25;
     constexpr int kOrdersPerSymbol = 100;
 
     // Each thread creates its own symbols and adds orders
     std::vector<std::thread> threads;
 
-    for (int t = 0; t < kNumThreads; ++t) {
+    for (int16_t t = 0; t < kNumThreads; ++t) {
         threads.emplace_back([&manager, t]() {
             SymbolId base_symbol = t * kSymbolsPerThread + 1;
-            for (int s = 0; s < kSymbolsPerThread; ++s) {
+            for (int16_t s = 0; s < kSymbolsPerThread; ++s) {
                 SymbolId symbol = base_symbol + s;
                 auto* book = manager.getOrCreateOrderBook(symbol);
 
@@ -354,9 +354,9 @@ TEST_F(OrderBookManagerL3Test, ConcurrentDifferentSymbols) {
     EXPECT_EQ(manager.symbolCount(), kNumThreads * kSymbolsPerThread);
 
     // Verify: each orderbook has correct number of orders
-    for (int t = 0; t < kNumThreads; ++t) {
+    for (int16_t t = 0; t < kNumThreads; ++t) {
         SymbolId base_symbol = t * kSymbolsPerThread + 1;
-        for (int s = 0; s < kSymbolsPerThread; ++s) {
+        for (int16_t s = 0; s < kSymbolsPerThread; ++s) {
             SymbolId symbol = base_symbol + s;
             auto* book = manager.getOrderBook(symbol);
             ASSERT_NE(book, nullptr);

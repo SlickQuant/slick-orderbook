@@ -259,6 +259,25 @@ TEST_F(OrderBookL3Test, ModifyOrderToZeroQuantityDeletes) {
     EXPECT_EQ(book.findOrder(kOrder1), nullptr);
 }
 
+TEST_F(OrderBookL3Test, AddOrModifyZeroQuantityDeletes) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
+    EXPECT_TRUE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice100, 0, kTs2));
+
+    EXPECT_EQ(book.orderCount(), 0);
+    EXPECT_TRUE(book.isEmpty());
+    EXPECT_EQ(book.findOrder(kOrder1), nullptr);
+}
+
+TEST_F(OrderBookL3Test, AddOrModifyZeroQuantityNonExistentReturnsFalse) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_FALSE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice100, 0, kTs1));
+    EXPECT_EQ(book.orderCount(), 0);
+    EXPECT_TRUE(book.isEmpty());
+}
+
 TEST_F(OrderBookL3Test, ModifyNonExistentOrder) {
     OrderBookL3 book(kSymbol);
 
@@ -617,6 +636,26 @@ public:
     }
 };
 
+class SnapshotObserver : public IOrderBookObserver {
+public:
+    int snapshot_begin_count = 0;
+    int snapshot_end_count = 0;
+    int order_update_count = 0;
+
+    void onSnapshotBegin([[maybe_unused]] SymbolId symbol, [[maybe_unused]] Timestamp timestamp) override {
+        ++snapshot_begin_count;
+    }
+
+    void onSnapshotEnd([[maybe_unused]] SymbolId symbol, [[maybe_unused]] Timestamp timestamp) override {
+        ++snapshot_end_count;
+    }
+
+    void onOrderUpdate(const OrderUpdate& update) override {
+        (void)update;
+        ++order_update_count;
+    }
+};
+
 TEST_F(OrderBookL3Test, ObserverAddOrder) {
     OrderBookL3 book(kSymbol);
     auto observer = std::make_shared<TestObserver>();
@@ -664,4 +703,32 @@ TEST_F(OrderBookL3Test, ObserverDeleteOrder) {
 
     EXPECT_EQ(observer->order_update_count, 1);
     EXPECT_EQ(observer->last_order_update.quantity, 0);  // Quantity=0 means delete
+}
+
+TEST_F(OrderBookL3Test, EmitSnapshotEmitsAllOrders) {
+    OrderBookL3 book(kSymbol);
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Sell, kPrice101, kQty20, kTs2));
+    EXPECT_TRUE(book.addOrder(kOrder3, Side::Buy, kPrice99, kQty30, kTs3));
+
+    auto observer = std::make_shared<SnapshotObserver>();
+    book.addObserver(observer);
+
+    book.emitSnapshot(kTs4);
+
+    EXPECT_EQ(observer->snapshot_begin_count, 1);
+    EXPECT_EQ(observer->snapshot_end_count, 1);
+    EXPECT_EQ(observer->order_update_count, 3);
+}
+
+TEST_F(OrderBookL3Test, OrderUpdateLevelIndexBestBidIsZero) {
+    OrderBookL3 book(kSymbol);
+    auto observer = std::make_shared<TestObserver>();
+    book.addObserver(observer);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice101, kQty20, kTs2));
+
+    EXPECT_EQ(observer->last_order_update.order_id, kOrder2);
+    EXPECT_EQ(observer->last_order_update.price_level_index, 0);
 }
