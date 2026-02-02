@@ -25,13 +25,14 @@ struct PriceLevelUpdate {
     Timestamp timestamp;    // Update timestamp
     uint16_t level_index;   // 0-based index in sorted order (0 = best, 1 = second best, etc.)
     uint8_t change_flags;   // Bitset of PriceLevelChangeFlag
+    uint64_t seq_num;       // Exchange sequence number (0 = not tracked)
 
     PriceLevelUpdate() noexcept = default;
 
     PriceLevelUpdate(SymbolId sym, Side s, Price p, Quantity q, Timestamp ts,
-                     uint16_t idx = 0, uint8_t flags = 0) noexcept
+                     uint16_t idx = 0, uint8_t flags = 0, uint64_t seq = 0) noexcept
         : symbol(sym), side(s), price(p), quantity(q), timestamp(ts),
-          level_index(idx), change_flags(flags) {}
+          level_index(idx), change_flags(flags), seq_num(seq) {}
 
     /// Check if this is a delete action
     [[nodiscard]] constexpr bool isDelete() const noexcept {
@@ -71,13 +72,14 @@ struct OrderUpdate {
     uint16_t price_level_index; // Index of the price level this order belongs to
     uint64_t priority;          // Order priority (typically timestamp or sequence number)
     uint8_t change_flags;       // Bitset of PriceLevelChangeFlag
+    uint64_t seq_num;           // Exchange sequence number (0 = not tracked)
 
     OrderUpdate() noexcept = default;
 
     OrderUpdate(SymbolId sym, OrderId id, Side s, Price p, Quantity q, Timestamp ts,
-                uint16_t idx = 0, uint64_t prio = 0, uint8_t flags = 0) noexcept
+                uint16_t idx = 0, uint64_t prio = 0, uint8_t flags = 0, uint64_t seq = 0) noexcept
         : symbol(sym), order_id(id), side(s), price(p), quantity(q), timestamp(ts),
-          price_level_index(idx), priority(prio), change_flags(flags) {}
+          price_level_index(idx), priority(prio), change_flags(flags), seq_num(seq) {}
 
     /// Check if this is a delete action
     [[nodiscard]] constexpr bool isDelete() const noexcept {

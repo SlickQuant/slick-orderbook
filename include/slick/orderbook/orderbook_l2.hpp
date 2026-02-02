@@ -59,10 +59,12 @@ public:
     /// @param price Price level
     /// @param quantity Total quantity at this level (0 = delete)
     /// @param timestamp Update timestamp
+    /// @param seq_num Exchange sequence number (0 = no tracking, default)
+    ///                Out-of-order updates (seq_num <= last_seq_num) are rejected
     /// @param is_last_in_batch Set to true if this is the last update in an external batch
     ///                         (enables batching of TopOfBook updates)
     void updateLevel(Side side, Price price, Quantity quantity, Timestamp timestamp,
-                     bool is_last_in_batch = true);
+                     uint64_t seq_num = 0, bool is_last_in_batch = true);
 
     /// Delete a price level
     /// @param side Buy or Sell
@@ -126,6 +128,12 @@ public:
         return observers_.observerCount();
     }
 
+    /// Get last processed sequence number
+    /// @return Last sequence number (0 if not tracking)
+    [[nodiscard]] uint64_t getLastSeqNum() const noexcept {
+        return last_seq_num_;
+    }
+
     /// Emit complete orderbook snapshot to observers
     /// Useful for replaying full book state to a new observer
     /// Calls onSnapshotBegin(), followed by onPriceLevelUpdate() for each level, then onSnapshotEnd()
@@ -139,10 +147,11 @@ private:
     /// @param update_flags Change flags from the update (used to check LastInBatch)
     void notifyTopOfBookIfChanged(Timestamp timestamp, uint8_t update_flags);
 
-    SymbolId symbol_;                                                    // Symbol identifier
-    std::array<detail::LevelContainer, SideCount> sides_;              // Bid and ask sides (indexed by Side enum)
-    ObserverManager observers_;                                          // Observer notifications
+    SymbolId symbol_;                                                   // Symbol identifier
+    std::array<detail::LevelContainer, SideCount> sides_;               // Bid and ask sides (indexed by Side enum)
+    ObserverManager observers_;                                         // Observer notifications
     TopOfBook cached_tob_;                                              // Cached top-of-book for efficient change detection
+    uint64_t last_seq_num_;                                             // Last processed sequence number (0 = not tracking)
 };
 
 SLICK_NAMESPACE_END

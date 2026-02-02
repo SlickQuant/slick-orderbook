@@ -332,9 +332,9 @@ TEST_F(OrderBookL2Test, BatchFlagMultipleUpdates) {
     book.addObserver(observer);
 
     // Batch of 3 updates - only last one should trigger ToB
-    book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1, false);  // Not last
-    book.updateLevel(Side::Buy, kPrice101, kQty20, kTs1, false);  // Not last
-    book.updateLevel(Side::Buy, kPrice102, kQty30, kTs1, true);   // Last
+    book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1, 0, false);  // seq_num=0, not last
+    book.updateLevel(Side::Buy, kPrice101, kQty20, kTs1, 0, false);  // seq_num=0, not last
+    book.updateLevel(Side::Buy, kPrice102, kQty30, kTs1, 0, true);   // seq_num=0, last
 
     // Should receive 3 level updates but only 1 ToB update (at the end)
     ASSERT_EQ(observer->level_updates.size(), 3);
@@ -361,8 +361,8 @@ TEST_F(OrderBookL2Test, BatchFlagIntermediateUpdates) {
     observer->reset();
 
     // Batch update: modify quantities without triggering ToB until end
-    book.updateLevel(Side::Buy, kPrice100, kQty20, kTs2, false);   // Qty change only, not last
-    book.updateLevel(Side::Sell, kPrice101, kQty20, kTs2, true);   // Qty change only, last
+    book.updateLevel(Side::Buy, kPrice100, kQty20, kTs2, 0, false);   // seq_num=0, qty change only, not last
+    book.updateLevel(Side::Sell, kPrice101, kQty20, kTs2, 0, true);   // seq_num=0, qty change only, last
 
     // Should receive 2 level updates and 1 ToB update
     ASSERT_EQ(observer->level_updates.size(), 2);
@@ -390,8 +390,8 @@ TEST_F(OrderBookL2Test, BatchFlagDeletion) {
     observer->reset();
 
     // Delete in batch
-    book.updateLevel(Side::Buy, kPrice100, 0, kTs2, false);  // Delete, not last
-    book.updateLevel(Side::Buy, kPrice99, 0, kTs2, true);    // Delete, last
+    book.updateLevel(Side::Buy, kPrice100, 0, kTs2, 0, false);  // seq_num=0, delete, not last
+    book.updateLevel(Side::Buy, kPrice99, 0, kTs2, 0, true);    // seq_num=0, delete, last
 
     // Should receive 2 deletions and 1 ToB update
     ASSERT_EQ(observer->level_updates.size(), 2);
@@ -419,10 +419,10 @@ TEST_F(OrderBookL2Test, BatchFlagMixedOperations) {
     book.addObserver(observer);
 
     // Mixed operations in a batch: add, modify, delete
-    book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1, false);   // Add new level
-    book.updateLevel(Side::Buy, kPrice100, kQty20, kTs1, false);   // Modify (qty only)
-    book.updateLevel(Side::Buy, kPrice101, kQty30, kTs1, false);   // Add new level
-    book.updateLevel(Side::Buy, kPrice100, 0, kTs1, true);         // Delete, last
+    book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1, 0, false);   // seq_num=0, add new level
+    book.updateLevel(Side::Buy, kPrice100, kQty20, kTs1, 0, false);   // seq_num=0, modify (qty only)
+    book.updateLevel(Side::Buy, kPrice101, kQty30, kTs1, 0, false);   // seq_num=0, add new level
+    book.updateLevel(Side::Buy, kPrice100, 0, kTs1, 0, true);         // seq_num=0, delete, last
 
     // Should receive 4 level updates and 1 ToB update
     ASSERT_EQ(observer->level_updates.size(), 4);
@@ -447,4 +447,116 @@ TEST_F(OrderBookL2Test, BatchFlagMixedOperations) {
 
     // Final ToB should show best bid at 10100
     EXPECT_EQ(observer->tob_updates[0].best_bid, kPrice101);
+}
+
+// ============================================================================
+// Sequence Number Tracking Tests
+// ============================================================================
+
+TEST_F(OrderBookL2Test, SequenceNumberInitialState) {
+    OrderBookL2 book(kSymbol);
+    EXPECT_EQ(book.getLastSeqNum(), 0);  // Initial state - no tracking
+}
+
+TEST_F(OrderBookL2Test, SequenceNumberTracking) {
+    OrderBookL2 book(kSymbol);
+
+    book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1, 100);
+    EXPECT_EQ(book.getLastSeqNum(), 100);
+
+    book.updateLevel(Side::Buy, kPrice101, kQty20, kTs1, 101);
+    EXPECT_EQ(book.getLastSeqNum(), 101);
+
+    book.updateLevel(Side::Buy, kPrice102, kQty30, kTs1, 105);  // Gap
+    EXPECT_EQ(book.getLastSeqNum(), 105);
+}
+
+TEST_F(OrderBookL2Test, SequenceNumberRejectOutOfOrder) {
+    OrderBookL2 book(kSymbol);
+
+    book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1, 100);
+    EXPECT_EQ(book.getLastSeqNum(), 100);
+
+    // Try out-of-order (should be rejected silently)
+    book.updateLevel(Side::Buy, kPrice101, kQty20, kTs1, 99);
+    EXPECT_EQ(book.getLastSeqNum(), 100);  // Should not update
+
+    // Verify level was NOT added
+    auto levels = book.getLevels(Side::Buy);
+    EXPECT_EQ(levels.size(), 1);  // Only first level exists
+}
+
+TEST_F(OrderBookL2Test, SequenceNumberAcceptGap) {
+    OrderBookL2 book(kSymbol);
+
+    book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1, 100);
+    EXPECT_EQ(book.getLastSeqNum(), 100);
+
+    // Gap from 100 to 200 (should be accepted)
+    book.updateLevel(Side::Buy, kPrice101, kQty20, kTs1, 200);
+    EXPECT_EQ(book.getLastSeqNum(), 200);
+
+    // Verify both levels exist
+    auto levels = book.getLevels(Side::Buy);
+    EXPECT_EQ(levels.size(), 2);
+}
+
+TEST_F(OrderBookL2Test, SequenceNumberAcceptDuplicate) {
+    OrderBookL2 book(kSymbol);
+
+    book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1, 100);
+    EXPECT_EQ(book.getLastSeqNum(), 100);
+
+    // Duplicate seq_num (should be accepted - seq_num == last_seq_num is allowed)
+    book.updateLevel(Side::Buy, kPrice101, kQty20, kTs1, 100);
+    EXPECT_EQ(book.getLastSeqNum(), 100);
+
+    // Verify both levels exist
+    auto levels = book.getLevels(Side::Buy);
+    EXPECT_EQ(levels.size(), 2);
+}
+
+TEST_F(OrderBookL2Test, SequenceNumberNoTracking) {
+    OrderBookL2 book(kSymbol);
+
+    // All updates without seq_num (default = 0)
+    book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1);
+    book.updateLevel(Side::Buy, kPrice101, kQty20, kTs1);
+    book.updateLevel(Side::Buy, kPrice102, kQty30, kTs1);
+
+    // Sequence number should remain 0
+    EXPECT_EQ(book.getLastSeqNum(), 0);
+
+    // All levels should exist (no validation)
+    auto levels = book.getLevels(Side::Buy);
+    EXPECT_EQ(levels.size(), 3);
+}
+
+TEST_F(OrderBookL2Test, SequenceNumberInEvents) {
+    OrderBookL2 book(kSymbol);
+    auto observer = std::make_shared<BatchObserverL2>();
+    book.addObserver(observer);
+
+    book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1, 12345);
+
+    ASSERT_EQ(observer->level_updates.size(), 1);
+    EXPECT_EQ(observer->level_updates[0].seq_num, 12345);
+}
+
+TEST_F(OrderBookL2Test, SequenceNumberMultipleSides) {
+    OrderBookL2 book(kSymbol);
+
+    // Sequence numbers apply to entire book, not per side
+    book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1, 100);
+    book.updateLevel(Side::Sell, kPrice101, kQty20, kTs1, 101);
+
+    EXPECT_EQ(book.getLastSeqNum(), 101);
+
+    // Out-of-order on different side should still be rejected
+    book.updateLevel(Side::Buy, kPrice99, kQty30, kTs1, 100);
+    EXPECT_EQ(book.getLastSeqNum(), 101);  // Should not update
+
+    // Verify rejected level was not added
+    auto bid_levels = book.getLevels(Side::Buy);
+    EXPECT_EQ(bid_levels.size(), 1);  // Only first bid exists
 }

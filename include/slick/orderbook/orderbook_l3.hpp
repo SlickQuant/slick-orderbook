@@ -100,18 +100,14 @@ public:
     /// @param quantity Order quantity
     /// @param timestamp Order timestamp
     /// @param priority Priority for sorting (used only when adding new order)
+    /// @param seq_num Exchange sequence number (0 = no tracking, default)
+    ///                Out-of-order updates (seq_num < last_seq_num) are rejected
     /// @param is_last_in_batch Set to true if this is the last update in an external batch
     ///                         (enables batching of TopOfBook updates)
     /// @return true if order was added or modified successfully
     bool addOrModifyOrder(OrderId order_id, Side side, Price price, Quantity quantity,
                           Timestamp timestamp, uint64_t priority,
-                          bool is_last_in_batch = true);
-
-    /// Add or modify order with timestamp as priority (convenience)
-    bool addOrModifyOrder(OrderId order_id, Side side, Price price, Quantity quantity, Timestamp timestamp,
-                          bool is_last_in_batch = true) {
-        return addOrModifyOrder(order_id, side, price, quantity, timestamp, timestamp, is_last_in_batch);
-    }
+                          uint64_t seq_num = 0, bool is_last_in_batch = true);
 
     /// Add a new order (strict - fails if order already exists)
     /// @param order_id Unique order identifier
@@ -120,38 +116,46 @@ public:
     /// @param quantity Order quantity
     /// @param timestamp Order timestamp
     /// @param priority Priority for sorting (defaults to timestamp)
+    /// @param seq_num Exchange sequence number (0 = no tracking, default)
+    ///                Out-of-order updates (seq_num < last_seq_num) are rejected
     /// @param is_last_in_batch Set to true if this is the last update in an external batch
     ///                         (enables batching of TopOfBook updates)
     /// @return true if order was added successfully, false if OrderId already exists
     bool addOrder(OrderId order_id, Side side, Price price, Quantity quantity,
-                  Timestamp timestamp, uint64_t priority = 0, bool is_last_in_batch = true);
+                  Timestamp timestamp, uint64_t priority = 0, uint64_t seq_num = 0, bool is_last_in_batch = true);
 
     /// Modify an existing order's price and/or quantity
     /// Compares new values with old to determine what changed
     /// @param order_id Order identifier
     /// @param new_price New price
     /// @param new_quantity New quantity (0 = delete)
+    /// @param seq_num Exchange sequence number (0 = no tracking, default)
+    ///                Out-of-order updates (seq_num < last_seq_num) are rejected
     /// @param is_last_in_batch Set to true if this is the last update in an external batch
     ///                         (enables batching of TopOfBook updates)
     /// @return true if order was found and modified
     bool modifyOrder(OrderId order_id, Price new_price, Quantity new_quantity,
-                     bool is_last_in_batch = true);
+                     uint64_t seq_num = 0, bool is_last_in_batch = true);
 
     /// Delete an order
     /// @param order_id Order identifier
+    /// @param seq_num Exchange sequence number (0 = no tracking, default)
+    ///                Out-of-order updates (seq_num < last_seq_num) are rejected
     /// @param is_last_in_batch Set to true if this is the last update in an external batch
     ///                         (enables batching of TopOfBook updates)
     /// @return true if order was found and deleted
-    bool deleteOrder(OrderId order_id, bool is_last_in_batch = true) noexcept;
+    bool deleteOrder(OrderId order_id, uint64_t seq_num = 0, bool is_last_in_batch = true) noexcept;
 
     /// Execute (partially fill) an order
     /// @param order_id Order identifier
     /// @param executed_quantity Quantity executed
+    /// @param seq_num Exchange sequence number (0 = no tracking, default)
+    ///                Out-of-order updates (seq_num < last_seq_num) are rejected
     /// @param is_last_in_batch Set to true if this is the last update in an external batch
     ///                         (enables batching of TopOfBook updates)
     /// @return true if order was found and executed
     bool executeOrder(OrderId order_id, Quantity executed_quantity,
-                      bool is_last_in_batch = true);
+                      uint64_t seq_num = 0, bool is_last_in_batch = true);
 
     /// Find order by OrderId
     /// @param order_id Order identifier
@@ -242,6 +246,12 @@ public:
         return observers_.observerCount();
     }
 
+    /// Get last processed sequence number
+    /// @return Last sequence number (0 if not tracking)
+    [[nodiscard]] uint64_t getLastSeqNum() const noexcept {
+        return last_seq_num_;
+    }
+
     /// Emit complete orderbook snapshot to observers (L3 MBO)
     /// Useful for replaying full book state to a new observer
     /// Calls onSnapshotBegin(), followed by onOrderUpdate() for each order, then onSnapshotEnd()
@@ -257,10 +267,10 @@ private:
 
     /// Notify observers of order update with level index and change flags
     void notifyOrderUpdate(const detail::Order* order, Quantity old_quantity, Price old_price,
-                          Timestamp timestamp, uint16_t level_index, uint8_t change_flags) const;
+                          Timestamp timestamp, uint16_t level_index, uint8_t change_flags, uint64_t seq_num) const;
 
     /// Notify observers of order delete with level index
-    void notifyOrderDelete(const detail::Order* order, Timestamp timestamp, uint16_t level_index, uint8_t change_flags) const;
+    void notifyOrderDelete(const detail::Order* order, Timestamp timestamp, uint16_t level_index, uint8_t change_flags, uint64_t seq_num) const;
 
     /// Calculate price level index for a given side and price
     [[nodiscard]] uint16_t calculateLevelIndex(Side side, Price price) const noexcept;
@@ -270,7 +280,7 @@ private:
                      Side aggressor_side, Price price, Quantity quantity, Timestamp timestamp) const;
 
     /// Notify observers of price level update (L2 aggregated view)
-    void notifyPriceLevelUpdate(Side side, Price price, Quantity total_quantity,  Timestamp timestamp, uint16_t level_index, uint8_t change_flags) const;
+    void notifyPriceLevelUpdate(Side side, Price price, Quantity total_quantity, Timestamp timestamp, uint16_t level_index, uint8_t change_flags, uint64_t seq_num) const;
 
     /// Notify observers of top-of-book update if best changed
     /// Updates cached_tob_ after notification
@@ -284,6 +294,7 @@ private:
     detail::ObjectPool<detail::Order> order_pool_;             // Memory pool for Order objects
     ObserverManager observers_;                                 // Observer notifications
     TopOfBook cached_tob_;                                      // Cached top-of-book for efficient change detection
+    uint64_t last_seq_num_;                                     // Last processed sequence number (0 = not tracking)
 };
 
 SLICK_NAMESPACE_END

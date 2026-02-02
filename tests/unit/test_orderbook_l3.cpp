@@ -113,8 +113,8 @@ TEST_F(OrderBookL3Test, AddDuplicateOrderId) {
 TEST_F(OrderBookL3Test, AddOrModifyOrderIdempotent) {
     OrderBookL3 book(kSymbol);
 
-    EXPECT_TRUE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
-    EXPECT_TRUE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice101, kQty20, kTs2));  // Same OrderId - modifies
+    EXPECT_TRUE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, kTs1));  // priority = timestamp
+    EXPECT_TRUE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice101, kQty20, kTs2, kTs2));  // Same OrderId - modifies
 
     EXPECT_EQ(book.orderCount(), 1);
 
@@ -263,7 +263,7 @@ TEST_F(OrderBookL3Test, AddOrModifyZeroQuantityDeletes) {
     OrderBookL3 book(kSymbol);
 
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
-    EXPECT_TRUE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice100, 0, kTs2));
+    EXPECT_TRUE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice100, 0, kTs2, kTs2));  // priority = timestamp
 
     EXPECT_EQ(book.orderCount(), 0);
     EXPECT_TRUE(book.isEmpty());
@@ -273,7 +273,7 @@ TEST_F(OrderBookL3Test, AddOrModifyZeroQuantityDeletes) {
 TEST_F(OrderBookL3Test, AddOrModifyZeroQuantityNonExistentReturnsFalse) {
     OrderBookL3 book(kSymbol);
 
-    EXPECT_FALSE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice100, 0, kTs1));
+    EXPECT_FALSE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice100, 0, kTs1, kTs1));  // priority = timestamp
     EXPECT_EQ(book.orderCount(), 0);
     EXPECT_TRUE(book.isEmpty());
 }
@@ -642,11 +642,11 @@ public:
     int snapshot_end_count = 0;
     int order_update_count = 0;
 
-    void onSnapshotBegin([[maybe_unused]] SymbolId symbol, [[maybe_unused]] Timestamp timestamp) override {
+    void onSnapshotBegin([[maybe_unused]] SymbolId symbol, [[maybe_unused]] uint64_t seq_num, [[maybe_unused]] Timestamp timestamp) override {
         ++snapshot_begin_count;
     }
 
-    void onSnapshotEnd([[maybe_unused]] SymbolId symbol, [[maybe_unused]] Timestamp timestamp) override {
+    void onSnapshotEnd([[maybe_unused]] SymbolId symbol, [[maybe_unused]] uint64_t seq_num, [[maybe_unused]] Timestamp timestamp) override {
         ++snapshot_end_count;
     }
 
@@ -788,10 +788,10 @@ TEST_F(OrderBookL3Test, BatchFlagMultipleAddOrders) {
     book.addObserver(observer);
 
     // Batch of 3 orders - only last one should trigger ToB
-    // Note: Must explicitly pass priority=0 to reach is_last_in_batch parameter
-    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, false));
-    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice101, kQty20, kTs1, 0, false));
-    EXPECT_TRUE(book.addOrder(kOrder3, Side::Buy, kPrice102, kQty30, kTs1, 0, true));
+    // Note: Must explicitly pass priority=0 and seq_num=0 to reach is_last_in_batch parameter
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 0, false));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice101, kQty20, kTs1, 0, 0, false));
+    EXPECT_TRUE(book.addOrder(kOrder3, Side::Buy, kPrice102, kQty30, kTs1, 0, 0, true));
 
     // Should receive 3 order updates, 3 level updates, but only 1 ToB update
     ASSERT_EQ(observer->order_updates.size(), 3);
@@ -821,8 +821,8 @@ TEST_F(OrderBookL3Test, BatchFlagModifyOrder) {
     observer->reset();
 
     // Modify in batch
-    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty20, false));  // Qty change, not last
-    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice101, kQty30, kTs2, true));  // Last
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty20, 0, false));  // seq_num=0, qty change, not last
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice101, kQty30, kTs2, 0, 0, true));  // priority=0, seq_num=0, last
 
     // Should receive 2 order updates, 2 level updates, 1 ToB
     ASSERT_EQ(observer->order_updates.size(), 2);
@@ -849,8 +849,8 @@ TEST_F(OrderBookL3Test, BatchFlagDeleteOrder) {
     observer->reset();
 
     // Delete in batch
-    EXPECT_TRUE(book.deleteOrder(kOrder1, false));  // Not last
-    EXPECT_TRUE(book.deleteOrder(kOrder2, true));   // Last
+    EXPECT_TRUE(book.deleteOrder(kOrder1, 0, false));  // seq_num=0, not last
+    EXPECT_TRUE(book.deleteOrder(kOrder2, 0, true));   // seq_num=0, last
 
     // Should receive 2 order updates, 2 level updates, 1 ToB
     ASSERT_EQ(observer->order_updates.size(), 2);
@@ -878,8 +878,8 @@ TEST_F(OrderBookL3Test, BatchFlagExecuteOrder) {
     observer->reset();
 
     // Execute in batch (partial fills)
-    EXPECT_TRUE(book.executeOrder(kOrder1, kQty10, false));  // Partial, not last
-    EXPECT_TRUE(book.executeOrder(kOrder1, kQty10, true));   // Partial, last
+    EXPECT_TRUE(book.executeOrder(kOrder1, kQty10, 0, false));  // seq_num=0, partial, not last
+    EXPECT_TRUE(book.executeOrder(kOrder1, kQty10, 0, true));   // seq_num=0, partial, last
 
     // Should receive 2 order updates (modify qty), 2 level updates, 1 ToB
     ASSERT_EQ(observer->order_updates.size(), 2);
@@ -899,9 +899,9 @@ TEST_F(OrderBookL3Test, BatchFlagAddOrModifyOrder) {
     book.addObserver(observer);
 
     // Batch using addOrModifyOrder
-    EXPECT_TRUE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, false));  // Add
-    EXPECT_TRUE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice101, kQty20, kTs2, false));  // Modify price
-    EXPECT_TRUE(book.addOrModifyOrder(kOrder2, Side::Buy, kPrice102, kQty30, kTs2, true));   // Add, last
+    EXPECT_TRUE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, kTs1, 0, false));  // Add, priority=ts, seq=0, not last
+    EXPECT_TRUE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice101, kQty20, kTs2, kTs2, 0, false));  // Modify price, not last
+    EXPECT_TRUE(book.addOrModifyOrder(kOrder2, Side::Buy, kPrice102, kQty30, kTs2, kTs2, 0, true));   // Add, last
 
     // Should get multiple updates but only 1 ToB at end
     ASSERT_GT(observer->order_updates.size(), 0);
@@ -917,12 +917,12 @@ TEST_F(OrderBookL3Test, BatchFlagMixedOperations) {
     book.addObserver(observer);
 
     // Complex batch: add, modify, delete, execute
-    // Note: Must explicitly pass priority=0 to reach is_last_in_batch parameter
-    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty40, kTs1, 0, false));
-    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice101, kQty30, kTs1, 0, false));
-    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty50, false));  // Increase qty
-    EXPECT_TRUE(book.executeOrder(kOrder2, kQty10, false));             // Partial fill
-    EXPECT_TRUE(book.deleteOrder(kOrder1, true));                       // Delete, last
+    // Note: Must explicitly pass priority=0 and seq_num=0 to reach is_last_in_batch parameter
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty40, kTs1, 0, 0, false));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice101, kQty30, kTs1, 0, 0, false));
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty50, 0, false));  // seq_num=0, increase qty
+    EXPECT_TRUE(book.executeOrder(kOrder2, kQty10, 0, false));             // seq_num=0, partial fill
+    EXPECT_TRUE(book.deleteOrder(kOrder1, 0, true));                       // seq_num=0, delete, last
 
     // Should receive multiple order/level updates but only 1 ToB
     ASSERT_GT(observer->order_updates.size(), 0);
@@ -952,7 +952,7 @@ TEST_F(OrderBookL3Test, BatchFlagPriceChangeInBatch) {
     observer->reset();
 
     // Modify price in batch (creates level updates for old and new price)
-    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice101, kQty10, true));
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice101, kQty10, 0, true));  // seq_num=0, last
 
     // Should receive order update, 2 level updates (old price deletion + new price), 1 ToB
     ASSERT_EQ(observer->order_updates.size(), 1);
@@ -972,4 +972,221 @@ TEST_F(OrderBookL3Test, BatchFlagPriceChangeInBatch) {
     // Second level update (new price) should have LastInBatch
     EXPECT_TRUE(observer->level_updates[1].isLastInBatch());
     EXPECT_EQ(observer->level_updates[1].price, kPrice101);
+}
+
+// ============================================================================
+// Sequence Number Tracking Tests
+// ============================================================================
+
+TEST_F(OrderBookL3Test, SequenceNumberInitialState) {
+    OrderBookL3 book(kSymbol);
+    EXPECT_EQ(book.getLastSeqNum(), 0);  // Initial state - no tracking
+}
+
+TEST_F(OrderBookL3Test, SequenceNumberTrackingAddOrder) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 100));
+    EXPECT_EQ(book.getLastSeqNum(), 100);
+
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice101, kQty20, kTs2, 0, 101));
+    EXPECT_EQ(book.getLastSeqNum(), 101);
+}
+
+TEST_F(OrderBookL3Test, SequenceNumberTrackingModifyOrder) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 100));
+    EXPECT_EQ(book.getLastSeqNum(), 100);
+
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty20, 101));
+    EXPECT_EQ(book.getLastSeqNum(), 101);
+}
+
+TEST_F(OrderBookL3Test, SequenceNumberTrackingDeleteOrder) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 100));
+    EXPECT_TRUE(book.deleteOrder(kOrder1, 101));
+    EXPECT_EQ(book.getLastSeqNum(), 101);
+}
+
+TEST_F(OrderBookL3Test, SequenceNumberTrackingExecuteOrder) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty20, kTs1, 0, 100));
+    EXPECT_TRUE(book.executeOrder(kOrder1, kQty10, 101));
+    EXPECT_EQ(book.getLastSeqNum(), 101);
+
+    // Verify partial execution
+    auto* order = book.findOrder(kOrder1);
+    ASSERT_NE(order, nullptr);
+    EXPECT_EQ(order->quantity, kQty10);
+}
+
+TEST_F(OrderBookL3Test, SequenceNumberRejectOutOfOrderAddOrder) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 100));
+    EXPECT_EQ(book.getLastSeqNum(), 100);
+
+    // Try out-of-order (should fail)
+    EXPECT_FALSE(book.addOrder(kOrder2, Side::Buy, kPrice101, kQty20, kTs1, 0, 99));
+    EXPECT_EQ(book.getLastSeqNum(), 100);  // Should not update
+
+    // Verify second order was NOT added
+    EXPECT_EQ(book.orderCount(Side::Buy), 1);
+    EXPECT_EQ(book.findOrder(kOrder2), nullptr);
+}
+
+TEST_F(OrderBookL3Test, SequenceNumberRejectOutOfOrderModifyOrder) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 100));
+    EXPECT_EQ(book.getLastSeqNum(), 100);
+
+    // Try out-of-order modify (should fail)
+    EXPECT_FALSE(book.modifyOrder(kOrder1, kPrice100, kQty20, 99));
+    EXPECT_EQ(book.getLastSeqNum(), 100);
+
+    // Verify order was NOT modified
+    auto* order = book.findOrder(kOrder1);
+    ASSERT_NE(order, nullptr);
+    EXPECT_EQ(order->quantity, kQty10);  // Original quantity
+}
+
+TEST_F(OrderBookL3Test, SequenceNumberRejectOutOfOrderDeleteOrder) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 100));
+    EXPECT_EQ(book.getLastSeqNum(), 100);
+
+    // Try out-of-order delete (should fail)
+    EXPECT_FALSE(book.deleteOrder(kOrder1, 99));
+    EXPECT_EQ(book.getLastSeqNum(), 100);
+
+    // Verify order was NOT deleted
+    EXPECT_EQ(book.orderCount(Side::Buy), 1);
+    EXPECT_NE(book.findOrder(kOrder1), nullptr);
+}
+
+TEST_F(OrderBookL3Test, SequenceNumberRejectOutOfOrderExecuteOrder) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty20, kTs1, 0, 100));
+    EXPECT_EQ(book.getLastSeqNum(), 100);
+
+    // Try out-of-order execute (should fail)
+    EXPECT_FALSE(book.executeOrder(kOrder1, kQty10, 99));
+    EXPECT_EQ(book.getLastSeqNum(), 100);
+
+    // Verify order was NOT executed
+    auto* order = book.findOrder(kOrder1);
+    ASSERT_NE(order, nullptr);
+    EXPECT_EQ(order->quantity, kQty20);  // Original quantity
+}
+
+TEST_F(OrderBookL3Test, SequenceNumberAcceptGap) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 100));
+    EXPECT_EQ(book.getLastSeqNum(), 100);
+
+    // Gap from 100 to 200 (should be accepted)
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice101, kQty20, kTs1, 0, 200));
+    EXPECT_EQ(book.getLastSeqNum(), 200);
+
+    // Verify both orders exist
+    EXPECT_EQ(book.orderCount(Side::Buy), 2);
+}
+
+TEST_F(OrderBookL3Test, SequenceNumberAcceptDuplicate) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 100));
+    EXPECT_EQ(book.getLastSeqNum(), 100);
+
+    // Duplicate seq_num (should be accepted - seq_num == last_seq_num is allowed)
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice101, kQty20, kTs1, 0, 100));
+    EXPECT_EQ(book.getLastSeqNum(), 100);
+
+    // Verify both orders exist
+    EXPECT_EQ(book.orderCount(Side::Buy), 2);
+}
+
+TEST_F(OrderBookL3Test, SequenceNumberNoTracking) {
+    OrderBookL3 book(kSymbol);
+
+    // All updates without seq_num (default = 0)
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice101, kQty20, kTs2));
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty30));
+    EXPECT_TRUE(book.deleteOrder(kOrder2));
+
+    // Sequence number should remain 0
+    EXPECT_EQ(book.getLastSeqNum(), 0);
+
+    // Operations should work normally
+    EXPECT_EQ(book.orderCount(Side::Buy), 1);
+    auto* order = book.findOrder(kOrder1);
+    ASSERT_NE(order, nullptr);
+    EXPECT_EQ(order->quantity, kQty30);
+}
+
+TEST_F(OrderBookL3Test, SequenceNumberInOrderUpdateEvents) {
+    OrderBookL3 book(kSymbol);
+    auto observer = std::make_shared<BatchObserverL3>();
+    book.addObserver(observer);
+
+    book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 12345);
+
+    ASSERT_EQ(observer->order_updates.size(), 1);
+    EXPECT_EQ(observer->order_updates[0].seq_num, 12345);
+}
+
+TEST_F(OrderBookL3Test, SequenceNumberInLevelUpdateEvents) {
+    OrderBookL3 book(kSymbol);
+    auto observer = std::make_shared<BatchObserverL3>();
+    book.addObserver(observer);
+
+    book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 54321);
+
+    ASSERT_EQ(observer->level_updates.size(), 1);
+    EXPECT_EQ(observer->level_updates[0].seq_num, 54321);
+}
+
+TEST_F(OrderBookL3Test, SequenceNumberAddOrModifyOrder) {
+    OrderBookL3 book(kSymbol);
+
+    // Add with seq_num
+    EXPECT_TRUE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, kTs1, 100));
+    EXPECT_EQ(book.getLastSeqNum(), 100);
+
+    // Modify with seq_num
+    EXPECT_TRUE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice101, kQty20, kTs2, kTs2, 101));
+    EXPECT_EQ(book.getLastSeqNum(), 101);
+
+    // Verify modification
+    auto* order = book.findOrder(kOrder1);
+    ASSERT_NE(order, nullptr);
+    EXPECT_EQ(order->price, kPrice101);
+    EXPECT_EQ(order->quantity, kQty20);
+}
+
+TEST_F(OrderBookL3Test, SequenceNumberMultipleSides) {
+    OrderBookL3 book(kSymbol);
+
+    // Sequence numbers apply to entire book, not per side
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 100));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Sell, kPrice101, kQty20, kTs1, 0, 101));
+
+    EXPECT_EQ(book.getLastSeqNum(), 101);
+
+    // Out-of-order on different side should still be rejected
+    EXPECT_FALSE(book.addOrder(kOrder3, Side::Buy, kPrice99, kQty30, kTs1, 0, 100));
+    EXPECT_EQ(book.getLastSeqNum(), 101);  // Should not update
+
+    // Verify rejected order was not added
+    EXPECT_EQ(book.orderCount(Side::Buy), 1);  // Only first bid exists
+    EXPECT_EQ(book.findOrder(kOrder3), nullptr);
 }

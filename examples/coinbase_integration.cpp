@@ -6,8 +6,13 @@
 #include <iostream>
 #include <iomanip>
 #include <chrono>
+#include <thread>
+#include <ctime>
 #include <csignal>
 #include <atomic>
+#include <format>
+
+using WebSocketClient = coinbase::WebSocketClient;
 
 // Global flag for graceful shutdown
 std::atomic<bool> g_running{true};
@@ -30,15 +35,15 @@ public:
     explicit CoinbaseOrderBookObserver(slick::orderbook::OrderBookL2* orderbook, const std::string& symbol)
         : orderbook_(orderbook), symbol_(symbol), in_snapshot_(false) {}
 
-    void onSnapshotBegin(slick::orderbook::SymbolId symbol, [[maybe_unused]] slick::orderbook::Timestamp timestamp) override {
+    void onSnapshotBegin(slick::orderbook::SymbolId symbol, uint64_t, [[maybe_unused]] slick::orderbook::Timestamp timestamp) override {
         in_snapshot_ = true;
         std::cout << symbol << " receiving orderbook snapshot..." << std::endl;
     }
 
-    void onSnapshotEnd(slick::orderbook::SymbolId symbol, [[maybe_unused]] slick::orderbook::Timestamp timestamp) override {
+    void onSnapshotEnd(slick::orderbook::SymbolId symbol, uint64_t seq_num, [[maybe_unused]] slick::orderbook::Timestamp timestamp) override {
         in_snapshot_ = false;
         std::cout << symbol << " snapshot complete. Displaying initial orderbook:\n" << std::endl;
-        printTopLevels();
+        printTopLevels(seq_num);
     }
 
     void onPriceLevelUpdate(const slick::orderbook::PriceLevelUpdate& update) override {
@@ -49,22 +54,24 @@ public:
             if (update.change_flags == 0) {
                 std::cout << "!!!! UNCHANGED UPDATE" << std::endl;
             }
-            printTopLevels();
+            if (update.isLastInBatch()) {
+                printTopLevels(update.seq_num);
+            }
         }
     }
 
-    void printTopLevels() {
+    void printTopLevels(uint64_t seq_num) {
         auto bids = orderbook_->getLevels(slick::orderbook::Side::Buy, TOP_N_LEVELS);
         auto asks = orderbook_->getLevels(slick::orderbook::Side::Sell, TOP_N_LEVELS);
 
         // Get current timestamp
         auto now = std::chrono::system_clock::now();
-        auto time_t_now = std::chrono::system_clock::to_time_t(now);
-        auto tm_now = *std::localtime(&time_t_now);
+        std::chrono::zoned_time local_time{std::chrono::current_zone(), now};
+        std::string str_local_now = std::format("{:%F %T}", local_time);
 
         std::cout << "\n" << std::string(70, '=') << "\n";
         std::cout << symbol_ << " Order Book - "
-                  << std::put_time(&tm_now, "%Y-%m-%d %H:%M:%S") << "\n";
+                  << str_local_now << " seq_num: " << seq_num << "\n";
         std::cout << std::string(70, '=') << "\n";
 
         // Print asks in reverse order (highest to lowest)
@@ -108,6 +115,7 @@ public:
         }
 
         std::cout << std::string(70, '=') << "\n" << std::endl;
+
     }
 };
 
@@ -151,8 +159,24 @@ public:
         orderbook_.addObserver(observer_);
     }
 
+    void onMarketDataConnected(WebSocketClient*) {
+        std::cout << "MarketData WebSocket Conntected" << std::endl;
+    }
+
+    void onMarketDataDisconnected(WebSocketClient*) {
+        std::cout << "MarketData WebSocket Disconnected" << std::endl;
+    }
+
+    void onUserDataConnected(WebSocketClient*) {
+        std::cout << "UserData WebSocket Conntected" << std::endl;
+    }
+
+    void onUserDataDisconnected(WebSocketClient*) {
+        std::cout << "UserData WebSocket Disconntected" << std::endl;
+    }
+
     /// Handle initial orderbook snapshot from Coinbase
-    void onLevel2Snapshot(const coinbase::Level2UpdateBatch& snapshot) override {
+    void onLevel2Snapshot(WebSocketClient*, uint64_t seq_num, const coinbase::Level2UpdateBatch& snapshot) override {
         std::cout << "Received L2 snapshot for " << snapshot.product_id
                   << " with " << snapshot.updates.size() << " levels" << std::endl;
 
@@ -161,20 +185,25 @@ public:
 
         // Notify snapshot begin
         if (!snapshot.updates.empty()) {
-            orderbook_.addObserver(observer_);  // Ensure observer is attached
-            observer_->onSnapshotBegin(SYMBOL_ID, toTimestamp(snapshot.updates[0].event_time));
+            observer_->onSnapshotBegin(SYMBOL_ID, seq_num, toTimestamp(snapshot.updates[0].event_time));
         }
 
         // Process all levels in snapshot
         // Each updateLevel() call will trigger onPriceLevelUpdate() in the observer
         // Observer is in snapshot mode (in_snapshot_=true), so it won't print yet
-        for (const auto& update : snapshot.updates) {
+        // Mark only the last update in the batch with is_last_in_batch=true
+        const size_t num_updates = snapshot.updates.size();
+        for (size_t i = 0, last = num_updates - 1; i < num_updates; ++i) {
+            const auto& update = snapshot.updates[i];
             if (update.new_quantity > 0.0) {  // Only add levels with positive quantity
+                bool is_last = (i == last);
                 orderbook_.updateLevel(
                     toSide(update.side),
                     toPrice(update.price_level),
                     toQuantity(update.new_quantity),
-                    toTimestamp(update.event_time)
+                    toTimestamp(update.event_time),
+                    seq_num,
+                    is_last
                 );
             }
         }
@@ -182,52 +211,58 @@ public:
         // Notify snapshot end
         // Observer's onSnapshotEnd() will print the full orderbook
         if (!snapshot.updates.empty()) {
-            observer_->onSnapshotEnd(SYMBOL_ID, toTimestamp(snapshot.updates.back().event_time));
+            observer_->onSnapshotEnd(SYMBOL_ID, seq_num, toTimestamp(snapshot.updates.back().event_time));
         }
     }
 
     /// Handle incremental orderbook updates from Coinbase
-    void onLevel2Updates(const coinbase::Level2UpdateBatch& updates) override {
-        // Simply apply all updates - observer will print if top 10 changes
-        for (const auto& update : updates.updates) {
+    void onLevel2Updates(WebSocketClient*, uint64_t seq_num, const coinbase::Level2UpdateBatch& updates) override {
+        // Apply all updates as a batch - only the last one should trigger ToB update
+        // Pass seq_num to orderbook for sequence tracking and gap detection
+        const size_t num_updates = updates.updates.size();
+        for (size_t i = 0, last = num_updates - 1; i < num_updates; ++i) {
+            const auto& update = updates.updates[i];
             auto side = toSide(update.side);
             auto price = toPrice(update.price_level);
             auto qty = toQuantity(update.new_quantity);
-            // auto ts = toTimestamp(update.event_time);
+            auto ts = toTimestamp(update.event_time);
+            bool is_last = (i == last);
 
             // Quantity of 0 means delete the level
             // Observer will be notified with level_index and change_flags
-            orderbook_.updateLevel(side, price, qty, update.event_time);
+            // Only the last update in the batch will trigger ToB emission
+            // Pass seq_num for out-of-order detection (orderbook will reject if seq_num < last_seq_num)
+            orderbook_.updateLevel(side, price, qty, ts, seq_num, is_last);
         }
     }
 
     /// Handle market data sequence gap (messages lost)
-    void onMarketDataGap() override {
+    void onMarketDataGap(WebSocketClient*) override {
         std::cerr << "\n*** WARNING: Market data sequence gap detected! ***" << std::endl;
         std::cerr << "*** Orderbook may be out of sync. ***" << std::endl;
         std::cerr << "*** Consider reconnecting to receive a fresh snapshot. ***\n" << std::endl;
     }
 
     /// Handle market data errors
-    void onMarketDataError(std::string err) override {
+    void onMarketDataError(WebSocketClient*, std::string &&err) override {
         std::cerr << "\n*** ERROR: " << err << " ***\n" << std::endl;
     }
 
     // Empty implementations for unused callbacks (required by WebsocketCallbacks interface)
-    void onMarketTradesSnapshot(const std::vector<coinbase::MarketTrade>&) override {}
-    void onMarketTrades(const std::vector<coinbase::MarketTrade>&) override {}
-    void onTickerSnapshot(uint64_t, uint64_t, const std::vector<coinbase::Ticker>&) override {}
-    void onTickers(uint64_t, uint64_t, const std::vector<coinbase::Ticker>&) override {}
-    void onCandlesSnapshot(uint64_t, uint64_t, const std::vector<coinbase::Candle>&) override {}
-    void onCandles(uint64_t, uint64_t, const std::vector<coinbase::Candle>&) override {}
-    void onStatusSnapshot(uint64_t, uint64_t, const std::vector<coinbase::Status>&) override {}
-    void onStatus(uint64_t, uint64_t, const std::vector<coinbase::Status>&) override {}
-    void onUserDataGap() override {}
-    void onUserDataSnapshot(uint64_t, const std::vector<coinbase::Order>&,
+    void onMarketTradesSnapshot(WebSocketClient*, uint64_t, const std::vector<coinbase::MarketTrade>&) override {}
+    void onMarketTrades(WebSocketClient*, uint64_t, const std::vector<coinbase::MarketTrade>&) override {}
+    void onTickerSnapshot(WebSocketClient*, uint64_t, uint64_t, const std::vector<coinbase::Ticker>&) override {}
+    void onTickers(WebSocketClient*, uint64_t, uint64_t, const std::vector<coinbase::Ticker>&) override {}
+    void onCandlesSnapshot(WebSocketClient*, uint64_t, uint64_t, const std::vector<coinbase::Candle>&) override {}
+    void onCandles(WebSocketClient*, uint64_t, uint64_t, const std::vector<coinbase::Candle>&) override {}
+    void onStatusSnapshot(WebSocketClient*, uint64_t, uint64_t, const std::vector<coinbase::Status>&) override {}
+    void onStatus(WebSocketClient*, uint64_t, uint64_t, const std::vector<coinbase::Status>&) override {}
+    void onUserDataGap(WebSocketClient*) override {}
+    void onUserDataSnapshot(WebSocketClient*, uint64_t, const std::vector<coinbase::Order>&,
                            const std::vector<coinbase::PerpetualFuturePosition>&,
                            const std::vector<coinbase::ExpiringFuturePosition>&) override {}
-    void onOrderUpdates(uint64_t, const std::vector<coinbase::Order>&) override {}
-    void onUserDataError(std::string) override {}
+    void onOrderUpdates(WebSocketClient*, uint64_t, const std::vector<coinbase::Order>&) override {}
+    void onUserDataError(WebSocketClient*, std::string&&) override {}
 };
 
 int main(int argc, char* argv[]) {

@@ -14,14 +14,24 @@ SLICK_OB_INLINE OrderBookL2::OrderBookL2(SymbolId symbol, std::size_t initial_ca
       sides_{detail::LevelContainer{Side::Buy, initial_capacity},
              detail::LevelContainer{Side::Sell, initial_capacity}},
       observers_(),
-      cached_tob_() {
+      cached_tob_(),
+      last_seq_num_(0) {
     // Initialize cached top-of-book
     cached_tob_.symbol = symbol_;
 }
 
 SLICK_OB_INLINE void OrderBookL2::updateLevel(Side side, Price price, Quantity quantity, Timestamp timestamp,
-                                               bool is_last_in_batch) {
+                                               uint64_t seq_num, bool is_last_in_batch) {
     SLICK_ASSERT(side < SideCount);
+
+    // Validate sequence number - reject out-of-order (seq_num < last_seq_num)
+    if (seq_num > 0) {
+        if (seq_num < last_seq_num_) {
+            // Out of order - reject silently
+            return;
+        }
+        last_seq_num_ = seq_num;
+    }
 
     if (quantity == 0) {
         // Find level index before deletion
@@ -38,8 +48,8 @@ SLICK_OB_INLINE void OrderBookL2::updateLevel(Side side, Price price, Quantity q
                 change_flags |= LastInBatch;
             }
 
-            // Notify with level_index and flags
-            PriceLevelUpdate update{symbol_, side, price, 0, timestamp, level_idx, change_flags};
+            // Notify with level_index, flags, and seq_num
+            PriceLevelUpdate update{symbol_, side, price, 0, timestamp, level_idx, change_flags, seq_num};
             observers_.notifyPriceLevelUpdate(update);
             notifyTopOfBookIfChanged(timestamp, change_flags);
         }
@@ -66,7 +76,7 @@ SLICK_OB_INLINE void OrderBookL2::updateLevel(Side side, Price price, Quantity q
         }
 
         // Notify observers
-        PriceLevelUpdate update{symbol_, side, price, quantity, timestamp, level_idx, change_flags};
+        PriceLevelUpdate update{symbol_, side, price, quantity, timestamp, level_idx, change_flags, seq_num};
         observers_.notifyPriceLevelUpdate(update);
         notifyTopOfBookIfChanged(timestamp, change_flags);
     }
@@ -175,7 +185,7 @@ SLICK_OB_INLINE void OrderBookL2::notifyTopOfBookIfChanged(Timestamp timestamp, 
 
 SLICK_OB_INLINE void OrderBookL2::emitSnapshot(Timestamp timestamp) {
     // Notify snapshot begin
-    observers_.notifySnapshotBegin(symbol_, timestamp);
+    observers_.notifySnapshotBegin(symbol_, last_seq_num_, timestamp);
 
     // Emit all bid levels
     uint16_t level_idx = 0;
@@ -208,7 +218,7 @@ SLICK_OB_INLINE void OrderBookL2::emitSnapshot(Timestamp timestamp) {
     }
 
     // Notify snapshot end
-    observers_.notifySnapshotEnd(symbol_, timestamp);
+    observers_.notifySnapshotEnd(symbol_, last_seq_num_, timestamp);
 }
 
 SLICK_NAMESPACE_END

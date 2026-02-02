@@ -52,7 +52,6 @@ target_include_directories(multi_symbol_orderbook
 )
 
 find_package(coinbase-advanced-cpp CONFIG QUIET)
-
 if(NOT coinbase-advanced-cpp_FOUND)
     include(FetchContent)
     message(STATUS "Fetching coinbase-advanced-cpp...")

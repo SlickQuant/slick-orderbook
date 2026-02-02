@@ -38,11 +38,11 @@ public:
 
     /// Called when snapshot processing begins
     /// Followed by multiple onPriceLevelUpdate() or onOrderUpdate() calls
-    virtual void onSnapshotBegin([[maybe_unused]] SymbolId symbol, [[maybe_unused]] Timestamp timestamp) {
+    virtual void onSnapshotBegin([[maybe_unused]] SymbolId symbol, [[maybe_unused]] uint64_t seq_num, [[maybe_unused]] Timestamp timestamp) {
     }
 
     /// Called when snapshot processing completes
-    virtual void onSnapshotEnd([[maybe_unused]] SymbolId symbol, [[maybe_unused]] Timestamp timestamp) {
+    virtual void onSnapshotEnd([[maybe_unused]] SymbolId symbol, [[maybe_unused]] uint64_t seq_num, [[maybe_unused]] Timestamp timestamp) {
     }
 };
 
@@ -118,16 +118,16 @@ public:
     }
 
     /// Notify all observers that snapshot processing is beginning
-    void notifySnapshotBegin(SymbolId symbol, Timestamp timestamp) const {
+    void notifySnapshotBegin(SymbolId symbol, uint64_t seq_num, Timestamp timestamp) const {
         for (const auto& observer : observers_) {
-            observer->onSnapshotBegin(symbol, timestamp);
+            observer->onSnapshotBegin(symbol, seq_num, timestamp);
         }
     }
 
     /// Notify all observers that snapshot processing is complete
-    void notifySnapshotEnd(SymbolId symbol, Timestamp timestamp) const {
+    void notifySnapshotEnd(SymbolId symbol, uint64_t seq_num, Timestamp timestamp) const {
         for (const auto& observer : observers_) {
-            observer->onSnapshotEnd(symbol, timestamp);
+            observer->onSnapshotEnd(symbol, seq_num, timestamp);
         }
     }
 
