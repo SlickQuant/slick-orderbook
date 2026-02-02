@@ -286,3 +286,165 @@ TEST_F(OrderBookL2Test, Move) {
     EXPECT_EQ(book3.symbol(), kSymbol);
     EXPECT_EQ(book3.levelCount(Side::Buy), 1);
 }
+
+// Batch flag tests
+class BatchObserverL2 : public IOrderBookObserver {
+public:
+    std::vector<PriceLevelUpdate> level_updates;
+    std::vector<TopOfBook> tob_updates;
+
+    void onPriceLevelUpdate(const PriceLevelUpdate& update) override {
+        level_updates.push_back(update);
+    }
+
+    void onTopOfBookUpdate(const TopOfBook& tob) override {
+        tob_updates.push_back(tob);
+    }
+
+    void reset() {
+        level_updates.clear();
+        tob_updates.clear();
+    }
+};
+
+TEST_F(OrderBookL2Test, BatchFlagSingleOperation) {
+    OrderBookL2 book(kSymbol);
+    auto observer = std::make_shared<BatchObserverL2>();
+    book.addObserver(observer);
+
+    // Single operation with default is_last_in_batch = true
+    book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1);
+
+    // Should receive 1 level update and 1 ToB update
+    ASSERT_EQ(observer->level_updates.size(), 1);
+    ASSERT_EQ(observer->tob_updates.size(), 1);
+
+    // Check flags
+    const auto& update = observer->level_updates[0];
+    EXPECT_TRUE(update.isLastInBatch());
+    EXPECT_TRUE(update.priceChanged());
+    EXPECT_TRUE(update.quantityChanged());
+}
+
+TEST_F(OrderBookL2Test, BatchFlagMultipleUpdates) {
+    OrderBookL2 book(kSymbol);
+    auto observer = std::make_shared<BatchObserverL2>();
+    book.addObserver(observer);
+
+    // Batch of 3 updates - only last one should trigger ToB
+    book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1, false);  // Not last
+    book.updateLevel(Side::Buy, kPrice101, kQty20, kTs1, false);  // Not last
+    book.updateLevel(Side::Buy, kPrice102, kQty30, kTs1, true);   // Last
+
+    // Should receive 3 level updates but only 1 ToB update (at the end)
+    ASSERT_EQ(observer->level_updates.size(), 3);
+    ASSERT_EQ(observer->tob_updates.size(), 1);
+
+    // Check flags on each update
+    EXPECT_FALSE(observer->level_updates[0].isLastInBatch());
+    EXPECT_FALSE(observer->level_updates[1].isLastInBatch());
+    EXPECT_TRUE(observer->level_updates[2].isLastInBatch());
+
+    // ToB should reflect the final state (best bid = 10200)
+    EXPECT_EQ(observer->tob_updates[0].best_bid, kPrice102);
+    EXPECT_EQ(observer->tob_updates[0].bid_quantity, kQty30);
+}
+
+TEST_F(OrderBookL2Test, BatchFlagIntermediateUpdates) {
+    OrderBookL2 book(kSymbol);
+    auto observer = std::make_shared<BatchObserverL2>();
+    book.addObserver(observer);
+
+    // Add initial levels
+    book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1);
+    book.updateLevel(Side::Sell, kPrice101, kQty10, kTs1);
+    observer->reset();
+
+    // Batch update: modify quantities without triggering ToB until end
+    book.updateLevel(Side::Buy, kPrice100, kQty20, kTs2, false);   // Qty change only, not last
+    book.updateLevel(Side::Sell, kPrice101, kQty20, kTs2, true);   // Qty change only, last
+
+    // Should receive 2 level updates and 1 ToB update
+    ASSERT_EQ(observer->level_updates.size(), 2);
+    ASSERT_EQ(observer->tob_updates.size(), 1);
+
+    // First update should only have QuantityChanged flag (no PriceChanged)
+    EXPECT_FALSE(observer->level_updates[0].priceChanged());
+    EXPECT_TRUE(observer->level_updates[0].quantityChanged());
+    EXPECT_FALSE(observer->level_updates[0].isLastInBatch());
+
+    // Second update should have both flags
+    EXPECT_FALSE(observer->level_updates[1].priceChanged());
+    EXPECT_TRUE(observer->level_updates[1].quantityChanged());
+    EXPECT_TRUE(observer->level_updates[1].isLastInBatch());
+}
+
+TEST_F(OrderBookL2Test, BatchFlagDeletion) {
+    OrderBookL2 book(kSymbol);
+    auto observer = std::make_shared<BatchObserverL2>();
+    book.addObserver(observer);
+
+    // Add levels
+    book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1);
+    book.updateLevel(Side::Buy, kPrice99, kQty20, kTs1);
+    observer->reset();
+
+    // Delete in batch
+    book.updateLevel(Side::Buy, kPrice100, 0, kTs2, false);  // Delete, not last
+    book.updateLevel(Side::Buy, kPrice99, 0, kTs2, true);    // Delete, last
+
+    // Should receive 2 deletions and 1 ToB update
+    ASSERT_EQ(observer->level_updates.size(), 2);
+    ASSERT_EQ(observer->tob_updates.size(), 1);
+
+    // Both deletions should have PriceChanged | QuantityChanged
+    EXPECT_TRUE(observer->level_updates[0].isDelete());
+    EXPECT_TRUE(observer->level_updates[0].priceChanged());
+    EXPECT_TRUE(observer->level_updates[0].quantityChanged());
+    EXPECT_FALSE(observer->level_updates[0].isLastInBatch());
+
+    EXPECT_TRUE(observer->level_updates[1].isDelete());
+    EXPECT_TRUE(observer->level_updates[1].priceChanged());
+    EXPECT_TRUE(observer->level_updates[1].quantityChanged());
+    EXPECT_TRUE(observer->level_updates[1].isLastInBatch());
+
+    // ToB should reflect empty book
+    EXPECT_EQ(observer->tob_updates[0].best_bid, 0);
+    EXPECT_EQ(observer->tob_updates[0].bid_quantity, 0);
+}
+
+TEST_F(OrderBookL2Test, BatchFlagMixedOperations) {
+    OrderBookL2 book(kSymbol);
+    auto observer = std::make_shared<BatchObserverL2>();
+    book.addObserver(observer);
+
+    // Mixed operations in a batch: add, modify, delete
+    book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1, false);   // Add new level
+    book.updateLevel(Side::Buy, kPrice100, kQty20, kTs1, false);   // Modify (qty only)
+    book.updateLevel(Side::Buy, kPrice101, kQty30, kTs1, false);   // Add new level
+    book.updateLevel(Side::Buy, kPrice100, 0, kTs1, true);         // Delete, last
+
+    // Should receive 4 level updates and 1 ToB update
+    ASSERT_EQ(observer->level_updates.size(), 4);
+    ASSERT_EQ(observer->tob_updates.size(), 1);
+
+    // Check flags
+    EXPECT_TRUE(observer->level_updates[0].priceChanged());   // New level
+    EXPECT_TRUE(observer->level_updates[0].quantityChanged());
+    EXPECT_FALSE(observer->level_updates[0].isLastInBatch());
+
+    EXPECT_FALSE(observer->level_updates[1].priceChanged());  // Qty change only
+    EXPECT_TRUE(observer->level_updates[1].quantityChanged());
+    EXPECT_FALSE(observer->level_updates[1].isLastInBatch());
+
+    EXPECT_TRUE(observer->level_updates[2].priceChanged());   // New level
+    EXPECT_TRUE(observer->level_updates[2].quantityChanged());
+    EXPECT_FALSE(observer->level_updates[2].isLastInBatch());
+
+    EXPECT_TRUE(observer->level_updates[3].priceChanged());   // Deletion
+    EXPECT_TRUE(observer->level_updates[3].quantityChanged());
+    EXPECT_TRUE(observer->level_updates[3].isLastInBatch());
+
+    // Final ToB should show best bid at 10100
+    EXPECT_EQ(observer->tob_updates[0].best_bid, kPrice101);
+}

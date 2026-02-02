@@ -59,7 +59,10 @@ public:
     /// @param price Price level
     /// @param quantity Total quantity at this level (0 = delete)
     /// @param timestamp Update timestamp
-    void updateLevel(Side side, Price price, Quantity quantity, Timestamp timestamp);
+    /// @param is_last_in_batch Set to true if this is the last update in an external batch
+    ///                         (enables batching of TopOfBook updates)
+    void updateLevel(Side side, Price price, Quantity quantity, Timestamp timestamp,
+                     bool is_last_in_batch = true);
 
     /// Delete a price level
     /// @param side Buy or Sell
@@ -132,7 +135,9 @@ public:
 private:
     /// Notify observers of top-of-book update if best changed
     /// Updates cached_tob_ after notification
-    void notifyTopOfBookIfChanged(Timestamp timestamp);
+    /// @param timestamp Update timestamp
+    /// @param update_flags Change flags from the update (used to check LastInBatch)
+    void notifyTopOfBookIfChanged(Timestamp timestamp, uint8_t update_flags);
 
     SymbolId symbol_;                                                    // Symbol identifier
     std::array<detail::LevelContainer, SideCount> sides_;              // Bid and ask sides (indexed by Side enum)

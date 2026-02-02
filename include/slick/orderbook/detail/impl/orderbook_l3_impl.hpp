@@ -34,7 +34,7 @@ SLICK_OB_INLINE OrderBookL3::~OrderBookL3() {
 }
 
 SLICK_OB_INLINE bool OrderBookL3::addOrModifyOrder(OrderId order_id, Side side, Price price, Quantity quantity,
-                                   Timestamp timestamp, uint64_t priority) {
+                                   Timestamp timestamp, uint64_t priority, bool is_last_in_batch) {
     SLICK_ASSERT(side < SideCount);
 
     // Check if order already exists
@@ -47,7 +47,7 @@ SLICK_OB_INLINE bool OrderBookL3::addOrModifyOrder(OrderId order_id, Side side, 
         }
 
         if (SLICK_UNLIKELY(quantity <= 0)) {
-            return (quantity == 0) ? deleteOrder(order_id) : false;
+            return (quantity == 0) ? deleteOrder(order_id, is_last_in_batch) : false;
         }
 
         // Idempotent update - nothing to do.
@@ -57,7 +57,7 @@ SLICK_OB_INLINE bool OrderBookL3::addOrModifyOrder(OrderId order_id, Side side, 
 
         // Use the provided timestamp for update notifications.
         order->timestamp = timestamp;
-        return modifyOrder(order_id, price, quantity);
+        return modifyOrder(order_id, price, quantity, is_last_in_batch);
     }
 
     if (SLICK_UNLIKELY(quantity <= 0)) {
@@ -79,28 +79,39 @@ SLICK_OB_INLINE bool OrderBookL3::addOrModifyOrder(OrderId order_id, Side side, 
     // Add to order map
     order_map_.insert(order);
 
-    // Notify observers (new order: both price and quantity changed)
-    notifyOrderUpdate(order, 0, 0, timestamp, level_idx, PriceChanged | QuantityChanged);
+    // New order: both price and quantity changed
+    uint8_t order_flags = PriceChanged | QuantityChanged;
     uint8_t level_change_flag = QuantityChanged;
     if (is_new) {
         level_change_flag |= PriceChanged;
     }
+    // Add LastInBatch flag if this is the last update
+    if (is_last_in_batch) {
+        order_flags |= LastInBatch;
+        level_change_flag |= LastInBatch;
+    }
+
+    // Notify observers
+    notifyOrderUpdate(order, 0, 0, timestamp, level_idx, order_flags);
     notifyPriceLevelUpdate(side, price, level->getTotalQuantity(), timestamp, level_idx, level_change_flag);
-    notifyTopOfBookIfChanged(timestamp);
+    notifyTopOfBookIfChanged(timestamp, order_flags);
 
     return true;
 }
 
 SLICK_OB_INLINE bool OrderBookL3::addOrder(OrderId order_id, Side side, Price price, Quantity quantity,
-                          Timestamp timestamp, uint64_t priority) {
+                          Timestamp timestamp, uint64_t priority, bool is_last_in_batch) {
     // Strict add - fail if order already exists
     if (order_map_.contains(order_id)) {
         return false;
     }
-    return addOrModifyOrder(order_id, side, price, quantity, timestamp, priority);
+    // Use timestamp as priority if not specified
+    uint64_t actual_priority = (priority == 0) ? timestamp : priority;
+    return addOrModifyOrder(order_id, side, price, quantity, timestamp, actual_priority, is_last_in_batch);
 }
 
-SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price, Quantity new_quantity) {
+SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price, Quantity new_quantity,
+                                               bool is_last_in_batch) {
     // Find order
     detail::Order* order = order_map_.find(order_id);
     if (!order) {
@@ -113,7 +124,7 @@ SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price,
 
     // Check if this is a delete (quantity = 0)
     if (new_quantity == 0) {
-        return deleteOrder(order_id);
+        return deleteOrder(order_id, is_last_in_batch);
     }
 
     const Timestamp timestamp = order->timestamp;  // Use original timestamp for modifications
@@ -144,6 +155,7 @@ SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price,
             if (removeLevelIfEmpty(side, old_price)) {
                 old_level_change_flags |= PriceChanged;
             }
+            // Don't add LastInBatch to intermediate old level update
             notifyPriceLevelUpdate(side, old_price, old_level_total, timestamp, old_level_idx, old_level_change_flags);
         }
 
@@ -158,18 +170,23 @@ SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price,
         new_level->insertOrder(order);
 
         // Notify observers (price changed: both price and quantity flags)
-        uint8_t flags = PriceChanged;
+        uint8_t order_flags = PriceChanged;
         if (quantity_changed) {
-            flags |= QuantityChanged;
+            order_flags |= QuantityChanged;
         }
-        
-        notifyOrderUpdate(order, old_quantity, old_price, timestamp, new_level_idx, flags);
         uint8_t new_level_change_flags = QuantityChanged;
         if (is_new) {
             new_level_change_flags |= PriceChanged;
         }
+        // Add LastInBatch flag if this is the last update
+        if (is_last_in_batch) {
+            order_flags |= LastInBatch;
+            new_level_change_flags |= LastInBatch;
+        }
+
+        notifyOrderUpdate(order, old_quantity, old_price, timestamp, new_level_idx, order_flags);
         notifyPriceLevelUpdate(side, new_price, new_level->getTotalQuantity(), timestamp, new_level_idx, new_level_change_flags);
-        notifyTopOfBookIfChanged(timestamp);
+        notifyTopOfBookIfChanged(timestamp, order_flags);
 
     } else {
         // Only quantity changed
@@ -180,19 +197,26 @@ SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price,
         order->quantity = new_quantity;
 
         // Notify observers (only quantity changed)
-        notifyOrderUpdate(order, old_quantity, old_price, timestamp, level_index, QuantityChanged);
+        uint8_t order_flags = QuantityChanged;
         uint8_t level_change_flags = QuantityChanged;
         if (is_new) [[unlikely]] {
             level_change_flags |= PriceChanged;
         }
+        // Add LastInBatch flag if this is the last update
+        if (is_last_in_batch) {
+            order_flags |= LastInBatch;
+            level_change_flags |= LastInBatch;
+        }
+
+        notifyOrderUpdate(order, old_quantity, old_price, timestamp, level_index, order_flags);
         notifyPriceLevelUpdate(side, old_price, level->getTotalQuantity(), timestamp, level_index, level_change_flags);
-        notifyTopOfBookIfChanged(timestamp);
+        notifyTopOfBookIfChanged(timestamp, order_flags);
     }
 
     return true;
 }
 
-SLICK_OB_INLINE bool OrderBookL3::deleteOrder(OrderId order_id) noexcept {
+SLICK_OB_INLINE bool OrderBookL3::deleteOrder(OrderId order_id, bool is_last_in_batch) noexcept {
     // Find order
     detail::Order* order = order_map_.find(order_id);
     if (!order) {
@@ -207,8 +231,13 @@ SLICK_OB_INLINE bool OrderBookL3::deleteOrder(OrderId order_id) noexcept {
     auto [level, level_idx] = getLevel(side, price);
     if (!level) {
         // Level doesn't exist - data structure inconsistency
+        // Deletion: both price and quantity changed
+        uint8_t order_flags = PriceChanged | QuantityChanged;
+        if (is_last_in_batch) {
+            order_flags |= LastInBatch;
+        }
         // Notify deletion, then clean up (use max index since level not found)
-        notifyOrderDelete(order, timestamp, std::numeric_limits<uint16_t>::max());
+        notifyOrderDelete(order, timestamp, std::numeric_limits<uint16_t>::max(), order_flags);
         order_map_.erase(order_id);
         order_pool_.destroy(order);
         return false;
@@ -221,25 +250,32 @@ SLICK_OB_INLINE bool OrderBookL3::deleteOrder(OrderId order_id) noexcept {
     // Remove from order map
     order_map_.erase(order_id);
 
-    // Notify observers (before destroying order)
-    notifyOrderDelete(order, timestamp, level_idx);
-
+    // Deletion: both price and quantity changed
+    uint8_t order_flags = PriceChanged | QuantityChanged;
     uint8_t level_change_flags = QuantityChanged;
     if (removeLevelIfEmpty(side, price)) {
         level_change_flags |= PriceChanged;
     }
+    // Add LastInBatch flag if this is the last update
+    if (is_last_in_batch) {
+        order_flags |= LastInBatch;
+        level_change_flags |= LastInBatch;
+    }
+
+    // Notify observers (before destroying order)
+    notifyOrderDelete(order, timestamp, level_idx, order_flags);
     notifyPriceLevelUpdate(side, price, level_total, timestamp, level_idx, level_change_flags);
 
     // Destroy order
     order_pool_.destroy(order);
 
     // Notify ToB if changed
-    notifyTopOfBookIfChanged(timestamp);
+    notifyTopOfBookIfChanged(timestamp, order_flags);
 
     return true;
 }
 
-SLICK_OB_INLINE bool OrderBookL3::executeOrder(OrderId order_id, Quantity executed_quantity) {
+SLICK_OB_INLINE bool OrderBookL3::executeOrder(OrderId order_id, Quantity executed_quantity, bool is_last_in_batch) {
     detail::Order* order = order_map_.find(order_id);
     if (!order) {
         return false;
@@ -253,11 +289,11 @@ SLICK_OB_INLINE bool OrderBookL3::executeOrder(OrderId order_id, Quantity execut
     const Quantity remaining = order->quantity - executed_quantity;
 
     if (remaining == 0) {
-        // Fully executed - delete order
-        return deleteOrder(order_id);
+        // Fully executed - delete order (pass through is_last_in_batch)
+        return deleteOrder(order_id, is_last_in_batch);
     } else {
-        // Partial execution - reduce quantity
-        return modifyOrder(order_id, order->price, remaining);
+        // Partial execution - reduce quantity (pass through is_last_in_batch)
+        return modifyOrder(order_id, order->price, remaining, is_last_in_batch);
     }
 }
 
@@ -480,7 +516,7 @@ SLICK_OB_INLINE void OrderBookL3::notifyOrderUpdate(const detail::Order* order, 
     observers_.notifyOrderUpdate(update);
 }
 
-SLICK_OB_INLINE void OrderBookL3::notifyOrderDelete(const detail::Order* order, Timestamp timestamp, uint16_t level_index) const {
+SLICK_OB_INLINE void OrderBookL3::notifyOrderDelete(const detail::Order* order, Timestamp timestamp, uint16_t level_index, uint8_t change_flags) const {
     OrderUpdate update{
         symbol_,
         order->order_id,
@@ -490,7 +526,7 @@ SLICK_OB_INLINE void OrderBookL3::notifyOrderDelete(const detail::Order* order, 
         timestamp,
         level_index,
         order->priority,
-        static_cast<uint8_t>(PriceChanged | QuantityChanged)  // Deletion = both changed
+        change_flags
     };
     observers_.notifyOrderUpdate(update);
 }
@@ -525,7 +561,13 @@ SLICK_OB_INLINE void OrderBookL3::notifyPriceLevelUpdate(Side side, Price price,
     observers_.notifyPriceLevelUpdate(update);
 }
 
-SLICK_OB_INLINE void OrderBookL3::notifyTopOfBookIfChanged(Timestamp timestamp) {
+SLICK_OB_INLINE void OrderBookL3::notifyTopOfBookIfChanged(Timestamp timestamp, uint8_t update_flags) {
+    // Only emit ToB if LastInBatch flag is set
+    // (defaults to true for single operations, false for intermediate batch updates)
+    if ((update_flags & LastInBatch) == 0) {
+        return;  // Skip ToB emission for intermediate batch updates
+    }
+
     // Compute current top-of-book
     const auto* bid = getBestBid();
     const auto* ask = getBestAsk();

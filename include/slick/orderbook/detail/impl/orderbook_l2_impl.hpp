@@ -19,7 +19,8 @@ SLICK_OB_INLINE OrderBookL2::OrderBookL2(SymbolId symbol, std::size_t initial_ca
     cached_tob_.symbol = symbol_;
 }
 
-SLICK_OB_INLINE void OrderBookL2::updateLevel(Side side, Price price, Quantity quantity, Timestamp timestamp) {
+SLICK_OB_INLINE void OrderBookL2::updateLevel(Side side, Price price, Quantity quantity, Timestamp timestamp,
+                                               bool is_last_in_batch) {
     SLICK_ASSERT(side < SideCount);
 
     if (quantity == 0) {
@@ -31,10 +32,16 @@ SLICK_OB_INLINE void OrderBookL2::updateLevel(Side side, Price price, Quantity q
             // Delete the level
             sides_[side].erase(it);
 
-            // Notify with level_index and flags (deletion = both price and quantity changed)
-            PriceLevelUpdate update{symbol_, side, price, 0, timestamp, level_idx, PriceChanged | QuantityChanged};
+            // Deletion: both price and quantity changed
+            uint8_t change_flags = PriceChanged | QuantityChanged;
+            if (is_last_in_batch) {
+                change_flags |= LastInBatch;
+            }
+
+            // Notify with level_index and flags
+            PriceLevelUpdate update{symbol_, side, price, 0, timestamp, level_idx, change_flags};
             observers_.notifyPriceLevelUpdate(update);
-            notifyTopOfBookIfChanged(timestamp);
+            notifyTopOfBookIfChanged(timestamp, change_flags);
         }
     } else {
         // Insert or update level
@@ -43,20 +50,25 @@ SLICK_OB_INLINE void OrderBookL2::updateLevel(Side side, Price price, Quantity q
         // Calculate level index
         uint16_t level_idx = static_cast<uint16_t>(std::distance(sides_[side].begin(), it));
 
-        // Determine change flags
-        uint8_t flags = 0;
+        // Determine change flags based on what actually changed
+        uint8_t change_flags = 0;
         if (inserted) {
             // New level: both price and quantity changed
-            flags = PriceChanged | QuantityChanged;
+            change_flags = PriceChanged | QuantityChanged;
         } else {
             // Existing level: only quantity changed
-            flags = QuantityChanged;
+            change_flags = QuantityChanged;
+        }
+
+        // Add LastInBatch flag if this is the last update
+        if (is_last_in_batch) {
+            change_flags |= LastInBatch;
         }
 
         // Notify observers
-        PriceLevelUpdate update{symbol_, side, price, quantity, timestamp, level_idx, flags};
+        PriceLevelUpdate update{symbol_, side, price, quantity, timestamp, level_idx, change_flags};
         observers_.notifyPriceLevelUpdate(update);
-        notifyTopOfBookIfChanged(timestamp);
+        notifyTopOfBookIfChanged(timestamp, change_flags);
     }
 }
 
@@ -126,7 +138,13 @@ SLICK_OB_INLINE bool OrderBookL2::isEmpty() const noexcept {
     return sides_[Side::Buy].empty() && sides_[Side::Sell].empty();
 }
 
-SLICK_OB_INLINE void OrderBookL2::notifyTopOfBookIfChanged(Timestamp timestamp) {
+SLICK_OB_INLINE void OrderBookL2::notifyTopOfBookIfChanged(Timestamp timestamp, uint8_t update_flags) {
+    // Only emit ToB if LastInBatch flag is set
+    // (defaults to true for single operations, false for intermediate batch updates)
+    if ((update_flags & LastInBatch) == 0) {
+        return;  // Skip ToB emission for intermediate batch updates
+    }
+
     // Compute current top-of-book
     const auto* bid = getBestBid();
     const auto* ask = getBestAsk();

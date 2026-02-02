@@ -100,13 +100,17 @@ public:
     /// @param quantity Order quantity
     /// @param timestamp Order timestamp
     /// @param priority Priority for sorting (used only when adding new order)
+    /// @param is_last_in_batch Set to true if this is the last update in an external batch
+    ///                         (enables batching of TopOfBook updates)
     /// @return true if order was added or modified successfully
     bool addOrModifyOrder(OrderId order_id, Side side, Price price, Quantity quantity,
-                          Timestamp timestamp, uint64_t priority);
+                          Timestamp timestamp, uint64_t priority,
+                          bool is_last_in_batch = true);
 
     /// Add or modify order with timestamp as priority (convenience)
-    bool addOrModifyOrder(OrderId order_id, Side side, Price price, Quantity quantity, Timestamp timestamp) {
-        return addOrModifyOrder(order_id, side, price, quantity, timestamp, timestamp);
+    bool addOrModifyOrder(OrderId order_id, Side side, Price price, Quantity quantity, Timestamp timestamp,
+                          bool is_last_in_batch = true) {
+        return addOrModifyOrder(order_id, side, price, quantity, timestamp, timestamp, is_last_in_batch);
     }
 
     /// Add a new order (strict - fails if order already exists)
@@ -115,34 +119,39 @@ public:
     /// @param price Order price
     /// @param quantity Order quantity
     /// @param timestamp Order timestamp
-    /// @param priority Priority for sorting
+    /// @param priority Priority for sorting (defaults to timestamp)
+    /// @param is_last_in_batch Set to true if this is the last update in an external batch
+    ///                         (enables batching of TopOfBook updates)
     /// @return true if order was added successfully, false if OrderId already exists
     bool addOrder(OrderId order_id, Side side, Price price, Quantity quantity,
-                  Timestamp timestamp, uint64_t priority);
-
-    /// Add order with timestamp as priority (convenience)
-    bool addOrder(OrderId order_id, Side side, Price price, Quantity quantity, Timestamp timestamp) {
-        return addOrder(order_id, side, price, quantity, timestamp, timestamp);
-    }
+                  Timestamp timestamp, uint64_t priority = 0, bool is_last_in_batch = true);
 
     /// Modify an existing order's price and/or quantity
     /// Compares new values with old to determine what changed
     /// @param order_id Order identifier
     /// @param new_price New price
     /// @param new_quantity New quantity (0 = delete)
+    /// @param is_last_in_batch Set to true if this is the last update in an external batch
+    ///                         (enables batching of TopOfBook updates)
     /// @return true if order was found and modified
-    bool modifyOrder(OrderId order_id, Price new_price, Quantity new_quantity);
+    bool modifyOrder(OrderId order_id, Price new_price, Quantity new_quantity,
+                     bool is_last_in_batch = true);
 
     /// Delete an order
     /// @param order_id Order identifier
+    /// @param is_last_in_batch Set to true if this is the last update in an external batch
+    ///                         (enables batching of TopOfBook updates)
     /// @return true if order was found and deleted
-    bool deleteOrder(OrderId order_id) noexcept;
+    bool deleteOrder(OrderId order_id, bool is_last_in_batch = true) noexcept;
 
     /// Execute (partially fill) an order
     /// @param order_id Order identifier
     /// @param executed_quantity Quantity executed
+    /// @param is_last_in_batch Set to true if this is the last update in an external batch
+    ///                         (enables batching of TopOfBook updates)
     /// @return true if order was found and executed
-    bool executeOrder(OrderId order_id, Quantity executed_quantity);
+    bool executeOrder(OrderId order_id, Quantity executed_quantity,
+                      bool is_last_in_batch = true);
 
     /// Find order by OrderId
     /// @param order_id Order identifier
@@ -251,7 +260,7 @@ private:
                           Timestamp timestamp, uint16_t level_index, uint8_t change_flags) const;
 
     /// Notify observers of order delete with level index
-    void notifyOrderDelete(const detail::Order* order, Timestamp timestamp, uint16_t level_index) const;
+    void notifyOrderDelete(const detail::Order* order, Timestamp timestamp, uint16_t level_index, uint8_t change_flags) const;
 
     /// Calculate price level index for a given side and price
     [[nodiscard]] uint16_t calculateLevelIndex(Side side, Price price) const noexcept;
@@ -265,7 +274,9 @@ private:
 
     /// Notify observers of top-of-book update if best changed
     /// Updates cached_tob_ after notification
-    void notifyTopOfBookIfChanged(Timestamp timestamp);
+    /// @param timestamp Update timestamp
+    /// @param update_flags Change flags from the update (used to check LastInBatch)
+    void notifyTopOfBookIfChanged(Timestamp timestamp, uint8_t update_flags);
 
     SymbolId symbol_;                                           // Symbol identifier
     std::array<PriceLevelMap, SideCount> levels_;              // Price levels per side (indexed by Side enum)

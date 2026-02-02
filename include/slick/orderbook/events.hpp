@@ -12,6 +12,7 @@ SLICK_NAMESPACE_BEGIN
 enum PriceLevelChangeFlag : uint8_t {
     PriceChanged = 0x01,    // Price level was added/moved
     QuantityChanged = 0x02, // Quantity at level changed
+    LastInBatch = 0x04,     // Last update in external batch
 };
 
 /// Level 2 price level update event
@@ -50,6 +51,11 @@ struct PriceLevelUpdate {
     /// Check if this update affects the top N levels
     [[nodiscard]] constexpr bool isTopN(uint16_t n) const noexcept {
         return level_index < n;
+    }
+
+    /// Check if this is the last update in a batch
+    [[nodiscard]] constexpr bool isLastInBatch() const noexcept {
+        return (change_flags & LastInBatch) != 0;
     }
 };
 
@@ -92,6 +98,11 @@ struct OrderUpdate {
     [[nodiscard]] constexpr bool isTopN(uint16_t n) const noexcept {
         return price_level_index < n;
     }
+
+    /// Check if this is the last update in a batch
+    [[nodiscard]] constexpr bool isLastInBatch() const noexcept {
+        return (change_flags & LastInBatch) != 0;
+    }
 };
 
 /// Trade event - represents an executed trade
@@ -103,11 +114,22 @@ struct Trade {
     OrderId aggressive_order_id;    // OrderId of the aggressive (incoming) order
     OrderId passive_order_id;       // OrderId of the passive (resting) order
     Side aggressor_side;            // Side that initiated the trade (Buy = uptick, Sell = downtick)
+    uint8_t change_flags;           // Bitset of PriceLevelChangeFlag
 
-    Trade() noexcept = default;
+    Trade() noexcept : symbol(0), price(0), quantity(0), timestamp(0),
+                       aggressive_order_id(0), passive_order_id(0),
+                       aggressor_side(Side::Buy), change_flags(0) {}
 
-    Trade(SymbolId sym, Price p, Quantity q, Timestamp ts, Side aggressor, OrderId passive = 0, OrderId aggressive = 0) noexcept
-        : symbol(sym), price(p), quantity(q), timestamp(ts), aggressive_order_id(aggressive), passive_order_id(passive), aggressor_side(aggressor) {}
+    Trade(SymbolId sym, Price p, Quantity q, Timestamp ts, Side aggressor,
+          OrderId passive = 0, OrderId aggressive = 0, uint8_t flags = 0) noexcept
+        : symbol(sym), price(p), quantity(q), timestamp(ts),
+          aggressive_order_id(aggressive), passive_order_id(passive),
+          aggressor_side(aggressor), change_flags(flags) {}
+
+    /// Check if this is the last update in a batch
+    [[nodiscard]] constexpr bool isLastInBatch() const noexcept {
+        return (change_flags & LastInBatch) != 0;
+    }
 };
 
 /// Top-of-book snapshot - best bid and ask
