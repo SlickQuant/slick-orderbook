@@ -43,6 +43,12 @@ target_include_directories(slick_orderbook_tests
         ${CMAKE_SOURCE_DIR}/include_private
 )
 
+# Set linker language to C++ (needed for LTO with header-only mode)
+set_target_properties(slick_orderbook_tests
+    PROPERTIES
+    LINKER_LANGUAGE CXX
+)
+
 # Discover tests for CTest
 include(GoogleTest)
 gtest_discover_tests(slick_orderbook_tests)

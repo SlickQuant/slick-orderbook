@@ -62,6 +62,19 @@ target_include_directories(bench_cache_alignment PRIVATE
     ${CMAKE_SOURCE_DIR}/include_private
 )
 
+# Set linker language to C++ for all benchmarks (needed for LTO with header-only mode)
+set_target_properties(
+    bench_orderbook_l2
+    bench_orderbook_l3
+    bench_orderbook_manager
+    bench_observer_overhead
+    bench_memory_usage
+    bench_market_replay
+    bench_cache_alignment
+    PROPERTIES
+    LINKER_LANGUAGE CXX
+)
+
 # Custom benchmark runner for all benchmarks
 add_custom_target(run_benchmarks
     COMMAND bench_orderbook_l2 --benchmark_out=bench_l2.json --benchmark_out_format=json

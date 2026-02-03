@@ -86,4 +86,5 @@ message(STATUS "Coinbase integration example enabled")
 set_target_properties(simple_l2_orderbook simple_l3_orderbook multi_symbol_orderbook coinbase_integration
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples
+    LINKER_LANGUAGE CXX
 )
