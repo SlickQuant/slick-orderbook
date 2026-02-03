@@ -12,8 +12,9 @@ jobs:
   # ============================================================================
   create-release:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required for creating releases
     outputs:
-      upload_url: ${{ steps.create_release.outputs.upload_url }}
       version: ${{ steps.get_version.outputs.version }}
 
     steps:
@@ -28,32 +29,42 @@ jobs:
         echo "version=$VERSION" >> $GITHUB_OUTPUT
         echo "Version: $VERSION"
 
-    - name: Generate Changelog
+    - name: Extract Changelog
       id: changelog
       run: |
-        echo "# Release Notes" > RELEASE_NOTES.md
-        echo "" >> RELEASE_NOTES.md
-        echo "Version: ${{ steps.get_version.outputs.version }}" >> RELEASE_NOTES.md
-        echo "" >> RELEASE_NOTES.md
+        VERSION="${{ steps.get_version.outputs.version }}"
 
-        # Get commits since last tag
-        PREVIOUS_TAG=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1) 2>/dev/null || echo "")
-        if [ -n "$PREVIOUS_TAG" ]; then
-          echo "## Changes since $PREVIOUS_TAG" >> RELEASE_NOTES.md
+        # Extract the section for this version from CHANGELOG.md
+        awk -v version="$VERSION" '
+          /^## \[/ {
+            if (found) exit;
+            if ($0 ~ "\\[" version "\\]") {
+              found=1;
+              next;
+            }
+          }
+          found && /^## \[/ { exit }
+          found { print }
+        ' CHANGELOG.md > RELEASE_NOTES.md
+
+        # If extraction failed or file is empty, use a default message
+        if [ ! -s RELEASE_NOTES.md ]; then
+          echo "Release version $VERSION" > RELEASE_NOTES.md
           echo "" >> RELEASE_NOTES.md
-          git log $PREVIOUS_TAG..HEAD --pretty=format:"- %s (%h)" >> RELEASE_NOTES.md
-        else
-          echo "## Initial Release" >> RELEASE_NOTES.md
+          echo "See [CHANGELOG.md](https://github.com/SlickQuant/slick-orderbook/blob/main/CHANGELOG.md) for details." >> RELEASE_NOTES.md
         fi
+
+        # Add header
+        sed -i '1i# Release Notes\n' RELEASE_NOTES.md
+
+        echo "Release notes:"
+        cat RELEASE_NOTES.md
 
     - name: Create Release
       id: create_release
-      uses: actions/create-release@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v2
       with:
-        tag_name: ${{ github.ref }}
-        release_name: Release ${{ steps.get_version.outputs.version }}
+        name: Release ${{ steps.get_version.outputs.version }}
         body_path: RELEASE_NOTES.md
         draft: false
         prerelease: false
@@ -64,6 +75,8 @@ jobs:
   build-linux:
     needs: create-release
     runs-on: ubuntu-24.04
+    permissions:
+      contents: write  # Required for uploading release assets
     strategy:
       matrix:
         arch: [x64]
@@ -80,6 +93,7 @@ jobs:
 
     - name: Build Release Package
       run: |
+        VERSION=${{ needs.create-release.outputs.version }}
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_CXX_COMPILER=g++-14 \
@@ -93,17 +107,12 @@ jobs:
         cmake --install build --prefix install
 
         # Package
-        tar -czf slick-orderbook-${{ needs.create-release.outputs.version }}-linux-${{ matrix.arch }}.tar.gz -C install .
+        tar -czf slick-orderbook-${VERSION}-linux-${{ matrix.arch }}.tar.gz -C install .
 
     - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v2
       with:
-        upload_url: ${{ needs.create-release.outputs.upload_url }}
-        asset_path: ./slick-orderbook-${{ needs.create-release.outputs.version }}-linux-${{ matrix.arch }}.tar.gz
-        asset_name: slick-orderbook-${{ needs.create-release.outputs.version }}-linux-${{ matrix.arch }}.tar.gz
-        asset_content_type: application/gzip
+        files: slick-orderbook-${{ needs.create-release.outputs.version }}-linux-${{ matrix.arch }}.tar.gz
 
   # ============================================================================
   # Build Release Artifacts - Windows
@@ -111,6 +120,8 @@ jobs:
   build-windows:
     needs: create-release
     runs-on: windows-2022
+    permissions:
+      contents: write  # Required for uploading release assets
 
     steps:
     - uses: actions/checkout@v4
@@ -122,6 +133,7 @@ jobs:
 
     - name: Build Release Package
       run: |
+        $VERSION = "${{ needs.create-release.outputs.version }}"
         cmake -B build -G "Visual Studio 17 2022" -A x64 `
           -DCMAKE_BUILD_TYPE=Release `
           -DSLICK_ORDERBOOK_BUILD_TESTS=OFF `
@@ -134,17 +146,12 @@ jobs:
         cmake --install build --prefix install --config Release
 
         # Package
-        Compress-Archive -Path install\* -DestinationPath slick-orderbook-${{ needs.create-release.outputs.version }}-windows-x64.zip
+        Compress-Archive -Path install\* -DestinationPath "slick-orderbook-${VERSION}-windows-x64.zip"
 
     - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v2
       with:
-        upload_url: ${{ needs.create-release.outputs.upload_url }}
-        asset_path: ./slick-orderbook-${{ needs.create-release.outputs.version }}-windows-x64.zip
-        asset_name: slick-orderbook-${{ needs.create-release.outputs.version }}-windows-x64.zip
-        asset_content_type: application/zip
+        files: slick-orderbook-${{ needs.create-release.outputs.version }}-windows-x64.zip
 
   # ============================================================================
   # Build Release Artifacts - macOS
@@ -152,6 +159,8 @@ jobs:
   build-macos:
     needs: create-release
     runs-on: macos-14
+    permissions:
+      contents: write  # Required for uploading release assets
 
     steps:
     - uses: actions/checkout@v4
@@ -163,6 +172,7 @@ jobs:
 
     - name: Build Release Package
       run: |
+        VERSION=${{ needs.create-release.outputs.version }}
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=Release \
           -DSLICK_ORDERBOOK_BUILD_TESTS=OFF \
@@ -175,17 +185,12 @@ jobs:
         cmake --install build --prefix install
 
         # Package
-        tar -czf slick-orderbook-${{ needs.create-release.outputs.version }}-macos-arm64.tar.gz -C install .
+        tar -czf slick-orderbook-${VERSION}-macos-arm64.tar.gz -C install .
 
     - name: Upload Release Asset
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v2
       with:
-        upload_url: ${{ needs.create-release.outputs.upload_url }}
-        asset_path: ./slick-orderbook-${{ needs.create-release.outputs.version }}-macos-arm64.tar.gz
-        asset_name: slick-orderbook-${{ needs.create-release.outputs.version }}-macos-arm64.tar.gz
-        asset_content_type: application/gzip
+        files: slick-orderbook-${{ needs.create-release.outputs.version }}-macos-arm64.tar.gz
 
   # ============================================================================
   # Publish Documentation
@@ -193,22 +198,20 @@ jobs:
   publish-docs:
     needs: create-release
     runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Required for uploading release assets
 
     steps:
     - uses: actions/checkout@v4
 
     - name: Create Documentation Archive
       run: |
-        tar -czf slick-orderbook-${{ needs.create-release.outputs.version }}-docs.tar.gz \
-          README.md ARCHITECTURE.mdLICENSE \
+        VERSION=${{ needs.create-release.outputs.version }}
+        tar -czf slick-orderbook-${VERSION}-docs.tar.gz \
+          README.md ARCHITECTURE.md CHANGELOG.md LICENSE \
           docs/ examples/ benchmarks/PROFILING_GUIDE.md
 
     - name: Upload Documentation
-      uses: actions/upload-release-asset@v1
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      uses: softprops/action-gh-release@v2
       with:
-        upload_url: ${{ needs.create-release.outputs.upload_url }}
-        asset_path: ./slick-orderbook-${{ needs.create-release.outputs.version }}-docs.tar.gz
-        asset_name: slick-orderbook-${{ needs.create-release.outputs.version }}-docs.tar.gz
-        asset_content_type: application/gzip
+        files: slick-orderbook-${{ needs.create-release.outputs.version }}-docs.tar.gz
