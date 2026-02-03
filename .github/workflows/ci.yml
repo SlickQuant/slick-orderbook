@@ -172,7 +172,7 @@ jobs:
 
     - name: Test
       working-directory: ${{ github.workspace }}/build
-      run: ctest --output-on-failure --config ${{ env.BUILD_TYPE }} -j
+      run: ctest --output-on-failure -C ${{ env.BUILD_TYPE }} -j
 
   # ============================================================================
   # macOS Build & Test

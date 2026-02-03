@@ -35,6 +35,9 @@ elseif(MSVC)
         $<$<CONFIG:Release>:/O2>
         $<$<CONFIG:Release>:/GL>  # Whole program optimization
     )
+    add_link_options(
+        $<$<CONFIG:Release>:/LTCG>  # Link-time code generation (required with /GL)
+    )
 endif()
 
 # Source files for compiled library

@@ -12,6 +12,7 @@
 #include <memory>
 #include <vector>
 #include <array>
+#include <atomic>
 
 SLICK_NAMESPACE_BEGIN
 
@@ -46,11 +47,11 @@ public:
     /// Destructor
     ~OrderBookL2() = default;
 
-    // Non-copyable, movable
+    // Non-copyable, movable (manual implementation due to std::atomic member)
     OrderBookL2(const OrderBookL2&) = delete;
     OrderBookL2& operator=(const OrderBookL2&) = delete;
-    OrderBookL2(OrderBookL2&&) noexcept = default;
-    OrderBookL2& operator=(OrderBookL2&&) noexcept = default;
+    OrderBookL2(OrderBookL2&&) noexcept;
+    OrderBookL2& operator=(OrderBookL2&&) noexcept;
 
     /// Get symbol ID
     [[nodiscard]] SymbolId symbol() const noexcept { return symbol_; }

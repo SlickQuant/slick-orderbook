@@ -23,6 +23,29 @@ SLICK_OB_INLINE OrderBookL2::OrderBookL2(SymbolId symbol, std::size_t initial_ca
     cached_tob_.symbol = symbol_;
 }
 
+// Move constructor - manually implement due to std::atomic member
+SLICK_OB_INLINE OrderBookL2::OrderBookL2(OrderBookL2&& other) noexcept
+    : symbol_(other.symbol_),
+      sides_(std::move(other.sides_)),
+      observers_(std::move(other.observers_)),
+      cached_tob_(other.cached_tob_),
+      tob_seq_(other.tob_seq_.load(std::memory_order_relaxed)),
+      last_seq_num_(other.last_seq_num_) {
+}
+
+// Move assignment - manually implement due to std::atomic member
+SLICK_OB_INLINE OrderBookL2& OrderBookL2::operator=(OrderBookL2&& other) noexcept {
+    if (this != &other) {
+        symbol_ = other.symbol_;
+        sides_ = std::move(other.sides_);
+        observers_ = std::move(other.observers_);
+        cached_tob_ = other.cached_tob_;
+        tob_seq_.store(other.tob_seq_.load(std::memory_order_relaxed), std::memory_order_relaxed);
+        last_seq_num_ = other.last_seq_num_;
+    }
+    return *this;
+}
+
 SLICK_OB_INLINE void OrderBookL2::updateLevel(Side side, Price price, Quantity quantity, Timestamp timestamp,
                                                uint64_t seq_num, bool is_last_in_batch) {
     SLICK_ASSERT(side < SideCount);
