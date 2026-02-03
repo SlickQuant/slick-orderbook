@@ -160,19 +160,19 @@ public:
         orderbook_.addObserver(observer_);
     }
 
-    void onMarketDataConnected(WebSocketClient*) {
+    void onMarketDataConnected(WebSocketClient*) override {
         std::cout << "MarketData WebSocket Conntected" << std::endl;
     }
 
-    void onMarketDataDisconnected(WebSocketClient*) {
+    void onMarketDataDisconnected(WebSocketClient*) override {
         std::cout << "MarketData WebSocket Disconnected" << std::endl;
     }
 
-    void onUserDataConnected(WebSocketClient*) {
+    void onUserDataConnected(WebSocketClient*) override {
         std::cout << "UserData WebSocket Conntected" << std::endl;
     }
 
-    void onUserDataDisconnected(WebSocketClient*) {
+    void onUserDataDisconnected(WebSocketClient*) override {
         std::cout << "UserData WebSocket Disconntected" << std::endl;
     }
 

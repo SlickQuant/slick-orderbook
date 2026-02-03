@@ -71,12 +71,12 @@ See @ref slick::orderbook::OrderBookManager for full API.
 
 All performance targets exceeded:
 
-| Operation | Target | Actual (p99) |
-|-----------|--------|--------------|
-| L2 Add/Modify/Delete | <100ns | **21-33ns** |
-| L3 Add/Modify/Delete | <200ns | **59-490ns** |
-| Best Bid/Ask Query | <10ns | **0.25ns** |
-| Observer Notification | <50ns | **2-3ns** |
+| Operation             | Target | Actual (p99)  |
+| --------------------- | ------ | ------------- |
+| L2 Add/Modify/Delete  | <100ns | **21-33ns**   |
+| L3 Add/Modify/Delete  | <200ns | **59-490ns**  |
+| Best Bid/Ask Query    | <10ns  | **0.25ns**    |
+| Observer Notification | <50ns  | **2-3ns**     |
 
 See [Performance Guide](../../docs/PERFORMANCE.md) for optimization techniques.
 

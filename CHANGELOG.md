@@ -12,6 +12,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 #### Core Functionality
+
 - Level 2 (L2) orderbook with aggregated price levels
   - O(log n) add/modify/delete operations
   - O(1) best bid/ask queries
@@ -27,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Support for both L2 and L3 orderbooks
 
 #### Event System
+
 - Observer pattern for real-time notifications
   - `onPriceLevelUpdate` - L2 price level changes
   - `onOrderUpdate` - L3 individual order changes
@@ -38,6 +40,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Batch operation support to reduce notification overhead
 
 #### Performance Optimizations
+
 - Cache line alignment (64 bytes) for hot structures
   - Order structure (64 bytes, 1 cache line)
   - OrderBookL2 (320 bytes, cache-aligned)
@@ -48,6 +51,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Sequence number tracking for out-of-order detection
 
 #### Build System
+
 - Hybrid library design (compiled or header-only mode)
 - CMake build system with C++23 support
 - Multi-platform support (Linux, Windows, macOS)
@@ -55,6 +59,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Google Benchmark integration for performance testing
 
 #### Documentation
+
 - Comprehensive README.md with quick start guide
 - Architecture guide (ARCHITECTURE.md) for developers
 - Performance guide (docs/PERFORMANCE.md) with optimization tips
@@ -63,12 +68,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Developer guide (CLAUDE.md) with design decisions
 
 #### Examples
+
 - `simple_l2_orderbook.cpp` - Level 2 orderbook basics
 - `simple_l3_orderbook.cpp` - Level 3 order tracking
 - `multi_symbol_orderbook.cpp` - Multi-symbol management
 - `coinbase_integration.cpp` - Real exchange integration (Coinbase WebSocket)
 
 #### Benchmarks
+
 - `bench_orderbook_l2` - L2 operation latency
 - `bench_orderbook_l3` - L3 operation latency
 - `bench_orderbook_manager` - Multi-symbol performance
@@ -78,6 +85,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `bench_cache_alignment` - Cache alignment verification
 
 #### CI/CD
+
 - Multi-platform continuous integration (GCC, Clang, MSVC)
 - Automated testing with sanitizers (ASan, TSan, UBSan)
 - Code coverage reporting with Codecov
@@ -90,12 +98,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 All performance targets exceeded:
 
-| Operation | Target | Actual (p99) | Improvement |
-|-----------|--------|--------------|-------------|
-| L2 Add/Modify/Delete | <100ns | 21-33ns | 3-5x better |
-| L3 Add/Modify/Delete | <200ns | 59-490ns | 2-3x better |
-| Best Bid/Ask Query | <10ns | 0.25ns | 40x better |
-| Observer Notification | <50ns | 2-3ns | 16-25x better |
+| Operation             | Target | Actual (p99) | Improvement  |
+| --------------------- | ------ | ------------ | ------------ |
+| L2 Add/Modify/Delete  | <100ns | 21-33ns      | 3-5x better  |
+| L3 Add/Modify/Delete  | <200ns | 59-490ns     | 2-3x better  |
+| Best Bid/Ask Query    | <10ns  | 0.25ns       | 40x better   |
+| Observer Notification | <50ns  | 2-3ns        | 16-25x better |
 
 ### Quality Metrics
 
@@ -112,12 +120,14 @@ All performance targets exceeded:
 ### Technical Details
 
 #### Data Structures
+
 - `FlatMap` - Cache-friendly sorted storage using `std::flat_map` (C++23)
 - `IntrusiveList` - Zero-allocation doubly-linked list for order queues
 - `ObjectPool` - Free-list based memory pool with exponential growth
 - `LevelContainer` - Price level storage with runtime comparator
 
 #### Type System
+
 - `Price` - Fixed-point price (int64_t)
 - `Quantity` - Volume/quantity (int64_t)
 - `OrderId` - Unique order identifier (uint64_t)
@@ -126,6 +136,7 @@ All performance targets exceeded:
 - `Timestamp` - Nanosecond timestamp (uint64_t)
 
 #### Design Patterns
+
 - Policy-based design with C++23 concepts
 - CRTP for static polymorphism
 - Observer pattern for event notifications

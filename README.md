@@ -24,14 +24,14 @@ A **high-performance, low-latency C++ library** for managing financial market or
 
 All performance targets exceeded by **2-40x**:
 
-| Operation | Target | Actual (p99) | Status |
-|-----------|--------|--------------|--------|
-| L2 Add/Modify/Delete | <100ns | 21-33ns | ✅ **3-5x faster** |
-| L3 Add/Modify/Delete | <200ns | 59-490ns | ✅ **2-3x faster** |
-| Best Bid/Ask Query | <10ns | 0.25-0.33ns | ✅ **30-40x faster** |
-| Observer Notification | <50ns/observer | 2-3ns | ✅ **16-25x faster** |
-| Memory Footprint (L2) | <1KB/symbol | <1KB | ✅ **Meets target** |
-| Memory Footprint (L3) | <10KB/1000 orders | <10KB | ✅ **Meets target** |
+| Operation              | Target             | Actual (p99) | Status                |
+| ---------------------- | ------------------ | ------------ | --------------------- |
+| L2 Add/Modify/Delete   | <100ns             | 21-33ns      | ✅ **3-5x faster**    |
+| L3 Add/Modify/Delete   | <200ns             | 59-490ns     | ✅ **2-3x faster**    |
+| Best Bid/Ask Query     | <10ns              | 0.25-0.33ns  | ✅ **30-40x faster**  |
+| Observer Notification  | <50ns/observer     | 2-3ns        | ✅ **16-25x faster**  |
+| Memory Footprint (L2)  | <1KB/symbol        | <1KB         | ✅ **Meets target**   |
+| Memory Footprint (L3)  | <10KB/1000 orders  | <10KB        | ✅ **Meets target**   |
 
 ## 🚀 Quick Start
 
@@ -90,7 +90,8 @@ int main() {
 ```
 
 Output:
-```
+
+```text
 Best Bid: 10000 x 100
 Best Ask: 10050 x 75
 Spread: 50
@@ -326,4 +327,4 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ---
 
-**Made with ⚡ by Slick Quant**
+Made with ⚡ by Slick Quant
