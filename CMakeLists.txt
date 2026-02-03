@@ -108,18 +108,21 @@ endif()
 # Add alias for consistent usage
 add_library(slick::orderbook ALIAS slick-orderbook)
 
-# Subdirectories
-if(SLICK_ORDERBOOK_BUILD_TESTS)
-    enable_testing()
-    add_subdirectory(tests)
-endif()
+# Only build tests, benchmarks, and examples if this is the top-level project
+if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
+    # Subdirectories
+    if(SLICK_ORDERBOOK_BUILD_TESTS)
+        enable_testing()
+        add_subdirectory(tests)
+    endif()
 
-if(SLICK_ORDERBOOK_BUILD_BENCHMARKS)
-    add_subdirectory(benchmarks)
-endif()
+    if(SLICK_ORDERBOOK_BUILD_BENCHMARKS)
+        add_subdirectory(benchmarks)
+    endif()
 
-if(SLICK_ORDERBOOK_BUILD_EXAMPLES)
-    add_subdirectory(examples)
+    if(SLICK_ORDERBOOK_BUILD_EXAMPLES)
+        add_subdirectory(examples)
+    endif()
 endif()
 
 # Installation rules
