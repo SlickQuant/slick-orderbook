@@ -62,6 +62,10 @@ public:
     struct PriceComparator {
         using Comparator = std::function<bool(Price, Price)>;
         Comparator compare_;
+
+        // Default constructor (for array initialization on MSVC)
+        PriceComparator() : compare_(detail::BidComparator{}) {}
+
         explicit PriceComparator(Side side)
             : compare_(side == Side::Buy
                 ? Comparator{detail::BidComparator{}}

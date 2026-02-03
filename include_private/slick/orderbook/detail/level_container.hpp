@@ -24,6 +24,9 @@ public:
     using const_iterator = typename std::vector<PriceLevelL2>::const_iterator;
     using Comparator = std::function<bool(const PriceLevelL2&, const PriceLevelL2&)>;
 
+    /// Default constructor (for array initialization on MSVC)
+    LevelContainer() : side_(Side::Buy), compare_(BidComparator{}) {}
+
     /// Constructor with side and initial capacity
     /// @param side Side (Buy = bids/descending, Sell = asks/ascending)
     /// @param initial_capacity Initial capacity for levels
