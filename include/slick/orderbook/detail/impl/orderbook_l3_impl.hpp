@@ -15,12 +15,15 @@ SLICK_OB_INLINE OrderBookL3::OrderBookL3(SymbolId symbol,
                          std::size_t initial_order_capacity,
                          std::size_t initial_level_capacity)
     : symbol_(symbol),
-      levels_{PriceLevelMap{PriceComparator{Side::Buy}}, PriceLevelMap{PriceComparator{Side::Sell}}},
       order_map_(initial_order_capacity),
       order_pool_(initial_order_capacity),
       observers_(),
       cached_tob_(),
       last_seq_num_(0) {
+    // Initialize levels array in constructor body to avoid Clang-17 C++23 aggregate init issues
+    levels_[Side::Buy] = PriceLevelMap{PriceComparator{Side::Buy}};
+    levels_[Side::Sell] = PriceLevelMap{PriceComparator{Side::Sell}};
+
     // Reserve capacity for price levels (flat_map doesn't have reserve in C++23)
     // This will be used during insertions to pre-allocate space
     (void)initial_level_capacity;  // Mark as used

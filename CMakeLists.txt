@@ -128,11 +128,13 @@ install(DIRECTORY include/
     FILES_MATCHING PATTERN "*.hpp"
 )
 
-install(EXPORT slick-orderbook-targets
-    FILE slick-orderbook-targets.cmake
-    NAMESPACE slick::
-    DESTINATION lib/cmake/slick-orderbook
-)
+if(NOT SLICK_ORDERBOOK_HEADER_ONLY)
+    install(EXPORT slick-orderbook-targets
+        FILE slick-orderbook-targets.cmake
+        NAMESPACE slick::
+        DESTINATION lib/cmake/slick-orderbook
+    )
+endif()
 
 # Package configuration
 include(CMakePackageConfigHelpers)

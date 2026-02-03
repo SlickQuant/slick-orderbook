@@ -36,6 +36,11 @@ public:
         levels_.reserve(initial_capacity);
     }
 
+    /// Get Side
+    [[nodiscard]] Side side() const noexcept {
+        return side_;
+    }
+
     /// Get number of levels
     [[nodiscard]] std::size_t size() const noexcept {
         return levels_.size();
