@@ -26,27 +26,27 @@ using namespace slick::orderbook;
 // Minimal observer that just counts notifications
 class CountingObserver : public IOrderBookObserver {
 public:
-    void onPriceLevelUpdate(const PriceLevelUpdate& update) override {
+    void onPriceLevelUpdate([[maybe_unused]] const PriceLevelUpdate& update) override {
         ++level_update_count_;
     }
 
-    void onOrderUpdate(const OrderUpdate& update) override {
+    void onOrderUpdate([[maybe_unused]] const OrderUpdate& update) override {
         ++order_update_count_;
     }
 
-    void onTrade(const Trade& trade) override {
+    void onTrade([[maybe_unused]] const Trade& trade) override {
         ++trade_count_;
     }
 
-    void onTopOfBookUpdate(const TopOfBook& tob) override {
+    void onTopOfBookUpdate([[maybe_unused]] const TopOfBook& tob) override {
         ++tob_change_count_;
     }
 
-    void onSnapshotBegin(SymbolId symbol, uint64_t seq_num, Timestamp timestamp) override {
+    void onSnapshotBegin([[maybe_unused]] SymbolId symbol, [[maybe_unused]] uint64_t seq_num, [[maybe_unused]] Timestamp timestamp) override {
         ++snapshot_begin_count_;
     }
 
-    void onSnapshotEnd(SymbolId symbol, uint64_t seq_num, Timestamp timestamp) override {
+    void onSnapshotEnd([[maybe_unused]] SymbolId symbol, [[maybe_unused]] uint64_t seq_num, [[maybe_unused]] Timestamp timestamp) override {
         ++snapshot_end_count_;
     }
 
@@ -84,11 +84,11 @@ public:
         benchmark::DoNotOptimize(computed_value_);
     }
 
-    void onSnapshotBegin(SymbolId symbol, uint64_t seq_num, Timestamp timestamp) override {
+    void onSnapshotBegin([[maybe_unused]] SymbolId symbol, [[maybe_unused]] uint64_t seq_num, [[maybe_unused]] Timestamp timestamp) override {
         computed_value_ = 0;
     }
 
-    void onSnapshotEnd(SymbolId symbol, uint64_t seq_num, Timestamp timestamp) override {
+    void onSnapshotEnd([[maybe_unused]] SymbolId symbol, [[maybe_unused]] uint64_t seq_num, [[maybe_unused]] Timestamp timestamp) override {
         benchmark::DoNotOptimize(computed_value_);
     }
 
@@ -129,7 +129,7 @@ static void BM_L2_WithCountingObservers(benchmark::State& state) {
 
     // Add observers
     std::vector<std::shared_ptr<CountingObserver>> observers;
-    for (size_t i = 0; i < num_observers; ++i) {
+    for (auto i = 0; i < num_observers; ++i) {
         observers.push_back(std::make_shared<CountingObserver>());
         book.addObserver(observers.back());
     }
@@ -161,7 +161,7 @@ static void BM_L2_WithComputingObservers(benchmark::State& state) {
 
     // Add observers
     std::vector<std::shared_ptr<ComputingObserver>> observers;
-    for (size_t i = 0; i < num_observers; ++i) {
+    for (auto i = 0; i < num_observers; ++i) {
         observers.push_back(std::make_shared<ComputingObserver>());
         book.addObserver(observers.back());
     }
@@ -224,7 +224,7 @@ static void BM_L3_WithCountingObservers(benchmark::State& state) {
 
     // Add observers
     std::vector<std::shared_ptr<CountingObserver>> observers;
-    for (size_t i = 0; i < num_observers; ++i) {
+    for (auto i = 0; i < num_observers; ++i) {
         observers.push_back(std::make_shared<CountingObserver>());
         book.addObserver(observers.back());
     }
@@ -266,7 +266,7 @@ static void BM_L3_WithComputingObservers(benchmark::State& state) {
 
     // Add observers
     std::vector<std::shared_ptr<ComputingObserver>> observers;
-    for (size_t i = 0; i < num_observers; ++i) {
+    for (auto i = 0; i < num_observers; ++i) {
         observers.push_back(std::make_shared<ComputingObserver>());
         book.addObserver(observers.back());
     }
@@ -307,7 +307,7 @@ static void BM_L2_EmitSnapshot(benchmark::State& state) {
     const auto num_levels = state.range(0);
 
     // Build book with num_levels on each side
-    for (size_t i = 0; i < num_levels; ++i) {
+    for (auto i = 0; i < num_levels; ++i) {
         book.updateLevel(Side::Buy, 100000 - static_cast<Price>(i) * 10, 1000, 0, 0);
         book.updateLevel(Side::Sell, 100100 + static_cast<Price>(i) * 10, 1000, 0, 0);
     }
@@ -338,7 +338,7 @@ static void BM_L3_EmitSnapshot(benchmark::State& state) {
     std::uniform_int_distribution<Price> price_offset_dist(0, 10);
     std::uniform_int_distribution<uint64_t> priority_dist(0, 1000000);
 
-    for (size_t i = 0; i < num_orders; ++i) {
+    for (auto i = 0; i < num_orders; ++i) {
         Price price = 100000 + static_cast<Price>(price_offset_dist(rng)) * 10;
         Side side = (i % 2 == 0) ? Side::Buy : Side::Sell;
         book.addOrModifyOrder(i + 1, side, price, qty_dist(rng), 0, priority_dist(rng), 0);
@@ -365,7 +365,7 @@ static void BM_AddRemoveObserver(benchmark::State& state) {
     const auto num_observers = state.range(0);
 
     std::vector<std::shared_ptr<CountingObserver>> observers;
-    for (size_t i = 0; i < num_observers; ++i) {
+    for (auto i = 0; i < num_observers; ++i) {
         observers.push_back(std::make_shared<CountingObserver>());
     }
 

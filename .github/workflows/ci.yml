@@ -1,0 +1,320 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+  workflow_dispatch:
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  # ============================================================================
+  # Linux Build & Test (GCC)
+  # ============================================================================
+  linux-gcc:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        compiler: [gcc-14]
+        build_mode: [compiled, header-only]
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }} g++-14
+
+    - name: Configure CMake (Compiled)
+      if: matrix.build_mode == 'compiled'
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+          -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} \
+          -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
+          -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON \
+          -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
+
+    - name: Configure CMake (Header-Only)
+      if: matrix.build_mode == 'header-only'
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+          -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} \
+          -DSLICK_ORDERBOOK_HEADER_ONLY=ON \
+          -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
+          -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON \
+          -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
+
+    - name: Build
+      run: cmake --build build --config ${{ env.BUILD_TYPE }} -j $(nproc)
+
+    - name: Test
+      working-directory: ${{ github.workspace }}/build
+      run: ctest --output-on-failure --config ${{ env.BUILD_TYPE }} -j $(nproc)
+
+    - name: Upload Test Results
+      if: always()
+      uses: actions/upload-artifact@v4
+      with:
+        name: test-results-linux-${{ matrix.compiler }}-${{ matrix.build_mode }}
+        path: build/Testing/Temporary/LastTest.log
+
+  # ============================================================================
+  # Linux Build & Test (Clang)
+  # ============================================================================
+  linux-clang:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        compiler: [clang-17]
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }}
+
+    - name: Configure CMake
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+          -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} \
+          -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
+          -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON \
+          -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
+
+    - name: Build
+      run: cmake --build build --config ${{ env.BUILD_TYPE }} -j $(nproc)
+
+    - name: Test
+      working-directory: ${{ github.workspace }}/build
+      run: ctest --output-on-failure --config ${{ env.BUILD_TYPE }} -j $(nproc)
+
+  # ============================================================================
+  # Windows Build & Test (MSVC 2022)
+  # ============================================================================
+  windows-msvc:
+    runs-on: windows-2022
+    strategy:
+      matrix:
+        build_mode: [compiled, header-only]
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup MSVC
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Configure CMake (Compiled)
+      if: matrix.build_mode == 'compiled'
+      run: |
+        cmake -B build -G "Visual Studio 17 2022" -A x64 `
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} `
+          -DSLICK_ORDERBOOK_BUILD_TESTS=ON `
+          -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON `
+          -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
+
+    - name: Configure CMake (Header-Only)
+      if: matrix.build_mode == 'header-only'
+      run: |
+        cmake -B build -G "Visual Studio 17 2022" -A x64 `
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} `
+          -DSLICK_ORDERBOOK_HEADER_ONLY=ON `
+          -DSLICK_ORDERBOOK_BUILD_TESTS=ON `
+          -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON `
+          -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
+
+    - name: Build
+      run: cmake --build build --config ${{ env.BUILD_TYPE }} -j
+
+    - name: Test
+      working-directory: ${{ github.workspace }}/build
+      run: ctest --output-on-failure --config ${{ env.BUILD_TYPE }} -j
+
+  # ============================================================================
+  # macOS Build & Test
+  # ============================================================================
+  macos:
+    runs-on: macos-14
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install Dependencies
+      run: |
+        brew install cmake ninja
+
+    - name: Configure CMake
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+          -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
+          -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON \
+          -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
+
+    - name: Build
+      run: cmake --build build --config ${{ env.BUILD_TYPE }} -j $(sysctl -n hw.ncpu)
+
+    - name: Test
+      working-directory: ${{ github.workspace }}/build
+      run: ctest --output-on-failure --config ${{ env.BUILD_TYPE }} -j $(sysctl -n hw.ncpu)
+
+  # ============================================================================
+  # Sanitizer Builds
+  # ============================================================================
+  sanitizers:
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        sanitizer: [address, thread, undefined]
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build gcc-14 g++-14
+
+    - name: Configure CMake
+      run: |
+        SANITIZER_FLAGS=""
+        if [ "${{ matrix.sanitizer }}" = "address" ]; then
+          SANITIZER_FLAGS="-fsanitize=address -fno-omit-frame-pointer"
+        elif [ "${{ matrix.sanitizer }}" = "thread" ]; then
+          SANITIZER_FLAGS="-fsanitize=thread"
+        elif [ "${{ matrix.sanitizer }}" = "undefined" ]; then
+          SANITIZER_FLAGS="-fsanitize=undefined -fno-omit-frame-pointer"
+        fi
+
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_CXX_COMPILER=g++-14 \
+          -DCMAKE_CXX_FLAGS="$SANITIZER_FLAGS" \
+          -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
+          -DSLICK_ORDERBOOK_BUILD_EXAMPLES=OFF \
+          -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
+
+    - name: Build
+      run: cmake --build build -j $(nproc)
+
+    - name: Test
+      working-directory: ${{ github.workspace }}/build
+      env:
+        ASAN_OPTIONS: detect_leaks=1:halt_on_error=1
+        TSAN_OPTIONS: halt_on_error=1:second_deadlock_stack=1
+        UBSAN_OPTIONS: halt_on_error=1:print_stacktrace=1
+      run: ctest --output-on-failure -j $(nproc)
+
+  # ============================================================================
+  # Code Coverage
+  # ============================================================================
+  coverage:
+    runs-on: ubuntu-24.04
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build gcc-14 g++-14 lcov
+
+    - name: Configure CMake
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_CXX_COMPILER=g++-14 \
+          -DCMAKE_CXX_FLAGS="--coverage -fprofile-arcs -ftest-coverage" \
+          -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
+          -DSLICK_ORDERBOOK_BUILD_EXAMPLES=OFF \
+          -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
+
+    - name: Build
+      run: cmake --build build -j $(nproc)
+
+    - name: Test
+      working-directory: ${{ github.workspace }}/build
+      run: ctest --output-on-failure -j $(nproc)
+
+    - name: Generate Coverage Report
+      run: |
+        lcov --capture --directory build --output-file coverage.info
+        lcov --remove coverage.info '/usr/*' '*/tests/*' '*/build/*' --output-file coverage.info
+        lcov --list coverage.info
+
+    - name: Upload Coverage to Codecov
+      uses: codecov/codecov-action@v4
+      with:
+        files: ./coverage.info
+        fail_ci_if_error: false
+
+  # ============================================================================
+  # Static Analysis
+  # ============================================================================
+  static-analysis:
+    runs-on: ubuntu-24.04
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build clang-17 clang-tidy-17
+
+    - name: Configure CMake
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=Debug \
+          -DCMAKE_CXX_COMPILER=clang++-17 \
+          -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
+          -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
+          -DSLICK_ORDERBOOK_BUILD_EXAMPLES=OFF \
+          -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
+
+    - name: Run clang-tidy
+      run: |
+        find include -name "*.hpp" -print0 | xargs -0 -n1 clang-tidy-17 -p build --warnings-as-errors='*' || true
+
+  # ============================================================================
+  # Status Check (Required for PRs)
+  # ============================================================================
+  ci-success:
+    runs-on: ubuntu-latest
+    needs: [linux-gcc, linux-clang, windows-msvc, macos, sanitizers, coverage, static-analysis]
+    if: always()
+
+    steps:
+    - name: Check CI Status
+      run: |
+        if [ "${{ needs.linux-gcc.result }}" != "success" ] || \
+           [ "${{ needs.linux-clang.result }}" != "success" ] || \
+           [ "${{ needs.windows-msvc.result }}" != "success" ] || \
+           [ "${{ needs.macos.result }}" != "success" ] || \
+           [ "${{ needs.sanitizers.result }}" != "success" ]; then
+          echo "CI failed"
+          exit 1
+        fi
+        echo "All CI checks passed"

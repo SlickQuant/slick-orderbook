@@ -30,6 +30,7 @@ elseif(MSVC)
     add_definitions(-D_WIN32_WINNT=0x0601)
     add_compile_options(
         /W4
+        /wd4324  # Suppress C4324: structure was padded due to alignment specifier (intentional for cache alignment)
         /std:c++latest  # Enable C++23 features including flat_map
         $<$<CONFIG:Release>:/O2>
         $<$<CONFIG:Release>:/GL>  # Whole program optimization

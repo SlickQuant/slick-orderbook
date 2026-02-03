@@ -1,0 +1,90 @@
+name: Documentation
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'include/**'
+      - 'docs/**'
+      - '*.md'
+  workflow_dispatch:
+
+jobs:
+  # ============================================================================
+  # Build and Deploy Documentation
+  # ============================================================================
+  build-docs:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Doxygen
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y doxygen graphviz
+
+    - name: Generate Doxygen Documentation
+      run: |
+        # Create Doxyfile if it doesn't exist
+        if [ ! -f Doxyfile ]; then
+          doxygen -g Doxyfile
+
+          # Configure Doxygen
+          sed -i 's/PROJECT_NAME           = "My Project"/PROJECT_NAME           = "Slick OrderBook"/' Doxyfile
+          sed -i 's/OUTPUT_DIRECTORY       =/OUTPUT_DIRECTORY       = docs\/api/' Doxyfile
+          sed -i 's/INPUT                  =/INPUT                  = include/' Doxyfile
+          sed -i 's/RECURSIVE              = NO/RECURSIVE              = YES/' Doxyfile
+          sed -i 's/EXTRACT_ALL            = NO/EXTRACT_ALL            = YES/' Doxyfile
+          sed -i 's/GENERATE_LATEX         = YES/GENERATE_LATEX         = NO/' Doxyfile
+          sed -i 's/HAVE_DOT               = NO/HAVE_DOT               = YES/' Doxyfile
+          sed -i 's/UML_LOOK               = NO/UML_LOOK               = YES/' Doxyfile
+        fi
+
+        doxygen Doxyfile
+
+    - name: Deploy to GitHub Pages
+      if: github.ref == 'refs/heads/main'
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/api/html
+        destination_dir: api
+
+    - name: Upload Documentation Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: api-documentation
+        path: docs/api/html/
+
+  # ============================================================================
+  # Link Check
+  # ============================================================================
+  check-links:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Check Markdown Links
+      uses: gaurav-nelson/github-action-markdown-link-check@v1
+      with:
+        use-quiet-mode: 'yes'
+        config-file: '.github/markdown-link-check-config.json'
+
+  # ============================================================================
+  # Markdown Lint
+  # ============================================================================
+  markdown-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Lint Markdown Files
+      uses: articulate/actions-markdownlint@v1
+      with:
+        config: .markdownlint.json
+        files: '*.md docs/*.md'
+        ignore: 'build'
+        version: '0.37.0'

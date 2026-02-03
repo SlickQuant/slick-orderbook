@@ -321,7 +321,7 @@ static void BM_MultiSymbol_MarketReplay(benchmark::State& state) {
 
     // Generate events for each symbol
     std::vector<std::vector<MarketEvent>> symbol_events;
-    for (size_t i = 0; i < num_symbols; ++i) {
+    for (auto i = 0; i < num_symbols; ++i) {
         symbol_events.push_back(gen.generateL2Events(1000, 100000, 100100));
     }
 
@@ -334,8 +334,8 @@ static void BM_MultiSymbol_MarketReplay(benchmark::State& state) {
             max_events = std::max(max_events, events.size());
         }
 
-        for (size_t event_idx = 0; event_idx < max_events; ++event_idx) {
-            for (size_t sym_idx = 0; sym_idx < num_symbols; ++sym_idx) {
+        for (auto event_idx = 0; event_idx < max_events; ++event_idx) {
+            for (auto sym_idx = 0; sym_idx < num_symbols; ++sym_idx) {
                 if (event_idx < symbol_events[sym_idx].size()) {
                     const auto& event = symbol_events[sym_idx][event_idx];
                     auto* book = manager.getOrCreateOrderBook(static_cast<SymbolId>(sym_idx + 1));

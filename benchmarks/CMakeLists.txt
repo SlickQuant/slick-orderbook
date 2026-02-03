@@ -17,6 +17,13 @@ add_compile_options(
     $<$<CONFIG:Release>:-DNDEBUG>
 )
 
+# Suppress MSVC warnings for benchmarks (intentional in benchmark code)
+if(MSVC)
+    add_compile_options(
+        /wd4834  # Suppress C4834: discarding return value with [[nodiscard]] (intentional in benchmarks)
+    )
+endif()
+
 # All benchmarks need access to private headers for compiled mode
 set(BENCHMARK_INCLUDE_DIRS
     ${CMAKE_SOURCE_DIR}/include_private

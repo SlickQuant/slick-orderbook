@@ -1,0 +1,158 @@
+name: Benchmarks
+
+on:
+  push:
+    tags:
+      - 'v*'  # Run on version tags
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sunday at midnight
+  workflow_dispatch:  # Allow manual trigger
+
+env:
+  BUILD_TYPE: Release
+
+jobs:
+  # ============================================================================
+  # Linux Benchmarks
+  # ============================================================================
+  benchmark-linux:
+    runs-on: ubuntu-24.04
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build gcc-14 g++-14
+
+    - name: Configure CMake
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+          -DCMAKE_CXX_COMPILER=g++-14 \
+          -DCMAKE_CXX_FLAGS="-march=native" \
+          -DSLICK_ORDERBOOK_BUILD_TESTS=OFF \
+          -DSLICK_ORDERBOOK_BUILD_EXAMPLES=OFF \
+          -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=ON
+
+    - name: Build
+      run: cmake --build build --config ${{ env.BUILD_TYPE }} -j $(nproc)
+
+    - name: Run Benchmarks
+      working-directory: ${{ github.workspace }}/build/benchmarks
+      run: |
+        mkdir -p results
+        ./bench_orderbook_l2 --benchmark_out=results/l2.json --benchmark_out_format=json
+        ./bench_orderbook_l3 --benchmark_out=results/l3.json --benchmark_out_format=json
+        ./bench_orderbook_manager --benchmark_out=results/manager.json --benchmark_out_format=json
+        ./bench_observer_overhead --benchmark_out=results/observer.json --benchmark_out_format=json
+        ./bench_memory_usage --benchmark_out=results/memory.json --benchmark_out_format=json
+        ./bench_market_replay --benchmark_out=results/market_replay.json --benchmark_out_format=json
+        ./bench_cache_alignment --benchmark_out=results/cache_alignment.json --benchmark_out_format=json
+
+    - name: Upload Benchmark Results
+      uses: actions/upload-artifact@v4
+      with:
+        name: benchmark-results-linux
+        path: build/benchmarks/results/
+
+    - name: Generate Benchmark Summary
+      working-directory: ${{ github.workspace }}/build/benchmarks/results
+      run: |
+        echo "# Benchmark Results (Linux)" > summary.md
+        echo "" >> summary.md
+        echo "**Platform:** $(uname -m)" >> summary.md
+        echo "**Compiler:** GCC 14" >> summary.md
+        echo "**Date:** $(date)" >> summary.md
+        echo "" >> summary.md
+
+        for file in *.json; do
+          echo "## $file" >> summary.md
+          python3 -c "import json; f=open('$file'); data=json.load(f); [print(f\"- {b['name']}: {b['real_time']:.2f} ns\") for b in data['benchmarks'][:10]]" >> summary.md || echo "Failed to parse $file" >> summary.md
+          echo "" >> summary.md
+        done
+
+    - name: Comment PR with Results
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const summary = fs.readFileSync('build/benchmarks/results/summary.md', 'utf8');
+          github.rest.issues.createComment({
+            issue_number: context.issue.number,
+            owner: context.repo.owner,
+            repo: context.repo.repo,
+            body: summary
+          });
+
+  # ============================================================================
+  # Windows Benchmarks
+  # ============================================================================
+  benchmark-windows:
+    runs-on: windows-2022
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup MSVC
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Configure CMake
+      run: |
+        cmake -B build -G "Visual Studio 17 2022" -A x64 `
+          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} `
+          -DSLICK_ORDERBOOK_BUILD_TESTS=OFF `
+          -DSLICK_ORDERBOOK_BUILD_EXAMPLES=OFF `
+          -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=ON
+
+    - name: Build
+      run: cmake --build build --config ${{ env.BUILD_TYPE }} -j
+
+    - name: Run Benchmarks
+      working-directory: ${{ github.workspace }}/build/benchmarks/${{ env.BUILD_TYPE }}
+      run: |
+        New-Item -ItemType Directory -Force -Path results
+        .\bench_orderbook_l2.exe --benchmark_out=results/l2.json --benchmark_out_format=json
+        .\bench_orderbook_l3.exe --benchmark_out=results/l3.json --benchmark_out_format=json
+        .\bench_orderbook_manager.exe --benchmark_out=results/manager.json --benchmark_out_format=json
+        .\bench_observer_overhead.exe --benchmark_out=results/observer.json --benchmark_out_format=json
+        .\bench_memory_usage.exe --benchmark_out=results/memory.json --benchmark_out_format=json
+        .\bench_market_replay.exe --benchmark_out=results/market_replay.json --benchmark_out_format=json
+        .\bench_cache_alignment.exe --benchmark_out=results/cache_alignment.json --benchmark_out_format=json
+
+    - name: Upload Benchmark Results
+      uses: actions/upload-artifact@v4
+      with:
+        name: benchmark-results-windows
+        path: build/benchmarks/${{ env.BUILD_TYPE }}/results/
+
+  # ============================================================================
+  # Performance Regression Check
+  # ============================================================================
+  regression-check:
+    runs-on: ubuntu-24.04
+    needs: [benchmark-linux]
+    if: github.event_name == 'pull_request'
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Download Benchmark Results
+      uses: actions/download-artifact@v4
+      with:
+        name: benchmark-results-linux
+        path: results/
+
+    - name: Check for Performance Regressions
+      run: |
+        echo "Checking for performance regressions..."
+        # TODO: Implement regression detection by comparing with baseline
+        # For now, just report that benchmarks completed
+        echo "Benchmarks completed successfully. Manual review recommended."
+        echo "See artifacts for detailed results."

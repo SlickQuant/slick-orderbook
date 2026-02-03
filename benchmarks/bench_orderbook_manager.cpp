@@ -43,7 +43,7 @@ static void BM_Manager_GetOrCreateL2(benchmark::State& state) {
     auto symbols = generateSymbolIds(num_symbols);
 
     // Pre-create some symbols
-    for (size_t i = 0; i < num_symbols / 2; ++i) {
+    for (auto i = 0; i < num_symbols / 2; ++i) {
         manager.getOrCreateOrderBook(symbols[i]);
     }
 
@@ -69,7 +69,7 @@ static void BM_Manager_GetOrCreateL3(benchmark::State& state) {
     auto symbols = generateSymbolIds(num_symbols);
 
     // Pre-create some symbols
-    for (size_t i = 0; i < num_symbols / 2; ++i) {
+    for (auto i = 0; i < num_symbols / 2; ++i) {
         manager.getOrCreateOrderBook(symbols[i]);
     }
 
@@ -206,7 +206,7 @@ BENCHMARK(BM_Manager_SymbolLookup)->Arg(10)->Arg(100)->Arg(1000)->Arg(10000);
 
 static void BM_Manager_SymbolChurn(benchmark::State& state) {
     OrderBookManager<OrderBookL2> manager;
-    const auto active_symbols = state.range(0);
+    const auto active_symbols = static_cast<SymbolId>(state.range(0));
 
     SymbolId next_symbol_id = 1;
     size_t operations = 0;

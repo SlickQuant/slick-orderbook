@@ -1,0 +1,214 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'  # Trigger on version tags (v1.0.0, v1.2.3, etc.)
+  workflow_dispatch:
+
+jobs:
+  # ============================================================================
+  # Create GitHub Release
+  # ============================================================================
+  create-release:
+    runs-on: ubuntu-latest
+    outputs:
+      upload_url: ${{ steps.create_release.outputs.upload_url }}
+      version: ${{ steps.get_version.outputs.version }}
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0  # Full history for changelog
+
+    - name: Get Version
+      id: get_version
+      run: |
+        VERSION=${GITHUB_REF#refs/tags/v}
+        echo "version=$VERSION" >> $GITHUB_OUTPUT
+        echo "Version: $VERSION"
+
+    - name: Generate Changelog
+      id: changelog
+      run: |
+        echo "# Release Notes" > RELEASE_NOTES.md
+        echo "" >> RELEASE_NOTES.md
+        echo "Version: ${{ steps.get_version.outputs.version }}" >> RELEASE_NOTES.md
+        echo "" >> RELEASE_NOTES.md
+
+        # Get commits since last tag
+        PREVIOUS_TAG=$(git describe --abbrev=0 --tags $(git rev-list --tags --skip=1 --max-count=1) 2>/dev/null || echo "")
+        if [ -n "$PREVIOUS_TAG" ]; then
+          echo "## Changes since $PREVIOUS_TAG" >> RELEASE_NOTES.md
+          echo "" >> RELEASE_NOTES.md
+          git log $PREVIOUS_TAG..HEAD --pretty=format:"- %s (%h)" >> RELEASE_NOTES.md
+        else
+          echo "## Initial Release" >> RELEASE_NOTES.md
+        fi
+
+    - name: Create Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ github.ref }}
+        release_name: Release ${{ steps.get_version.outputs.version }}
+        body_path: RELEASE_NOTES.md
+        draft: false
+        prerelease: false
+
+  # ============================================================================
+  # Build Release Artifacts - Linux
+  # ============================================================================
+  build-linux:
+    needs: create-release
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        arch: [x64]
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install Dependencies
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y cmake ninja-build gcc-14 g++-14
+
+    - name: Build Release Package
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_CXX_COMPILER=g++-14 \
+          -DSLICK_ORDERBOOK_BUILD_TESTS=OFF \
+          -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON \
+          -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
+
+        cmake --build build -j $(nproc)
+
+        # Create installation
+        cmake --install build --prefix install
+
+        # Package
+        tar -czf slick-orderbook-${{ needs.create-release.outputs.version }}-linux-${{ matrix.arch }}.tar.gz -C install .
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ./slick-orderbook-${{ needs.create-release.outputs.version }}-linux-${{ matrix.arch }}.tar.gz
+        asset_name: slick-orderbook-${{ needs.create-release.outputs.version }}-linux-${{ matrix.arch }}.tar.gz
+        asset_content_type: application/gzip
+
+  # ============================================================================
+  # Build Release Artifacts - Windows
+  # ============================================================================
+  build-windows:
+    needs: create-release
+    runs-on: windows-2022
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Setup MSVC
+      uses: microsoft/setup-msbuild@v2
+
+    - name: Build Release Package
+      run: |
+        cmake -B build -G "Visual Studio 17 2022" -A x64 `
+          -DCMAKE_BUILD_TYPE=Release `
+          -DSLICK_ORDERBOOK_BUILD_TESTS=OFF `
+          -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON `
+          -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
+
+        cmake --build build --config Release -j
+
+        # Create installation
+        cmake --install build --prefix install --config Release
+
+        # Package
+        Compress-Archive -Path install\* -DestinationPath slick-orderbook-${{ needs.create-release.outputs.version }}-windows-x64.zip
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ./slick-orderbook-${{ needs.create-release.outputs.version }}-windows-x64.zip
+        asset_name: slick-orderbook-${{ needs.create-release.outputs.version }}-windows-x64.zip
+        asset_content_type: application/zip
+
+  # ============================================================================
+  # Build Release Artifacts - macOS
+  # ============================================================================
+  build-macos:
+    needs: create-release
+    runs-on: macos-14
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        submodules: recursive
+
+    - name: Install Dependencies
+      run: brew install cmake ninja
+
+    - name: Build Release Package
+      run: |
+        cmake -B build -G Ninja \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DSLICK_ORDERBOOK_BUILD_TESTS=OFF \
+          -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON \
+          -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
+
+        cmake --build build -j $(sysctl -n hw.ncpu)
+
+        # Create installation
+        cmake --install build --prefix install
+
+        # Package
+        tar -czf slick-orderbook-${{ needs.create-release.outputs.version }}-macos-arm64.tar.gz -C install .
+
+    - name: Upload Release Asset
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ./slick-orderbook-${{ needs.create-release.outputs.version }}-macos-arm64.tar.gz
+        asset_name: slick-orderbook-${{ needs.create-release.outputs.version }}-macos-arm64.tar.gz
+        asset_content_type: application/gzip
+
+  # ============================================================================
+  # Publish Documentation
+  # ============================================================================
+  publish-docs:
+    needs: create-release
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Create Documentation Archive
+      run: |
+        tar -czf slick-orderbook-${{ needs.create-release.outputs.version }}-docs.tar.gz \
+          README.md ARCHITECTURE.mdLICENSE \
+          docs/ examples/ benchmarks/PROFILING_GUIDE.md
+
+    - name: Upload Documentation
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ needs.create-release.outputs.upload_url }}
+        asset_path: ./slick-orderbook-${{ needs.create-release.outputs.version }}-docs.tar.gz
+        asset_name: slick-orderbook-${{ needs.create-release.outputs.version }}-docs.tar.gz
+        asset_content_type: application/gzip

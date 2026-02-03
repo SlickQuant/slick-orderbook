@@ -1,4 +1,4 @@
-# Copyright 2026 Slick Quant LLC
+# Copyright 2026 Slick Quant
 # SPDX-License-Identifier: MIT
 
 # Examples for Slick OrderBook

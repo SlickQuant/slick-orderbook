@@ -40,9 +40,9 @@ void verifyAlignment(const char* type_name) {
     std::cout << "Alignment: " << alignof(T) << " bytes\n";
     std::cout << "Cache lines: " << (sizeof(T) + CACHE_LINE_SIZE - 1) / CACHE_LINE_SIZE << "\n";
 
-    if (alignof(T) >= CACHE_LINE_SIZE) {
+    if constexpr (alignof(T) >= CACHE_LINE_SIZE) {
         std::cout << "Status: ✓ Cache-aligned\n";
-    } else if (alignof(T) >= 16) {
+    } else if constexpr (alignof(T) >= 16) {
         std::cout << "Status: ⚠ SIMD-aligned (16 bytes) but not cache-aligned\n";
     } else {
         std::cout << "Status: ✗ Not aligned for optimal performance\n";

@@ -1,4 +1,4 @@
-// Copyright 2026 Slick Quant LLC
+// Copyright 2026 Slick Quant
 // SPDX-License-Identifier: MIT
 
 #include <slick/orderbook/detail/intrusive_list.hpp>

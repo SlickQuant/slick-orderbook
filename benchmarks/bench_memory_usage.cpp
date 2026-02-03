@@ -44,7 +44,7 @@ static void BM_L2_MemoryFootprint(benchmark::State& state) {
         state.ResumeTiming();
 
         // Build book with num_levels on each side
-        for (size_t i = 0; i < num_levels; ++i) {
+        for (auto i = 0; i < num_levels; ++i) {
             book.updateLevel(Side::Buy, 100000 - static_cast<Price>(i) * 10, 1000, 0, 0);
             book.updateLevel(Side::Sell, 100100 + static_cast<Price>(i) * 10, 1000, 0, 0);
         }
@@ -85,7 +85,7 @@ static void BM_L3_MemoryFootprint(benchmark::State& state) {
         state.ResumeTiming();
 
         // Build book with num_orders
-        for (size_t i = 0; i < num_orders; ++i) {
+        for (auto i = 0; i < num_orders; ++i) {
             Price price = 100000 + static_cast<Price>(price_offset_dist(rng)) * 10;
             Side side = (i % 2 == 0) ? Side::Buy : Side::Sell;
             book.addOrModifyOrder(i + 1, side, price, qty_dist(rng), 0, priority_dist(rng), 0);
@@ -171,14 +171,14 @@ static void BM_L2_MemoryChurn(benchmark::State& state) {
 
     for (auto _ : state) {
         // Add levels
-        for (size_t i = 0; i < num_levels; ++i) {
+        for (auto i = 0; i < num_levels; ++i) {
             Price offset = static_cast<Price>(cycle * 1000 + i);
             book.updateLevel(Side::Buy, 100000 - offset * 10, 1000, 0, 0);
             book.updateLevel(Side::Sell, 100100 + offset * 10, 1000, 0, 0);
         }
 
         // Delete levels
-        for (size_t i = 0; i < num_levels; ++i) {
+        for (auto i = 0; i < num_levels; ++i) {
             Price offset = static_cast<Price>(cycle * 1000 + i);
             book.deleteLevel(Side::Buy, 100000 - offset * 10);
             book.deleteLevel(Side::Sell, 100100 + offset * 10);
@@ -212,7 +212,7 @@ static void BM_L3_MemoryChurn(benchmark::State& state) {
         order_ids.clear();
 
         // Add orders
-        for (size_t i = 0; i < num_orders; ++i) {
+        for (auto i = 0; i < num_orders; ++i) {
             Price price = 100000 + (i % 10) * 10;
             Side side = (i % 2 == 0) ? Side::Buy : Side::Sell;
             book.addOrModifyOrder(order_id, side, price, qty_dist(rng), 0, priority_dist(rng), 0);
