@@ -150,6 +150,12 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:a0e0bf714f3a6fbf0dec45e21c2b6a972" id="r_a0e0bf714f3a6fbf0dec45e21c2b6a972"><td class="memItemLeft" align="right" valign="top">std::vector&lt; detail::PriceLevelL2 &gt;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1OrderBookL2.html#a0e0bf714f3a6fbf0dec45e21c2b6a972">getLevels</a> (<a class="el" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03f">Side</a> side, std::size_t depth=0) const</td></tr>
 <tr class="memdesc:a0e0bf714f3a6fbf0dec45e21c2b6a972"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get price levels for a side.  <br /></td></tr>
 <tr class="separator:a0e0bf714f3a6fbf0dec45e21c2b6a972"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a75c6a5c84ac9be8fbabac3d8e6f326e7" id="r_a75c6a5c84ac9be8fbabac3d8e6f326e7"><td class="memItemLeft" align="right" valign="top">const detail::PriceLevelL2 *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1OrderBookL2.html#a75c6a5c84ac9be8fbabac3d8e6f326e7">getLevel</a> (<a class="el" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03f">Side</a> side, <a class="el" href="namespaceslick_1_1orderbook.html#a25935d410087baa88ea8ec548e2a91ea">Price</a> price) const noexcept</td></tr>
+<tr class="memdesc:a75c6a5c84ac9be8fbabac3d8e6f326e7"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a specific price level by price.  <br /></td></tr>
+<tr class="separator:a75c6a5c84ac9be8fbabac3d8e6f326e7"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab2753f3b5ee41e4c8f7eef8081a0601e" id="r_ab2753f3b5ee41e4c8f7eef8081a0601e"><td class="memItemLeft" align="right" valign="top">const detail::PriceLevelL2 *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1OrderBookL2.html#ab2753f3b5ee41e4c8f7eef8081a0601e">getLevelByIndex</a> (<a class="el" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03f">Side</a> side, uint16_t index) const noexcept</td></tr>
+<tr class="memdesc:ab2753f3b5ee41e4c8f7eef8081a0601e"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get a price level by index (0 = best)  <br /></td></tr>
+<tr class="separator:ab2753f3b5ee41e4c8f7eef8081a0601e"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2e8a4fa5f7af66ef42677ce780d3cfd8" id="r_a2e8a4fa5f7af66ef42677ce780d3cfd8"><td class="memItemLeft" align="right" valign="top">std::size_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1OrderBookL2.html#a2e8a4fa5f7af66ef42677ce780d3cfd8">levelCount</a> (<a class="el" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03f">Side</a> side) const noexcept</td></tr>
 <tr class="memdesc:a2e8a4fa5f7af66ef42677ce780d3cfd8"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get number of levels on a side.  <br /></td></tr>
 <tr class="separator:a2e8a4fa5f7af66ef42677ce780d3cfd8"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -351,7 +357,7 @@ Public Member Functions</h2></td></tr>
 
 <p>Observer management. </p>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00118">118</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00130">130</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
 
 </div>
 </div>
@@ -409,7 +415,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00126">126</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00138">138</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
 
 </div>
 </div>
@@ -533,7 +539,7 @@ Public Member Functions</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00211">211</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00225">225</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
 <p class="reference">References <a class="el" href="types_8hpp_source.html#l00033">slick::orderbook::Buy</a>, <a class="el" href="observer_8hpp_source.html#l00093">slick::orderbook::ObserverManager::notifyPriceLevelUpdate()</a>, <a class="el" href="observer_8hpp_source.html#l00121">slick::orderbook::ObserverManager::notifySnapshotBegin()</a>, <a class="el" href="observer_8hpp_source.html#l00128">slick::orderbook::ObserverManager::notifySnapshotEnd()</a>, <a class="el" href="events_8hpp_source.html#l00013">slick::orderbook::PriceChanged</a>, <a class="el" href="events_8hpp_source.html#l00014">slick::orderbook::QuantityChanged</a>, and <a class="el" href="types_8hpp_source.html#l00034">slick::orderbook::Sell</a>.</p>
 
@@ -629,7 +635,107 @@ Public Member Functions</h2></td></tr>
 <p>Get last processed sequence number. </p>
 <dl class="section return"><dt>Returns</dt><dd>Last sequence number (0 if not tracking) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00136">136</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00148">148</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a75c6a5c84ac9be8fbabac3d8e6f326e7" name="a75c6a5c84ac9be8fbabac3d8e6f326e7"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a75c6a5c84ac9be8fbabac3d8e6f326e7">&#9670;&#160;</a></span>getLevel()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const detail::PriceLevelL2 * slick::orderbook::OrderBookL2::getLevel </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03f">Side</a>&#160;</td>
+          <td class="paramname"><em>side</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceslick_1_1orderbook.html#a25935d410087baa88ea8ec548e2a91ea">Price</a>&#160;</td>
+          <td class="paramname"><em>price</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a specific price level by price. </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">side</td><td>Buy or Sell </td></tr>
+    <tr><td class="paramname">price</td><td>Price to look up </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to price level, or nullptr if not found </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00157">157</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+
+<p class="reference">References <a class="el" href="types_8hpp_source.html#l00035">slick::orderbook::SideCount</a>, and <a class="el" href="config_8hpp_source.html#l00088">SLICK_ASSERT</a>.</p>
+
+</div>
+</div>
+<a id="ab2753f3b5ee41e4c8f7eef8081a0601e" name="ab2753f3b5ee41e4c8f7eef8081a0601e"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab2753f3b5ee41e4c8f7eef8081a0601e">&#9670;&#160;</a></span>getLevelByIndex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">const detail::PriceLevelL2 * slick::orderbook::OrderBookL2::getLevelByIndex </td>
+          <td>(</td>
+          <td class="paramtype"><a class="el" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03f">Side</a>&#160;</td>
+          <td class="paramname"><em>side</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t&#160;</td>
+          <td class="paramname"><em>index</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Get a price level by index (0 = best) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">side</td><td>Buy or Sell </td></tr>
+    <tr><td class="paramname">index</td><td>Level index (0-based, 0 = best bid/ask) </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Returns</dt><dd>Pointer to price level, or nullptr if index out of range </dd></dl>
+
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00162">162</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+
+<p class="reference">References <a class="el" href="types_8hpp_source.html#l00035">slick::orderbook::SideCount</a>, and <a class="el" href="config_8hpp_source.html#l00088">SLICK_ASSERT</a>.</p>
 
 </div>
 </div>
@@ -739,7 +845,7 @@ Public Member Functions</h2></td></tr>
 <p>Check if book is empty (both sides) </p>
 <dl class="section return"><dt>Returns</dt><dd>true if both sides are empty </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00167">167</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00181">181</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
 <p class="reference">References <a class="el" href="types_8hpp_source.html#l00033">slick::orderbook::Buy</a>, and <a class="el" href="types_8hpp_source.html#l00034">slick::orderbook::Sell</a>.</p>
 
@@ -778,7 +884,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if side has no levels </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00162">162</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00176">176</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
 <p class="reference">References <a class="el" href="types_8hpp_source.html#l00035">slick::orderbook::SideCount</a>, and <a class="el" href="config_8hpp_source.html#l00088">SLICK_ASSERT</a>.</p>
 
@@ -817,7 +923,7 @@ Public Member Functions</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Number of levels </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00157">157</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00171">171</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
 <p class="reference">References <a class="el" href="types_8hpp_source.html#l00035">slick::orderbook::SideCount</a>, and <a class="el" href="config_8hpp_source.html#l00088">SLICK_ASSERT</a>.</p>
 
@@ -846,7 +952,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00130">130</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00142">142</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
 
 </div>
 </div>
@@ -928,7 +1034,7 @@ Public Member Functions</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00122">122</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00134">134</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
 
 </div>
 </div>

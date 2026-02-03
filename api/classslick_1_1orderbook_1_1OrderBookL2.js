@@ -13,6 +13,8 @@ var classslick_1_1orderbook_1_1OrderBookL2 =
     [ "getBestAsk", "classslick_1_1orderbook_1_1OrderBookL2.html#ad7c180285c14c6d76938938d1146c47b", null ],
     [ "getBestBid", "classslick_1_1orderbook_1_1OrderBookL2.html#a5a15409327c93ad3a7786a5ba2e2097f", null ],
     [ "getLastSeqNum", "classslick_1_1orderbook_1_1OrderBookL2.html#aa9b91ab19cec9d5bf1c227f2ab63cdaf", null ],
+    [ "getLevel", "classslick_1_1orderbook_1_1OrderBookL2.html#a75c6a5c84ac9be8fbabac3d8e6f326e7", null ],
+    [ "getLevelByIndex", "classslick_1_1orderbook_1_1OrderBookL2.html#ab2753f3b5ee41e4c8f7eef8081a0601e", null ],
     [ "getLevels", "classslick_1_1orderbook_1_1OrderBookL2.html#a0e0bf714f3a6fbf0dec45e21c2b6a972", null ],
     [ "getTopOfBook", "classslick_1_1orderbook_1_1OrderBookL2.html#a77f1c490581f26920d07740e557b7bac", null ],
     [ "isEmpty", "classslick_1_1orderbook_1_1OrderBookL2.html#aa38a9c28035d4bf63bad8538bfae314e", null ],

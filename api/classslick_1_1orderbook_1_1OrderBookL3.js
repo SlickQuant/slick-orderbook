@@ -21,6 +21,7 @@ var classslick_1_1orderbook_1_1OrderBookL3 =
     [ "getLastSeqNum", "classslick_1_1orderbook_1_1OrderBookL3.html#a1d3d8f87e2a1c278a481908c5cf9114d", null ],
     [ "getLevel", "classslick_1_1orderbook_1_1OrderBookL3.html#a15b36dc4bb9c2bddddd2021e003d0ea5", null ],
     [ "getLevel", "classslick_1_1orderbook_1_1OrderBookL3.html#a4a6833de9578fa1b3822f20022243e59", null ],
+    [ "getLevelByIndex", "classslick_1_1orderbook_1_1OrderBookL3.html#a24fde990f06ea6c7f9cc877d236589b9", null ],
     [ "getLevelsL2", "classslick_1_1orderbook_1_1OrderBookL3.html#a4cc3cc9e1a9570c21d0856404612db5d", null ],
     [ "getLevelsL3", "classslick_1_1orderbook_1_1OrderBookL3.html#aee3d5c6bded2be456e6384510d621dca", null ],
     [ "getTopOfBook", "classslick_1_1orderbook_1_1OrderBookL3.html#a15dd8f18ad4adaa910e9f5bb1c9a29b1", null ],
