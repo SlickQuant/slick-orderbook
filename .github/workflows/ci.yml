@@ -26,15 +26,25 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Install Dependencies
+    - name: Setup vcpkg
+      uses: lukka/run-vcpkg@v11
+      with:
+        vcpkgGitCommitId: 'c8696863d371ab7f46e213d8f5ca923c4ff88ecd'
+
+    - name: Install System Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }} nlohmann-json3-dev g++-14 nlohmann-json3-dev
+        sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }} g++-14
+
+    - name: Install vcpkg Dependencies
+      run: |
+        vcpkg install nlohmann-json openssl boost-beast
 
     - name: Configure CMake (Compiled)
       if: matrix.build_mode == 'compiled'
       run: |
         cmake -B build -G Ninja \
+          -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" \
           -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
           -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} \
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
@@ -45,6 +55,7 @@ jobs:
       if: matrix.build_mode == 'header-only'
       run: |
         cmake -B build -G Ninja \
+          -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" \
           -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
           -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} \
           -DSLICK_ORDERBOOK_HEADER_ONLY=ON \
@@ -80,14 +91,24 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Install Dependencies
+    - name: Setup vcpkg
+      uses: lukka/run-vcpkg@v11
+      with:
+        vcpkgGitCommitId: 'c8696863d371ab7f46e213d8f5ca923c4ff88ecd'
+
+    - name: Install System Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }} nlohmann-json3-dev
+        sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }}
+
+    - name: Install vcpkg Dependencies
+      run: |
+        vcpkg install nlohmann-json openssl boost-beast
 
     - name: Configure CMake
       run: |
         cmake -B build -G Ninja \
+          -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" \
           -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
           -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} \
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
@@ -120,7 +141,7 @@ jobs:
 
     - name: Install vcpkg dependencies
       run: |
-        vcpkg install nlohmann-json:x64-windows
+        vcpkg install nlohmann-json:x64-windows openssl:x64-windows boost-beast:x64-windows
 
     - name: Configure CMake (Compiled)
       if: matrix.build_mode == 'compiled'
@@ -161,13 +182,23 @@ jobs:
       with:
         submodules: recursive
 
-    - name: Install Dependencies
+    - name: Setup vcpkg
+      uses: lukka/run-vcpkg@v11
+      with:
+        vcpkgGitCommitId: 'c8696863d371ab7f46e213d8f5ca923c4ff88ecd'
+
+    - name: Install System Dependencies
       run: |
         brew install cmake ninja
+
+    - name: Install vcpkg Dependencies
+      run: |
+        vcpkg install nlohmann-json openssl boost-beast
 
     - name: Configure CMake
       run: |
         cmake -B build -G Ninja \
+          -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" \
           -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
           -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON \

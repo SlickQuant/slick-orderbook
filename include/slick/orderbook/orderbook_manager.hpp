@@ -12,6 +12,7 @@
 #include <shared_mutex>
 #include <string>
 #include <vector>
+#include <mutex>
 
 SLICK_NAMESPACE_BEGIN
 
