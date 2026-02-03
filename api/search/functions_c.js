@@ -1,6 +1,6 @@
 var searchData=
 [
   ['pricechanged_0',['pricechanged',['../structslick_1_1orderbook_1_1PriceLevelUpdate.html#a5df9281b12a9085f54645a6d6a759788',1,'slick::orderbook::PriceLevelUpdate::priceChanged()'],['../structslick_1_1orderbook_1_1OrderUpdate.html#a40c9c7e48f82fa05717d3a83bab920e2',1,'slick::orderbook::OrderUpdate::priceChanged()']]],
-  ['pricecomparator_1',['PriceComparator',['../structslick_1_1orderbook_1_1OrderBookL3_1_1PriceComparator.html#a836a7ecf3701e3c8997ccc76ac9a3296',1,'slick::orderbook::OrderBookL3::PriceComparator']]],
+  ['pricecomparator_1',['pricecomparator',['../structslick_1_1orderbook_1_1OrderBookL3_1_1PriceComparator.html#a1d17e24a8086d8a73fd6b16355e3c868',1,'slick::orderbook::OrderBookL3::PriceComparator::PriceComparator()'],['../structslick_1_1orderbook_1_1OrderBookL3_1_1PriceComparator.html#a836a7ecf3701e3c8997ccc76ac9a3296',1,'slick::orderbook::OrderBookL3::PriceComparator::PriceComparator(Side side)']]],
   ['pricelevelupdate_2',['pricelevelupdate',['../structslick_1_1orderbook_1_1PriceLevelUpdate.html#a62784b7a647f9309ae617add4f42cd45',1,'slick::orderbook::PriceLevelUpdate::PriceLevelUpdate() noexcept=default'],['../structslick_1_1orderbook_1_1PriceLevelUpdate.html#a0e746a7e4f8909d00be9f0a43cb91b4d',1,'slick::orderbook::PriceLevelUpdate::PriceLevelUpdate(SymbolId sym, Side s, Price p, Quantity q, Timestamp ts, uint16_t idx=0, uint8_t flags=0, uint64_t seq=0) noexcept']]]
 ];

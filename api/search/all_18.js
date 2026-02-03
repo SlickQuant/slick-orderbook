@@ -1,9 +1,9 @@
 var searchData=
 [
   ['quantity_0',['quantity',['../structslick_1_1orderbook_1_1PriceLevelUpdate.html#a266a054445504169664461f22510451d',1,'slick::orderbook::PriceLevelUpdate::quantity'],['../structslick_1_1orderbook_1_1OrderUpdate.html#a09f24f5876d30430b6af07e26bdced37',1,'slick::orderbook::OrderUpdate::quantity'],['../structslick_1_1orderbook_1_1Trade.html#a0d4b66ff20abbed66265e0b62b5674c8',1,'slick::orderbook::Trade::quantity'],['../namespaceslick_1_1orderbook.html#a21187169371b8cf74060371e141b8f3a',1,'slick::orderbook::Quantity']]],
-  ['quantity_200_20deletion_1',['3. Quantity=0 Deletion',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md98',1,'']]],
+  ['quantity_200_20deletion_1',['3. Quantity=0 Deletion',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md76',1,'']]],
   ['quantitychanged_2',['quantitychanged',['../structslick_1_1orderbook_1_1PriceLevelUpdate.html#a85516a34c4af2b918363bdf510c7562a',1,'slick::orderbook::PriceLevelUpdate::quantityChanged()'],['../structslick_1_1orderbook_1_1OrderUpdate.html#a0ef14cea0fc12e4d9ebf738d0b3d8dea',1,'slick::orderbook::OrderUpdate::quantityChanged()'],['../namespaceslick_1_1orderbook.html#a9cd1513fcc4da9f1b357148038fd3895af310399218b95d363b483eb082c7f18a',1,'slick::orderbook::QuantityChanged']]],
-  ['queries_3',['7. Cache TopOfBook Queries',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md56',1,'']]],
-  ['queue_4',['IntrusiveList - Zero-Allocation Order Queue',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md44',1,'']]],
+  ['queries_3',['7. Cache TopOfBook Queries',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md57',1,'']]],
+  ['queue_4',['IntrusiveList - Zero-Allocation Order Queue',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md47',1,'']]],
   ['quick_20start_5',['🚀 Quick Start',['../index.html#autotoc_md3',1,'']]]
 ];

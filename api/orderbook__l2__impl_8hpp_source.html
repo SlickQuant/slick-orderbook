@@ -112,7 +112,7 @@ $(document).ready(function(){initNavTree('orderbook__l2__impl_8hpp_source.html',
 <div class="foldopen" id="foldopen00012" data-start="{" data-end="}">
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="classslick_1_1orderbook_1_1OrderBookL2.html#ada9f62c65c631b58a908bc2ed64272ac">   12</a></span><a class="code hl_define" href="orderbook__l2__impl_8hpp.html#a9605fe132c82c26aab3eec1c59e42929">SLICK_OB_INLINE</a> OrderBookL2::OrderBookL2(<a class="code hl_typedef" href="namespaceslick_1_1orderbook.html#aa9f5216180c724765d97ba90dd859f53">SymbolId</a> symbol, std::size_t initial_capacity)</div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    : symbol_(symbol),</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>      sides_(),</div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>      sides_{},</div>
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>      observers_(),</div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>      cached_tob_(),</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>      tob_seq_(0),</div>
