@@ -94,7 +94,7 @@ $(document).ready(function(){initNavTree('md__2home_2runner_2work_2slick-orderbo
 </div><!--header-->
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="autotoc_md26"></a> This document provides a comprehensive overview of the internal architecture, design decisions, and implementation details of the Slick OrderBook library.</p>
-<h1><a class="anchor" id="autotoc_md74"></a>
+<h1><a class="anchor" id="autotoc_md62"></a>
 Table of Contents</h1>
 <ol type="1">
 <li>Overview</li>
@@ -107,7 +107,7 @@ Table of Contents</h1>
 <li>Design Patterns</li>
 </ol>
 <hr  />
-<h1><a class="anchor" id="autotoc_md76"></a>
+<h1><a class="anchor" id="autotoc_md71"></a>
 Overview</h1>
 <p>Slick OrderBook is designed with three primary goals:</p>
 <ol type="1">
@@ -115,7 +115,7 @@ Overview</h1>
 <li><b>Zero Allocations</b>: Object pooling eliminates runtime allocations in hot paths</li>
 <li><b>Scalability</b>: Efficient management of thousands of symbols</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md77"></a>
+<h2><a class="anchor" id="autotoc_md72"></a>
 Architecture Principles</h2>
 <ul>
 <li><b>Performance First</b>: Every design decision prioritizes latency and throughput</li>
@@ -125,9 +125,9 @@ Architecture Principles</h2>
 <li><b>Single Responsibility</b>: Clear separation of concerns</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md79"></a>
+<h1><a class="anchor" id="autotoc_md75"></a>
 Core Components</h1>
-<h2><a class="anchor" id="autotoc_md80"></a>
+<h2><a class="anchor" id="autotoc_md76"></a>
 OrderBookL2 - Aggregated Price Levels</h2>
 <p>Level 2 orderbook maintains aggregated quantities at each price level without tracking individual orders.</p>
 <p><b>Key Features</b>:</p><ul>
@@ -144,7 +144,7 @@ OrderBookL2 - Aggregated Price Levels</h2>
 <div class="line">│   └── [1] = Sell side (asks, ascending order)</div>
 <div class="line">└── ObserverManager observers_ (variable size)</div>
 </div><!-- fragment --><p><b>Hot Path</b>: <code>updateLevel()</code> → <code>getOrCreateLevel()</code> → binary search → notify observers</p>
-<h2><a class="anchor" id="autotoc_md81"></a>
+<h2><a class="anchor" id="autotoc_md78"></a>
 OrderBookL3 - Order-by-Order Tracking</h2>
 <p>Level 3 orderbook tracks individual orders with unique IDs, maintaining time priority within each price level.</p>
 <p><b>Key Features</b>:</p><ul>
@@ -162,7 +162,7 @@ OrderBookL3 - Order-by-Order Tracking</h2>
 <div class="line">├── OrderMap order_map_ (hash table for O(1) lookup)</div>
 <div class="line">└── ObjectPool&lt;Order&gt; order_pool_ (pre-allocated orders)</div>
 </div><!-- fragment --><p><b>Hot Path</b>: <code>addOrModifyOrder()</code> → hash lookup → pool allocate → intrusive list insert</p>
-<h2><a class="anchor" id="autotoc_md82"></a>
+<h2><a class="anchor" id="autotoc_md80"></a>
 OrderBookManager - Multi-Symbol Coordination</h2>
 <p>Template-based manager for handling multiple symbols efficiently.</p>
 <p><b>Key Features</b>:</p><ul>

@@ -357,9 +357,9 @@ Custom Benchmarks</h2>
 <div class="ttc" id="anamespaceslick_1_1orderbook_html_a5355a0a7f10f6c2d6c9a27f9954cf03fa0fdce9f0ade221c1e1341e11f6029a00"><div class="ttname"><a href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa0fdce9f0ade221c1e1341e11f6029a00">slick::orderbook::Buy</a></div><div class="ttdeci">@ Buy</div><div class="ttdef"><b>Definition</b> <a href="types_8hpp_source.html#l00033">types.hpp:33</a></div></div>
 <div class="ttc" id="aorderbook_8hpp_html"><div class="ttname"><a href="orderbook_8hpp.html">orderbook.hpp</a></div></div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md63"></a>
+<h1><a class="anchor" id="autotoc_md64"></a>
 Profiling</h1>
-<h2><a class="anchor" id="autotoc_md64"></a>
+<h2><a class="anchor" id="autotoc_md65"></a>
 Visual Studio Performance Profiler (Windows)</h2>
 <p><b>Quick profiling:</b></p><ol type="1">
 <li>Open Visual Studio 2022</li>
@@ -369,7 +369,7 @@ Visual Studio Performance Profiler (Windows)</h2>
 <li>Run and analyze Hot Path view</li>
 </ol>
 <p>See benchmarks/PROFILING_GUIDE.md for detailed instructions.</p>
-<h2><a class="anchor" id="autotoc_md65"></a>
+<h2><a class="anchor" id="autotoc_md66"></a>
 Linux perf</h2>
 <p><b>Profile hot functions:</b> </p><div class="fragment"><div class="line"># Record profiling data</div>
 <div class="line">perf record -g ./bench_orderbook_l2</div>
@@ -381,7 +381,7 @@ Linux perf</h2>
 <div class="line"># - updateLevel</div>
 <div class="line"># - std::lower_bound (binary search)</div>
 <div class="line"># - observer callbacks</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md66"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md67"></a>
 Intel VTune</h2>
 <p><b>Cache miss analysis:</b> </p><div class="fragment"><div class="line"># Profile cache behavior</div>
 <div class="line">vtune -collect memory-access -- ./bench_orderbook_l2</div>
@@ -394,9 +394,9 @@ Intel VTune</h2>
 <li>Hot functions: <code>std::lower_bound</code>, <code>updateLevel</code></li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md68"></a>
+<h1><a class="anchor" id="autotoc_md69"></a>
 Performance Targets</h1>
-<h2><a class="anchor" id="autotoc_md69"></a>
+<h2><a class="anchor" id="autotoc_md73"></a>
 Target Latencies (p99)</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -410,7 +410,7 @@ Target Latencies (p99)</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Observer Notification   </td><td class="markdownTableBodyNone">&lt;50ns/observer   </td><td class="markdownTableBodyNone">✅ Achieved (2-3ns)   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md70"></a>
+<h2><a class="anchor" id="autotoc_md77"></a>
 Target Throughput</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -422,7 +422,7 @@ Target Throughput</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">100 Symbols   </td><td class="markdownTableBodyNone">&gt;5M items/sec   </td><td class="markdownTableBodyNone">✅ Achieved (5.5M)   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md71"></a>
+<h2><a class="anchor" id="autotoc_md79"></a>
 Memory Targets</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -433,7 +433,7 @@ Memory Targets</h2>
 <td class="markdownTableBodyNone">L3 per 1000 orders   </td><td class="markdownTableBodyNone">&lt;10KB   </td><td class="markdownTableBodyNone">✅ Achieved (~88KB includes pool)   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md73"></a>
+<h1><a class="anchor" id="autotoc_md82"></a>
 Conclusion</h1>
 <p>Slick OrderBook is designed for ultra-low latency with <b>all performance targets exceeded by 2-40x</b>. Follow the best practices in this guide to achieve optimal performance in your application.</p>
 <p><b>Key Takeaways</b>:</p><ol type="1">

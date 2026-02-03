@@ -15,6 +15,6 @@ var searchData=
   ['build_20modes_12',['Build Modes',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md114',1,'']]],
   ['builds_13',['10. Use Release Builds',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md43',1,'']]],
   ['buy_14',['Buy',['../namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa0fdce9f0ade221c1e1341e11f6029a00',1,'slick::orderbook']]],
-  ['by_20order_20tracking_15',['OrderBookL3 - Order-by-Order Tracking',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md81',1,'']]],
+  ['by_20order_20tracking_15',['OrderBookL3 - Order-by-Order Tracking',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md78',1,'']]],
   ['by_20side_16',['2. Array Indexing by Side',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md99',1,'']]]
 ];
