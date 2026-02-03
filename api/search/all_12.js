@@ -1,8 +1,8 @@
 var searchData=
 [
   ['id_0',['id',['../structslick_1_1orderbook_1_1Symbol.html#ab42d1740fc66087c4c0298721cff982f',1,'slick::orderbook::Symbol']]],
-  ['in_20production_1',['❌ Pitfall 5: Debug Assertions in Production',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md105',1,'']]],
-  ['indexing_20by_20side_2',['2. Array Indexing by Side',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md51',1,'']]],
+  ['in_20production_1',['❌ Pitfall 5: Debug Assertions in Production',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md90',1,'']]],
+  ['indexing_20by_20side_2',['2. Array Indexing by Side',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md56',1,'']]],
   ['insert_3',['insert',['../classslick_1_1orderbook_1_1detail_1_1OrderMap.html#a739427853024a673864227bd454dfb64',1,'slick::orderbook::detail::OrderMap']]],
   ['insert_5fafter_4',['insert_after',['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a0640974d21f45320ddcdfd73dcbfcc99',1,'slick::orderbook::detail::IntrusiveList']]],
   ['insert_5fbefore_5',['insert_before',['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#abdd0c450798d32d6e5378fbcd3838a84',1,'slick::orderbook::detail::IntrusiveList']]],
@@ -10,12 +10,12 @@ var searchData=
   ['insertorupdate_7',['insertOrUpdate',['../classslick_1_1orderbook_1_1detail_1_1LevelContainer.html#ad86e3e95011970ee8c3d00d9eb01447b',1,'slick::orderbook::detail::LevelContainer']]],
   ['installation_8',['Installation',['../index.html#autotoc_md5',1,'']]],
   ['integration_9',['📦 Integration',['../index.html#autotoc_md16',1,'']]],
-  ['intel_20vtune_10',['Intel VTune',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md121',1,'']]],
-  ['interface_11',['Observer Interface',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md58',1,'']]],
-  ['interpreting_20results_12',['Interpreting Results',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md115',1,'']]],
+  ['intel_20vtune_10',['Intel VTune',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md106',1,'']]],
+  ['interface_11',['Observer Interface',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md72',1,'']]],
+  ['interpreting_20results_12',['Interpreting Results',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md100',1,'']]],
   ['intrusive_5flist_2ehpp_13',['intrusive_list.hpp',['../intrusive__list_8hpp.html',1,'']]],
   ['intrusivelist_14',['intrusivelist',['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#ae36aa465bda7bee9707fdad98619840f',1,'slick::orderbook::detail::IntrusiveList::IntrusiveList() noexcept'],['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a91eee8dc867ff8e4d24c5dda95529e38',1,'slick::orderbook::detail::IntrusiveList::IntrusiveList(const IntrusiveList &amp;)=delete'],['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#aa9a8a56066bfc63cc1e4e442be362889',1,'slick::orderbook::detail::IntrusiveList::IntrusiveList(IntrusiveList &amp;&amp;other) noexcept'],['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html',1,'slick::orderbook::detail::IntrusiveList&lt; T, NextPtr, PrevPtr &gt;']]],
-  ['intrusivelist_20zero_20allocation_20order_20queue_15',['IntrusiveList - Zero-Allocation Order Queue',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md38',1,'']]],
+  ['intrusivelist_20zero_20allocation_20order_20queue_15',['IntrusiveList - Zero-Allocation Order Queue',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md39',1,'']]],
   ['intrusivelist_3c_20slick_3a_3aorderbook_3a_3adetail_3a_3aorder_20_3e_16',['IntrusiveList&lt; slick::orderbook::detail::Order &gt;',['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html',1,'slick::orderbook::detail']]],
   ['iorderbookobserver_17',['IOrderBookObserver',['../classslick_1_1orderbook_1_1IOrderBookObserver.html',1,'slick::orderbook']]],
   ['iscrossed_18',['isCrossed',['../structslick_1_1orderbook_1_1TopOfBook.html#a811de8d7cd5c359af99536a9843c9f02',1,'slick::orderbook::TopOfBook']]],
@@ -24,7 +24,7 @@ var searchData=
   ['islastinbatch_21',['islastinbatch',['../structslick_1_1orderbook_1_1PriceLevelUpdate.html#adf3e826a214308dd0cc7418075f79e4e',1,'slick::orderbook::PriceLevelUpdate::isLastInBatch()'],['../structslick_1_1orderbook_1_1OrderUpdate.html#a61b5d8b00f7662876db53028639891aa',1,'slick::orderbook::OrderUpdate::isLastInBatch()'],['../structslick_1_1orderbook_1_1Trade.html#aa06a6eff726f97ab72155cdfec9dffc0',1,'slick::orderbook::Trade::isLastInBatch()']]],
   ['istopn_22',['istopn',['../structslick_1_1orderbook_1_1OrderUpdate.html#a7f3e34776856d4fa2e022abf3029533b',1,'slick::orderbook::OrderUpdate::isTopN()'],['../structslick_1_1orderbook_1_1PriceLevelUpdate.html#a90558f729bbb527e557aa50fc5a3969d',1,'slick::orderbook::PriceLevelUpdate::isTopN()']]],
   ['isvalid_23',['isValid',['../structslick_1_1orderbook_1_1TopOfBook.html#a1279416ece077c4f0f49e972a4dde44c',1,'slick::orderbook::TopOfBook']]],
-  ['iteration_24',['5. Zero-Copy Iteration',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md54',1,'']]],
+  ['iteration_24',['5. Zero-Copy Iteration',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md65',1,'']]],
   ['iterator_25',['iterator',['../classslick_1_1orderbook_1_1detail_1_1OrderMap.html#a5d3d12b3d3df7e48c96b3bc9b501779c',1,'slick::orderbook::detail::OrderMap::iterator'],['../classslick_1_1orderbook_1_1detail_1_1LevelContainer.html#a3f88d14414b883c887d7d2a6a383301f',1,'slick::orderbook::detail::LevelContainer::iterator'],['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a62a0a2c1e39551c84364cf3b363c4f96',1,'slick::orderbook::detail::IntrusiveList::iterator'],['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html#ae549d71f20a08ba568db3cec57ea58dc',1,'slick::orderbook::detail::IntrusiveList::Iterator::Iterator()'],['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html',1,'slick::orderbook::detail::IntrusiveList&lt; T, NextPtr, PrevPtr &gt;::Iterator'],['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html#aa264ba2dd6487b2f1f5c4858336ccef4',1,'slick::orderbook::detail::IntrusiveList::Iterator::Iterator()']]],
   ['iterator_5fcategory_26',['iterator_category',['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1ConstIterator.html#adf6acf966fe3f98f469fc37adbc1036e',1,'slick::orderbook::detail::IntrusiveList::ConstIterator::iterator_category'],['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html#a1b47bc63e492b301247135791221ab9c',1,'slick::orderbook::detail::IntrusiveList::Iterator::iterator_category']]]
 ];
