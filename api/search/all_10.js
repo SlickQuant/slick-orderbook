@@ -12,5 +12,5 @@ var searchData=
   ['getsymbols_9',['getSymbols',['../classslick_1_1orderbook_1_1OrderBookManager.html#a7c49a540fe4b52c6538656c408080f70',1,'slick::orderbook::OrderBookManager']]],
   ['gettopofbook_10',['gettopofbook',['../classslick_1_1orderbook_1_1OrderBookL2.html#a77f1c490581f26920d07740e557b7bac',1,'slick::orderbook::OrderBookL2::getTopOfBook()'],['../classslick_1_1orderbook_1_1OrderBookL3.html#a15dd8f18ad4adaa910e9f5bb1c9a29b1',1,'slick::orderbook::OrderBookL3::getTopOfBook()']]],
   ['guide_11',['guide',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html',1,'Performance Guide'],['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html',1,'Slick OrderBook - Architecture Guide']]],
-  ['guided_20optimization_20pgo_12',['Technique 2: Profile-Guided Optimization (PGO)',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md53',1,'']]]
+  ['guided_20optimization_20pgo_12',['Technique 2: Profile-Guided Optimization (PGO)',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md91',1,'']]]
 ];
