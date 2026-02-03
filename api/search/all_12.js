@@ -1,12 +1,12 @@
 var searchData=
 [
   ['id_0',['id',['../structslick_1_1orderbook_1_1Symbol.html#ab42d1740fc66087c4c0298721cff982f',1,'slick::orderbook::Symbol']]],
-  ['in_20production_1',['❌ Pitfall 5: Debug Assertions in Production',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md73',1,'']]],
-  ['indexing_20by_20side_2',['2. Array Indexing by Side',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md79',1,'']]],
+  ['in_20production_1',['❌ Pitfall 5: Debug Assertions in Production',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md75',1,'']]],
+  ['indexing_20by_20side_2',['2. Array Indexing by Side',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md76',1,'']]],
   ['installation_3',['Installation',['../index.html#autotoc_md5',1,'']]],
   ['integration_4',['📦 Integration',['../index.html#autotoc_md16',1,'']]],
-  ['intel_20vtune_5',['Intel VTune',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md102',1,'']]],
-  ['interface_6',['Observer Interface',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md94',1,'']]],
+  ['intel_20vtune_5',['Intel VTune',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md110',1,'']]],
+  ['interface_6',['Observer Interface',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md93',1,'']]],
   ['interpreting_20results_7',['Interpreting Results',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md92',1,'']]],
   ['intrusivelist_20zero_20allocation_20order_20queue_8',['IntrusiveList - Zero-Allocation Order Queue',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md49',1,'']]],
   ['iorderbookobserver_9',['IOrderBookObserver',['../classslick_1_1orderbook_1_1IOrderBookObserver.html',1,'slick::orderbook']]],
@@ -16,5 +16,5 @@ var searchData=
   ['islastinbatch_13',['islastinbatch',['../structslick_1_1orderbook_1_1Trade.html#aa06a6eff726f97ab72155cdfec9dffc0',1,'slick::orderbook::Trade::isLastInBatch()'],['../structslick_1_1orderbook_1_1OrderUpdate.html#a61b5d8b00f7662876db53028639891aa',1,'slick::orderbook::OrderUpdate::isLastInBatch()'],['../structslick_1_1orderbook_1_1PriceLevelUpdate.html#adf3e826a214308dd0cc7418075f79e4e',1,'slick::orderbook::PriceLevelUpdate::isLastInBatch()']]],
   ['istopn_14',['istopn',['../structslick_1_1orderbook_1_1OrderUpdate.html#a7f3e34776856d4fa2e022abf3029533b',1,'slick::orderbook::OrderUpdate::isTopN()'],['../structslick_1_1orderbook_1_1PriceLevelUpdate.html#a90558f729bbb527e557aa50fc5a3969d',1,'slick::orderbook::PriceLevelUpdate::isTopN()']]],
   ['isvalid_15',['isValid',['../structslick_1_1orderbook_1_1TopOfBook.html#a1279416ece077c4f0f49e972a4dde44c',1,'slick::orderbook::TopOfBook']]],
-  ['iteration_16',['5. Zero-Copy Iteration',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md85',1,'']]]
+  ['iteration_16',['5. Zero-Copy Iteration',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md84',1,'']]]
 ];
