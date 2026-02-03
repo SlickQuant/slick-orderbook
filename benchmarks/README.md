@@ -333,6 +333,6 @@ When adding new features:
 ## Resources
 
 - [Google Benchmark Documentation](https://github.com/google/benchmark/blob/main/docs/user_guide.md)
-- [Performance Analysis Tools](https://easyperf.net/blog/)
+- [Performance Analysis Tools](https://easyperf.net/notes/)
 - [Optimization Techniques](https://www.agner.org/optimize/)
 - [Cache Effects](https://igoro.com/archive/gallery-of-processor-cache-effects/)

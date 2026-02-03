@@ -5,6 +5,24 @@
     },
     {
       "pattern": "^https://github.com/SlickQuant"
+    },
+    {
+      "pattern": "^\\.\\./"
+    },
+    {
+      "pattern": "^\\./"
+    },
+    {
+      "pattern": "^[^/]*\\.md"
+    },
+    {
+      "pattern": "^benchmarks/"
+    },
+    {
+      "pattern": "^docs/"
+    },
+    {
+      "pattern": "^examples/"
     }
   ],
   "replacementPatterns": [],
