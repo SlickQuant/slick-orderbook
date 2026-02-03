@@ -89,7 +89,7 @@ jobs:
     - name: Setup vcpkg
       uses: lukka/run-vcpkg@v11
       with:
-        vcpkgGitCommitId: 'c8696863d371ab7f46e213d8f5ca923c4ff88ecd'
+        vcpkgGitCommitId: '2024.11.16'
 
     - name: Install System Dependencies
       run: |
@@ -185,7 +185,7 @@ jobs:
     - name: Setup vcpkg
       uses: lukka/run-vcpkg@v11
       with:
-        vcpkgGitCommitId: 'c8696863d371ab7f46e213d8f5ca923c4ff88ecd'
+        vcpkgGitCommitId: '2024.11.16'
 
     - name: Install System Dependencies
       run: brew install cmake ninja

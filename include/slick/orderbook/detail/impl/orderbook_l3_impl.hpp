@@ -15,7 +15,7 @@ SLICK_OB_INLINE OrderBookL3::OrderBookL3(SymbolId symbol,
                          std::size_t initial_order_capacity,
                          std::size_t initial_level_capacity)
     : symbol_(symbol),
-      levels_(PriceLevelMap{PriceComparator{Side::Buy}}, PriceLevelMap{PriceComparator{Side::Sell}}),
+      levels_{PriceLevelMap{PriceComparator{Side::Buy}}, PriceLevelMap{PriceComparator{Side::Sell}}},
       order_map_(initial_order_capacity),
       order_pool_(initial_order_capacity),
       observers_(),
