@@ -17,6 +17,7 @@ SLICK_OB_INLINE OrderBookL2::OrderBookL2(SymbolId symbol, std::size_t initial_ca
       }),
       observers_(),
       cached_tob_(),
+      tob_seq_(0),
       last_seq_num_(0) {
     // Initialize cached top-of-book
     cached_tob_.symbol = symbol_;
@@ -108,26 +109,20 @@ SLICK_OB_INLINE const detail::PriceLevelL2* OrderBookL2::getBestAsk() const noex
 }
 
 SLICK_OB_INLINE TopOfBook OrderBookL2::getTopOfBook() const noexcept {
-    const auto* bid = getBestBid();
-    const auto* ask = getBestAsk();
-
+    // Use sequence lock to read cached top-of-book atomically
     TopOfBook tob;
-    tob.symbol = symbol_;
-
-    if (bid) {
-        tob.best_bid = bid->price;
-        tob.bid_quantity = bid->quantity;
-        tob.timestamp = bid->timestamp;
-    }
-
-    if (ask) {
-        tob.best_ask = ask->price;
-        tob.ask_quantity = ask->quantity;
-        if (ask->timestamp > tob.timestamp) {
-            tob.timestamp = ask->timestamp;
+    uint64_t seq1, seq2;
+    do {
+        seq1 = tob_seq_.load(std::memory_order_acquire);
+        // If seq1 is odd, writer is in progress, spin
+        while (seq1 & 1) {
+            seq1 = tob_seq_.load(std::memory_order_acquire);
         }
-    }
-
+        // Read the cached value
+        tob = cached_tob_;
+        // Check if a write occurred during read
+        seq2 = tob_seq_.load(std::memory_order_acquire);
+    } while (seq1 != seq2);
     return tob;
 }
 
@@ -173,12 +168,17 @@ SLICK_OB_INLINE void OrderBookL2::notifyTopOfBookIfChanged(Timestamp timestamp, 
                             (cached_tob_.ask_quantity != new_ask_qty);
 
     if (bid_changed || ask_changed) {
-        // Update cached values
+        // Update cached values using sequence lock (odd = writing, even = readable)
+        uint64_t seq = tob_seq_.load(std::memory_order_relaxed);
+        tob_seq_.store(seq + 1, std::memory_order_release);  // Mark as writing (odd)
+
         cached_tob_.best_bid = new_best_bid;
         cached_tob_.bid_quantity = new_bid_qty;
         cached_tob_.best_ask = new_best_ask;
         cached_tob_.ask_quantity = new_ask_qty;
         cached_tob_.timestamp = timestamp;
+
+        tob_seq_.store(seq + 2, std::memory_order_release);  // Mark as readable (even)
 
         // Notify observers
         observers_.notifyTopOfBookUpdate(cached_tob_);

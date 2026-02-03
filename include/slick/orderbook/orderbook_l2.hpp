@@ -153,6 +153,7 @@ private:
     std::array<detail::LevelContainer, SideCount> sides_;               // Bid and ask sides (indexed by Side enum)
     ObserverManager observers_;                                         // Observer notifications
     TopOfBook cached_tob_;                                              // Cached top-of-book for efficient change detection
+    std::atomic<uint64_t> tob_seq_;                                     // Sequence lock for cached_tob_ (odd = writing, even = readable)
     uint64_t last_seq_num_;                                             // Last processed sequence number (0 = not tracking)
 };
 
