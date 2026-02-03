@@ -94,7 +94,7 @@ jobs:
     - name: Setup vcpkg
       uses: lukka/run-vcpkg@v11
       with:
-        vcpkgGitCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
+        vcpkgGitCommitId: '66c0373dc7fca549e5803087b9487edfe3aca0a1'
 
     - name: Install System Dependencies
       run: |
@@ -185,7 +185,7 @@ jobs:
     - name: Setup vcpkg
       uses: lukka/run-vcpkg@v11
       with:
-        vcpkgGitCommitId: 'a42af01b72c28a8e1d7b48107b33e4f286a55ef6'
+        vcpkgGitCommitId: '66c0373dc7fca549e5803087b9487edfe3aca0a1'
 
     - name: Install System Dependencies
       run: |
