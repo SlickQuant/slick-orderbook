@@ -29,7 +29,7 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }} g++-14
+        sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }} nlohmann-json3-dev g++-14 nlohmann-json3-dev
 
     - name: Configure CMake (Compiled)
       if: matrix.build_mode == 'compiled'
@@ -83,7 +83,7 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }}
+        sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }} nlohmann-json3-dev
 
     - name: Configure CMake
       run: |
@@ -118,10 +118,15 @@ jobs:
     - name: Setup MSVC
       uses: microsoft/setup-msbuild@v2
 
+    - name: Install vcpkg dependencies
+      run: |
+        vcpkg install nlohmann-json:x64-windows
+
     - name: Configure CMake (Compiled)
       if: matrix.build_mode == 'compiled'
       run: |
         cmake -B build -G "Visual Studio 17 2022" -A x64 `
+          -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake" `
           -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} `
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON `
           -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON `
@@ -131,6 +136,7 @@ jobs:
       if: matrix.build_mode == 'header-only'
       run: |
         cmake -B build -G "Visual Studio 17 2022" -A x64 `
+          -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake" `
           -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} `
           -DSLICK_ORDERBOOK_HEADER_ONLY=ON `
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON `
