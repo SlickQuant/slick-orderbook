@@ -81,6 +81,12 @@ if(SLICK_ORDERBOOK_HEADER_ONLY)
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include_private>
         $<INSTALL_INTERFACE:include>
     )
+
+    # Fix for GCC/Clang with LTO: explicitly link C++ standard library
+    # LTO can cause the linker to lose track of C++ stdlib dependency
+    if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+        target_link_libraries(slick-orderbook INTERFACE stdc++)
+    endif()
 else()
     # Compiled library (static or shared)
     if(SLICK_ORDERBOOK_BUILD_SHARED)
