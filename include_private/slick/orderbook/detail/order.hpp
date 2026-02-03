@@ -10,7 +10,8 @@ SLICK_DETAIL_NAMESPACE_BEGIN
 
 /// Order structure for Level 3 orderbook
 /// Uses intrusive list design for zero-allocation order queues at each price level
-struct Order {
+/// Cache-aligned to 64 bytes for optimal performance (exactly 1 cache line)
+struct SLICK_CACHE_ALIGNED Order {
     OrderId order_id;           // Unique order identifier
     Price price;                // Order price
     Quantity quantity;          // Order quantity

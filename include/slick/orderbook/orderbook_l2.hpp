@@ -28,13 +28,15 @@ SLICK_NAMESPACE_BEGIN
 ///
 /// Thread Safety: Single writer, multiple readers (lock-free reads planned)
 ///
+/// Memory Layout: Cache-aligned to 64 bytes for optimal performance
+///
 /// Usage:
 /// @code
 /// OrderBookL2 book(symbol_id);
 /// book.updateLevel(Side::Buy, 10000, 100, timestamp);
 /// auto best_bid = book.getBestBid();
 /// @endcode
-class OrderBookL2 {
+class SLICK_CACHE_ALIGNED OrderBookL2 {
 public:
     /// Constructor
     /// @param symbol Symbol identifier

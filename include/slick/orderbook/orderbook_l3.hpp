@@ -37,6 +37,8 @@ SLICK_NAMESPACE_BEGIN
 ///
 /// Thread Safety: Single writer, multiple readers (lock-free reads planned)
 ///
+/// Memory Layout: Cache-aligned to 64 bytes for optimal performance
+///
 /// Usage:
 /// @code
 /// OrderBookL3 book(symbol_id);
@@ -55,7 +57,7 @@ SLICK_NAMESPACE_BEGIN
 ///
 /// book.deleteOrder(order_id);
 /// @endcode
-class OrderBookL3 {
+class SLICK_CACHE_ALIGNED OrderBookL3 {
 public:
     struct PriceComparator {
         using Comparator = std::function<bool(Price, Price)>;

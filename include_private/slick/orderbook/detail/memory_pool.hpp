@@ -35,8 +35,8 @@ class ObjectPool {
 public:
     static_assert(std::is_nothrow_destructible_v<T>,
                   "ObjectPool requires nothrow destructible types");
-    static_assert(alignof(T) <= alignof(std::max_align_t),
-                  "ObjectPool does not support over-aligned types");
+    // Note: ObjectPool supports over-aligned types via std::align_val_t
+    // (see operator delete calls with std::align_val_t{alignof(T)})
 
     /// Constructor - pre-allocates initial capacity
     /// @param initial_capacity Number of objects to pre-allocate
