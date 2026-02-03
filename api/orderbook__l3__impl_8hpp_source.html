@@ -116,21 +116,21 @@ $(document).ready(function(){initNavTree('orderbook__l3__impl_8hpp_source.html',
 <div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>                         std::size_t initial_order_capacity,</div>
 <div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>                         std::size_t initial_level_capacity)</div>
 <div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    : symbol_(symbol),</div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>      order_map_(initial_order_capacity),</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>      order_pool_(initial_order_capacity),</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>      observers_(),</div>
-<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>      cached_tob_(),</div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>      last_seq_num_(0) {</div>
-<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>    <span class="comment">// Initialize levels array in constructor body to avoid Clang-17 C++23 aggregate init issues</span></div>
-<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>    levels_[<a class="code hl_enumvalue" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa0fdce9f0ade221c1e1341e11f6029a00">Side::Buy</a>] = <a class="code hl_typedef" href="classslick_1_1orderbook_1_1OrderBookL3.html#a2c51e1ef936d11ada68d769adf0f85a5">PriceLevelMap</a>{<a class="code hl_struct" href="structslick_1_1orderbook_1_1OrderBookL3_1_1PriceComparator.html">PriceComparator</a>{<a class="code hl_enumvalue" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa0fdce9f0ade221c1e1341e11f6029a00">Side::Buy</a>}};</div>
-<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>    levels_[<a class="code hl_enumvalue" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa5ba9eecb8dca5be7c92607b0661e700a">Side::Sell</a>] = <a class="code hl_typedef" href="classslick_1_1orderbook_1_1OrderBookL3.html#a2c51e1ef936d11ada68d769adf0f85a5">PriceLevelMap</a>{<a class="code hl_struct" href="structslick_1_1orderbook_1_1OrderBookL3_1_1PriceComparator.html">PriceComparator</a>{<a class="code hl_enumvalue" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa5ba9eecb8dca5be7c92607b0661e700a">Side::Sell</a>}};</div>
-<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span> </div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>      levels_(std::array&lt;<a class="code hl_typedef" href="classslick_1_1orderbook_1_1OrderBookL3.html#a2c51e1ef936d11ada68d769adf0f85a5">PriceLevelMap</a>, 2&gt;{</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>          <a class="code hl_typedef" href="classslick_1_1orderbook_1_1OrderBookL3.html#a2c51e1ef936d11ada68d769adf0f85a5">PriceLevelMap</a>{<a class="code hl_struct" href="structslick_1_1orderbook_1_1OrderBookL3_1_1PriceComparator.html">PriceComparator</a>{<a class="code hl_enumvalue" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa0fdce9f0ade221c1e1341e11f6029a00">Side::Buy</a>}},</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>          <a class="code hl_typedef" href="classslick_1_1orderbook_1_1OrderBookL3.html#a2c51e1ef936d11ada68d769adf0f85a5">PriceLevelMap</a>{<a class="code hl_struct" href="structslick_1_1orderbook_1_1OrderBookL3_1_1PriceComparator.html">PriceComparator</a>{<a class="code hl_enumvalue" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa5ba9eecb8dca5be7c92607b0661e700a">Side::Sell</a>}}</div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>      }),</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>      order_map_(initial_order_capacity),</div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>      order_pool_(initial_order_capacity),</div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span>      observers_(),</div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span>      cached_tob_(),</div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span>      last_seq_num_(0) {</div>
 <div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span>    <span class="comment">// Reserve capacity for price levels (flat_map doesn&#39;t have reserve in C++23)</span></div>
 <div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span>    <span class="comment">// This will be used during insertions to pre-allocate space</span></div>
 <div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span>    (void)initial_level_capacity;  <span class="comment">// Mark as used</span></div>
 <div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
 <div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    <span class="comment">// Initialize cached top-of-book</span></div>
-<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    cached_tob_.<a class="code hl_variable" href="structslick_1_1orderbook_1_1TopOfBook.html#ac83386d1471990be72566ddaeadcd0b5">symbol</a> = symbol_;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    cached_tob_.symbol = symbol_;</div>
 <div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>}</div>
 </div>
 <div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>

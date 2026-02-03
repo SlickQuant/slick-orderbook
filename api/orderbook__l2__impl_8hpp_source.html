@@ -112,15 +112,15 @@ $(document).ready(function(){initNavTree('orderbook__l2__impl_8hpp_source.html',
 <div class="foldopen" id="foldopen00012" data-start="{" data-end="}">
 <div class="line"><a id="l00012" name="l00012"></a><span class="lineno"><a class="line" href="classslick_1_1orderbook_1_1OrderBookL2.html#ada9f62c65c631b58a908bc2ed64272ac">   12</a></span><a class="code hl_define" href="orderbook__l2__impl_8hpp.html#a9605fe132c82c26aab3eec1c59e42929">SLICK_OB_INLINE</a> OrderBookL2::OrderBookL2(<a class="code hl_typedef" href="namespaceslick_1_1orderbook.html#aa9f5216180c724765d97ba90dd859f53">SymbolId</a> symbol, std::size_t initial_capacity)</div>
 <div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span>    : symbol_(symbol),</div>
-<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>      observers_(),</div>
-<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>      cached_tob_(),</div>
-<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>      last_seq_num_(0) {</div>
-<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>    <span class="comment">// Initialize sides array in constructor body to avoid Clang-17 C++23 aggregate init issues</span></div>
-<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>    sides_[<a class="code hl_enumvalue" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa0fdce9f0ade221c1e1341e11f6029a00">Side::Buy</a>] = detail::LevelContainer{<a class="code hl_enumvalue" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa0fdce9f0ade221c1e1341e11f6029a00">Side::Buy</a>, initial_capacity};</div>
-<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>    sides_[<a class="code hl_enumvalue" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa5ba9eecb8dca5be7c92607b0661e700a">Side::Sell</a>] = detail::LevelContainer{<a class="code hl_enumvalue" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa5ba9eecb8dca5be7c92607b0661e700a">Side::Sell</a>, initial_capacity};</div>
-<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span>      sides_(std::array&lt;detail::LevelContainer, 2&gt;{</div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span>          detail::LevelContainer{<a class="code hl_enumvalue" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa0fdce9f0ade221c1e1341e11f6029a00">Side::Buy</a>, initial_capacity},</div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno">   16</span>          detail::LevelContainer{<a class="code hl_enumvalue" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa5ba9eecb8dca5be7c92607b0661e700a">Side::Sell</a>, initial_capacity}</div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno">   17</span>      }),</div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno">   18</span>      observers_(),</div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span>      cached_tob_(),</div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span>      last_seq_num_(0) {</div>
 <div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span>    <span class="comment">// Initialize cached top-of-book</span></div>
-<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    cached_tob_.<a class="code hl_variable" href="structslick_1_1orderbook_1_1TopOfBook.html#ac83386d1471990be72566ddaeadcd0b5">symbol</a> = symbol_;</div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span>    cached_tob_.symbol = symbol_;</div>
 <div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span>}</div>
 </div>
 <div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span> </div>
