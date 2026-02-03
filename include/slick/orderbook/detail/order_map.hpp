@@ -29,8 +29,9 @@ public:
     /// @return true if insertion succeeded, false if OrderId already exists
     bool insert(Order* order) noexcept {
         SLICK_ASSERT(order != nullptr);
-        auto [it, inserted] = map_.try_emplace(order->order_id, order);
-        return inserted;
+        // Avoid structured bindings to work around C++23 tuple conversion issues with Clang 17 + GCC 14 libstdc++
+        auto result = map_.try_emplace(order->order_id, order);
+        return result.second;
     }
 
     /// Remove order from map

@@ -1,9 +1,8 @@
 cmake_minimum_required(VERSION 3.20)
 project(slick-orderbook VERSION 1.0.0 LANGUAGES CXX)
 
-# C++23 required
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
+# C++23 required for our library targets (not set globally to avoid affecting dependencies like Google Test)
+# Per-target C++ standard is set below using target_compile_features()
 set(CMAKE_CXX_EXTENSIONS OFF)
 
 # Options
@@ -78,6 +77,7 @@ if(SLICK_ORDERBOOK_HEADER_ONLY)
     # Header-only library
     add_library(slick-orderbook INTERFACE)
     target_compile_definitions(slick-orderbook INTERFACE SLICK_ORDERBOOK_HEADER_ONLY)
+    target_compile_features(slick-orderbook INTERFACE cxx_std_23)
     target_include_directories(slick-orderbook INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
         $<INSTALL_INTERFACE:include>
@@ -97,6 +97,7 @@ else()
         add_library(slick-orderbook STATIC ${SLICK_ORDERBOOK_SOURCES})
     endif()
 
+    target_compile_features(slick-orderbook PUBLIC cxx_std_23)
     target_include_directories(slick-orderbook
         PUBLIC
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>

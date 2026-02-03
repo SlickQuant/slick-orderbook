@@ -67,11 +67,11 @@ jobs:
           -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
 
     - name: Build
-      run: cmake --build build --config ${{ env.BUILD_TYPE }} -j $(nproc)
+      run: cmake --build build -j $(nproc)
 
     - name: Test
       working-directory: ${{ github.workspace }}/build
-      run: ctest --output-on-failure --config ${{ env.BUILD_TYPE }} -j $(nproc)
+      run: ctest --output-on-failure -j $(nproc)
 
     - name: Upload Test Results
       if: always()
@@ -119,11 +119,11 @@ jobs:
           -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
 
     - name: Build
-      run: cmake --build build --config ${{ env.BUILD_TYPE }} -j $(nproc)
+      run: cmake --build build -j $(nproc)
 
     - name: Test
       working-directory: ${{ github.workspace }}/build
-      run: ctest --output-on-failure --config ${{ env.BUILD_TYPE }} -j $(nproc)
+      run: ctest --output-on-failure -j $(nproc)
 
   # ============================================================================
   # Windows Build & Test (MSVC 2022)
@@ -208,11 +208,11 @@ jobs:
           -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
 
     - name: Build
-      run: cmake --build build --config ${{ env.BUILD_TYPE }} -j $(sysctl -n hw.ncpu)
+      run: cmake --build build -j $(sysctl -n hw.ncpu)
 
     - name: Test
       working-directory: ${{ github.workspace }}/build
-      run: ctest --output-on-failure --config ${{ env.BUILD_TYPE }} -j $(sysctl -n hw.ncpu)
+      run: ctest --output-on-failure -j $(sysctl -n hw.ncpu)
 
   # ============================================================================
   # Sanitizer Builds
@@ -284,7 +284,7 @@ jobs:
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=Debug \
           -DCMAKE_CXX_COMPILER=g++-14 \
-          -DCMAKE_CXX_FLAGS="--coverage -fprofile-arcs -ftest-coverage" \
+          -DCMAKE_CXX_FLAGS="--coverage -fprofile-arcs -ftest-coverage -fprofile-update=atomic" \
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
           -DSLICK_ORDERBOOK_BUILD_EXAMPLES=OFF \
           -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
