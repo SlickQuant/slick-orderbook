@@ -87,6 +87,12 @@ public:
         return levels_.end();
     }
 
+    /// Get level by price (returns pointer or nullptr)
+    [[nodiscard]] const PriceLevelL2* getLevel(Price price) const noexcept {
+        auto it = find(price);
+        return (it != levels_.end()) ? &(*it) : nullptr;
+    }
+
     /// Insert or update a level
     /// If price exists, updates quantity; otherwise inserts new level
     /// Returns iterator to the level and whether insertion occurred

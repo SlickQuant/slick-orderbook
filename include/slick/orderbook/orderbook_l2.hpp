@@ -100,6 +100,18 @@ public:
     /// @return Vector of price levels
     [[nodiscard]] std::vector<detail::PriceLevelL2> getLevels(Side side, std::size_t depth = 0) const;
 
+    /// Get a specific price level by price
+    /// @param side Buy or Sell
+    /// @param price Price to look up
+    /// @return Pointer to price level, or nullptr if not found
+    [[nodiscard]] const detail::PriceLevelL2* getLevel(Side side, Price price) const noexcept;
+
+    /// Get a price level by index (0 = best)
+    /// @param side Buy or Sell
+    /// @param index Level index (0-based, 0 = best bid/ask)
+    /// @return Pointer to price level, or nullptr if index out of range
+    [[nodiscard]] const detail::PriceLevelL2* getLevelByIndex(Side side, uint16_t index) const noexcept;
+
     /// Get number of levels on a side
     /// @param side Buy or Sell
     /// @return Number of levels

@@ -154,6 +154,20 @@ SLICK_OB_INLINE std::vector<detail::PriceLevelL2> OrderBookL2::getLevels(Side si
     return sides_[side].getLevels(depth);
 }
 
+SLICK_OB_INLINE const detail::PriceLevelL2* OrderBookL2::getLevel(Side side, Price price) const noexcept {
+    SLICK_ASSERT(side < SideCount);
+    return sides_[side].getLevel(price);
+}
+
+SLICK_OB_INLINE const detail::PriceLevelL2* OrderBookL2::getLevelByIndex(Side side, uint16_t index) const noexcept {
+    SLICK_ASSERT(side < SideCount);
+    const auto& container = sides_[side];
+    if (index >= container.size()) {
+        return nullptr;
+    }
+    return &container[index];
+}
+
 SLICK_OB_INLINE std::size_t OrderBookL2::levelCount(Side side) const noexcept {
     SLICK_ASSERT(side < SideCount);
     return sides_[side].size();

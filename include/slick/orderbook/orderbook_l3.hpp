@@ -201,6 +201,12 @@ public:
 
     [[nodiscard]] std::pair<detail::PriceLevelL3*, uint16_t> getLevel(Side side, Price price) noexcept;
 
+    /// Get L3 price level by index (0 = best)
+    /// @param side Buy or Sell
+    /// @param index Level index (0-based, 0 = best bid/ask)
+    /// @return Pointer to L3 price level, or nullptr if index out of range
+    [[nodiscard]] const detail::PriceLevelL3* getLevelByIndex(Side side, uint16_t index) const noexcept;
+
     /// Get number of price levels on a side
     /// @param side Buy or Sell
     /// @return Number of levels

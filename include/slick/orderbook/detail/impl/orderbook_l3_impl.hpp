@@ -454,6 +454,17 @@ SLICK_OB_INLINE std::pair<detail::PriceLevelL3*, uint16_t> OrderBookL3::getLevel
     return {nullptr, std::numeric_limits<uint16_t>::max()};
 }
 
+SLICK_OB_INLINE const detail::PriceLevelL3* OrderBookL3::getLevelByIndex(Side side, uint16_t index) const noexcept {
+    SLICK_ASSERT(side < SideCount);
+    const auto& level_map = levels_[side];
+    if (index >= level_map.size()) {
+        return nullptr;
+    }
+    auto it = level_map.begin();
+    std::advance(it, index);
+    return &it->second;
+}
+
 SLICK_OB_INLINE std::size_t OrderBookL3::levelCount(Side side) const noexcept {
     SLICK_ASSERT(side < SideCount);
     return levels_[side].size();
