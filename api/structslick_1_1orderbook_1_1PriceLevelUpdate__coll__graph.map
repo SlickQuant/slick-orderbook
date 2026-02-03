@@ -1,0 +1,3 @@
+<map id="slick::orderbook::PriceLevelUpdate" name="slick::orderbook::PriceLevelUpdate">
+<area shape="rect" id="Node000001" title="Level 2 price level update event Note: quantity = 0 implies the price level should be deleted." alt="" coords="5,5,199,345"/>
+</map>

@@ -1,0 +1,15 @@
+<map id="slick/orderbook/observer.hpp" name="slick/orderbook/observer.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="14,5,225,31"/>
+<area shape="rect" id="Node000002" href="$orderbook_8hpp.html" title=" " alt="" coords="25,255,245,280"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="66,38,37,55,14,80,8,98,14,118,36,161,66,199,97,231,122,253,119,257,93,234,62,203,32,164,9,120,3,98,9,77,33,51,64,34"/>
+<area shape="rect" id="Node000003" href="$orderbook__l2_8hpp.html" title=" " alt="" coords="23,79,215,119"/>
+<area shape="poly" id="edge2_Node000001_Node000003" title=" " alt="" coords="122,44,122,79,117,79,117,44"/>
+<area shape="rect" id="Node000005" href="$orderbook__l3_8hpp.html" title=" " alt="" coords="239,79,431,119"/>
+<area shape="poly" id="edge6_Node000001_Node000005" title=" " alt="" coords="164,33,284,76,283,81,162,38"/>
+<area shape="poly" id="edge3_Node000003_Node000002" title=" " alt="" coords="106,132,95,168,94,187,97,206,110,232,126,253,122,256,105,235,92,207,88,187,90,167,101,130"/>
+<area shape="rect" id="Node000004" href="$orderbook__manager_8hpp.html" title=" " alt="" coords="106,167,298,207"/>
+<area shape="poly" id="edge4_Node000003_Node000004" title=" " alt="" coords="149,127,186,165,182,168,145,131"/>
+<area shape="poly" id="edge5_Node000004_Node000002" title=" " alt="" coords="179,219,147,256,143,253,175,215"/>
+<area shape="poly" id="edge7_Node000005_Node000002" title=" " alt="" coords="338,133,332,171,324,191,312,208,293,226,270,239,222,257,221,252,268,235,289,221,308,205,319,189,327,170,333,132"/>
+<area shape="poly" id="edge8_Node000005_Node000004" title=" " alt="" coords="296,129,233,169,230,164,293,124"/>
+</map>

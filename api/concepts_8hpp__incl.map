@@ -1,0 +1,18 @@
+<map id="slick/orderbook/concepts.hpp" name="slick/orderbook/concepts.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="225,5,437,31"/>
+<area shape="rect" id="Node000002" href="$config_8hpp.html" title=" " alt="" coords="5,152,199,177"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="249,33,194,51,168,64,145,81,124,109,111,140,106,138,119,106,141,77,166,59,192,46,247,28"/>
+<area shape="rect" id="Node000004" href="$types_8hpp.html" title=" " alt="" coords="156,79,347,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="320,33,276,72,273,68,317,29"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="371,79,451,104"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="346,29,390,68,386,72,342,33"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="476,79,568,104"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="363,28,479,71,477,76,361,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="67,225,137,251"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,178,105,212,99,212,99,178"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="228,106,140,148,138,144,226,102"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="223,152,290,177"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="255,104,257,138,252,139,250,105"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="315,152,412,177"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="271,102,335,142,332,147,268,106"/>
+</map>

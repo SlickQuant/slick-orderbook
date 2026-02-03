@@ -1,0 +1,3 @@
+<map id="slick::orderbook::ObserverManager" name="slick::orderbook::ObserverManager">
+<area shape="rect" id="Node000001" title="Observer manager for notifying multiple observers Uses type erasure to support both concept&#45;based and..." alt="" coords="5,5,191,285"/>
+</map>

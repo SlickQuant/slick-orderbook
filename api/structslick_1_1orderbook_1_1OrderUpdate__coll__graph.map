@@ -1,0 +1,3 @@
+<map id="slick::orderbook::OrderUpdate" name="slick::orderbook::OrderUpdate">
+<area shape="rect" id="Node000001" title="Level 3 order update event Note: quantity = 0 implies the order should be deleted." alt="" coords="5,5,215,371"/>
+</map>

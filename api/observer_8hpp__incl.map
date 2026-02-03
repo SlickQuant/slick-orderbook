@@ -1,0 +1,29 @@
+<map id="slick/orderbook/observer.hpp" name="slick/orderbook/observer.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="305,5,515,31"/>
+<area shape="rect" id="Node000002" href="$config_8hpp.html" title=" " alt="" coords="5,225,199,251"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="305,26,235,32,165,42,106,58,85,69,71,80,62,95,57,112,60,148,73,183,89,213,84,215,68,185,55,149,52,111,57,93,67,77,82,64,105,53,164,37,234,27,304,21"/>
+<area shape="rect" id="Node000004" href="$events_8hpp.html" title=" " alt="" coords="81,79,280,104"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="374,33,232,77,230,72,372,28"/>
+<area shape="rect" id="Node000008" href="$concepts_8hpp.html" title=" " alt="" coords="304,79,516,104"/>
+<area shape="poly" id="edge9_Node000001_Node000008" title=" " alt="" coords="413,31,413,65,407,65,407,31"/>
+<area shape="rect" id="Node000011" title=" " alt="" coords="540,79,603,104"/>
+<area shape="poly" id="edge14_Node000001_Node000011" title=" " alt="" coords="437,28,534,71,531,75,435,33"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="627,79,705,104"/>
+<area shape="poly" id="edge15_Node000001_Node000012" title=" " alt="" coords="452,28,615,73,613,78,450,33"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="67,299,137,324"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,251,105,285,99,285,99,251"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="169,106,149,127,130,153,117,183,109,212,104,211,112,181,125,151,145,123,166,102"/>
+<area shape="rect" id="Node000005" href="$types_8hpp.html" title=" " alt="" coords="184,152,375,177"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="198,102,254,142,251,146,195,106"/>
+<area shape="poly" id="edge6_Node000005_Node000002" title=" " alt="" coords="252,180,144,223,142,218,250,175"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="349,225,415,251"/>
+<area shape="poly" id="edge7_Node000005_Node000006" title=" " alt="" coords="297,175,355,215,352,219,294,180"/>
+<area shape="rect" id="Node000007" title=" " alt="" coords="227,225,324,251"/>
+<area shape="poly" id="edge8_Node000005_Node000007" title=" " alt="" coords="281,178,279,212,274,212,276,178"/>
+<area shape="poly" id="edge10_Node000008_Node000002" title=" " alt="" coords="305,107,237,124,204,138,173,154,141,183,118,214,113,211,137,179,170,150,202,133,236,119,304,101"/>
+<area shape="poly" id="edge11_Node000008_Node000005" title=" " alt="" coords="390,106,314,148,311,143,388,102"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="399,152,479,177"/>
+<area shape="poly" id="edge12_Node000008_Node000009" title=" " alt="" coords="417,103,432,138,427,140,412,105"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="504,152,596,177"/>
+<area shape="poly" id="edge13_Node000008_Node000010" title=" " alt="" coords="434,102,516,143,514,148,431,106"/>
+</map>

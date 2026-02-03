@@ -1,0 +1,30 @@
+<map id="slick/orderbook/types.hpp" name="slick/orderbook/types.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="351,5,542,31"/>
+<area shape="rect" id="Node000002" href="$concepts_8hpp.html" title=" " alt="" coords="43,79,255,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="386,36,198,81,197,76,385,31"/>
+<area shape="rect" id="Node000004" href="$orderbook_8hpp.html" title=" " alt="" coords="54,401,274,427"/>
+<area shape="poly" id="edge17_Node000001_Node000004" title=" " alt="" coords="338,25,251,30,162,40,84,57,54,68,33,81,18,99,11,116,9,163,9,246,13,274,23,299,39,321,58,342,102,376,141,399,138,404,99,380,55,346,35,325,19,301,8,275,4,247,4,163,5,115,13,96,30,77,52,63,83,52,161,35,251,25,337,19"/>
+<area shape="rect" id="Node000005" href="$orderbook__l2_8hpp.html" title=" " alt="" coords="201,225,393,265"/>
+<area shape="poly" id="edge18_Node000001_Node000005" title=" " alt="" coords="472,39,492,69,497,87,493,105,464,147,426,181,385,208,346,228,344,223,382,203,423,177,460,143,488,103,491,87,487,71,467,42"/>
+<area shape="rect" id="Node000006" href="$orderbook__manager_8hpp.html" title=" " alt="" coords="276,313,468,353"/>
+<area shape="poly" id="edge20_Node000001_Node000006" title=" " alt="" coords="494,34,527,52,558,77,601,124,633,169,642,192,645,216,639,241,623,267,599,285,561,300,468,321,467,316,560,295,597,280,619,264,634,239,639,216,637,193,629,171,597,127,554,81,524,56,491,39"/>
+<area shape="rect" id="Node000007" href="$orderbook__l3_8hpp.html" title=" " alt="" coords="417,225,609,265"/>
+<area shape="poly" id="edge19_Node000001_Node000007" title=" " alt="" coords="490,35,515,53,535,77,543,97,547,117,545,158,536,196,525,226,520,224,531,194,540,157,541,117,538,98,531,80,512,57,487,39"/>
+<area shape="rect" id="Node000008" href="$events_8hpp.html" title=" " alt="" coords="279,79,478,104"/>
+<area shape="poly" id="edge12_Node000001_Node000008" title=" " alt="" coords="428,42,391,80,388,77,424,39"/>
+<area shape="rect" id="Node000003" href="$observer_8hpp.html" title=" " alt="" coords="150,152,361,177"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="179,109,240,150,237,154,176,114"/>
+<area shape="poly" id="edge11_Node000002_Node000004" title=" " alt="" coords="125,115,109,132,97,153,78,208,71,253,77,299,97,352,118,380,144,399,141,403,114,383,92,355,71,300,66,253,73,207,92,151,105,129,121,111"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="227,188,207,205,191,227,174,275,166,325,164,369,165,401,160,401,159,369,160,324,169,273,187,224,203,202,224,184"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="271,188,289,224,285,226,266,191"/>
+<area shape="poly" id="edge8_Node000003_Node000007" title=" " alt="" coords="307,179,452,223,450,228,305,184"/>
+<area shape="poly" id="edge5_Node000005_Node000004" title=" " alt="" coords="275,278,175,403,171,400,271,275"/>
+<area shape="poly" id="edge6_Node000005_Node000006" title=" " alt="" coords="325,274,357,311,353,315,321,278"/>
+<area shape="poly" id="edge7_Node000006_Node000004" title=" " alt="" coords="310,361,195,404,194,399,309,356"/>
+<area shape="poly" id="edge9_Node000007_Node000004" title=" " alt="" coords="514,280,505,319,495,339,481,355,447,374,396,388,274,407,273,401,394,383,445,369,478,351,491,336,500,317,509,278"/>
+<area shape="poly" id="edge10_Node000007_Node000006" title=" " alt="" coords="472,275,404,316,401,311,469,270"/>
+<area shape="poly" id="edge13_Node000008_Node000003" title=" " alt="" coords="348,113,277,154,275,149,346,108"/>
+<area shape="poly" id="edge14_Node000008_Node000004" title=" " alt="" coords="271,109,191,127,160,139,140,154,124,184,116,218,115,254,120,290,140,356,160,400,155,402,135,357,115,291,110,255,110,218,119,182,136,150,157,135,189,122,270,104"/>
+<area shape="poly" id="edge15_Node000008_Node000005" title=" " alt="" coords="384,118,384,148,376,178,355,206,330,227,327,223,351,203,371,176,379,147,379,118"/>
+<area shape="poly" id="edge16_Node000008_Node000007" title=" " alt="" coords="400,112,498,223,494,227,396,116"/>
+</map>

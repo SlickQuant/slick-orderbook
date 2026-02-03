@@ -1,0 +1,3 @@
+<map id="slick::orderbook::IOrderBookObserver" name="slick::orderbook::IOrderBookObserver">
+<area shape="rect" id="Node000001" title="Base interface for orderbook observers Observers receive callbacks for orderbook events." alt="" coords="5,5,187,205"/>
+</map>

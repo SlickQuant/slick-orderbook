@@ -1,0 +1,18 @@
+<map id="slick/orderbook/concepts.hpp" name="slick/orderbook/concepts.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="195,5,407,31"/>
+<area shape="rect" id="Node000002" href="$observer_8hpp.html" title=" " alt="" coords="125,79,336,104"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="282,43,244,80,240,77,278,39"/>
+<area shape="rect" id="Node000003" href="$orderbook_8hpp.html" title=" " alt="" coords="124,328,344,353"/>
+<area shape="poly" id="edge10_Node000001_Node000003" title=" " alt="" coords="339,35,383,62,426,98,443,120,454,143,458,167,453,193,438,220,419,244,372,284,320,312,274,330,272,326,318,307,369,279,415,241,434,217,448,191,453,167,449,144,438,122,422,102,380,66,336,40"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="142,109,67,128,38,140,20,154,12,168,9,182,9,195,13,208,32,234,60,258,95,279,132,298,201,325,199,330,130,303,92,284,57,262,28,237,8,210,4,196,3,181,7,166,16,150,36,135,66,123,141,104"/>
+<area shape="rect" id="Node000004" href="$orderbook__l2_8hpp.html" title=" " alt="" coords="30,152,222,192"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="206,114,153,154,150,150,203,110"/>
+<area shape="rect" id="Node000006" href="$orderbook__l3_8hpp.html" title=" " alt="" coords="246,152,438,192"/>
+<area shape="poly" id="edge7_Node000002_Node000006" title=" " alt="" coords="260,110,317,150,314,154,257,114"/>
+<area shape="poly" id="edge4_Node000004_Node000003" title=" " alt="" coords="121,206,119,243,122,261,129,279,141,295,157,307,194,326,191,330,154,312,138,298,124,281,116,263,113,243,116,206"/>
+<area shape="rect" id="Node000005" href="$orderbook__manager_8hpp.html" title=" " alt="" coords="138,240,330,280"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="163,199,212,238,209,242,159,203"/>
+<area shape="poly" id="edge6_Node000005_Node000003" title=" " alt="" coords="237,294,237,328,232,328,232,294"/>
+<area shape="poly" id="edge8_Node000006_Node000003" title=" " alt="" coords="353,206,356,243,352,263,345,281,331,298,314,312,277,330,275,326,312,307,328,295,340,279,347,261,350,243,348,206"/>
+<area shape="poly" id="edge9_Node000006_Node000005" title=" " alt="" coords="309,203,260,242,257,238,306,199"/>
+</map>
