@@ -38,7 +38,7 @@ jobs:
 
     - name: Install vcpkg Dependencies
       run: |
-        vcpkg install nlohmann-json openssl boost-beast
+        vcpkg install nlohmann-json openssl boost-beast jwt-cpp
 
     - name: Configure CMake (Compiled)
       if: matrix.build_mode == 'compiled'
@@ -103,7 +103,7 @@ jobs:
 
     - name: Install vcpkg Dependencies
       run: |
-        vcpkg install nlohmann-json openssl boost-beast
+        vcpkg install nlohmann-json openssl boost-beast jwt-cpp
 
     - name: Configure CMake
       run: |
@@ -141,7 +141,7 @@ jobs:
 
     - name: Install vcpkg dependencies
       run: |
-        vcpkg install nlohmann-json:x64-windows openssl:x64-windows boost-beast:x64-windows
+        vcpkg install nlohmann-json:x64-windows openssl:x64-windows boost-beast:x64-windows jwt-cpp:x64-windows
 
     - name: Configure CMake (Compiled)
       if: matrix.build_mode == 'compiled'
@@ -193,7 +193,7 @@ jobs:
 
     - name: Install vcpkg Dependencies
       run: |
-        vcpkg install nlohmann-json openssl boost-beast
+        vcpkg install nlohmann-json openssl boost-beast jwt-cpp
 
     - name: Configure CMake
       run: |
