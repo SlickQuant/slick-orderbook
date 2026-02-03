@@ -66,8 +66,9 @@ public:
 
         // Get current timestamp
         auto now = std::chrono::system_clock::now();
-        std::chrono::zoned_time local_time{std::chrono::current_zone(), now};
-        std::string str_local_now = std::format("{:%F %T}", local_time);
+        auto now_time_t = std::chrono::system_clock::to_time_t(now);
+        std::tm local_tm = *std::localtime(&now_time_t);
+        std::string str_local_now = std::format("{:%F %T}", local_tm);
 
         std::cout << "\n" << std::string(70, '=') << "\n";
         std::cout << symbol_ << " Order Book - "

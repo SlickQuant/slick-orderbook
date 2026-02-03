@@ -11,14 +11,16 @@ SLICK_NAMESPACE_BEGIN
 
 SLICK_OB_INLINE OrderBookL2::OrderBookL2(SymbolId symbol, std::size_t initial_capacity)
     : symbol_(symbol),
-      sides_(std::array<detail::LevelContainer, 2>{
-          detail::LevelContainer{Side::Buy, initial_capacity},
-          detail::LevelContainer{Side::Sell, initial_capacity}
-      }),
+      sides_(),
       observers_(),
       cached_tob_(),
       tob_seq_(0),
       last_seq_num_(0) {
+    // Initialize level containers
+    // Note: Clang-17 with GCC-14 libstdc++ has issues with aggregate initialization in member init list
+    sides_[Side::Buy] = detail::LevelContainer{Side::Buy, initial_capacity};
+    sides_[Side::Sell] = detail::LevelContainer{Side::Sell, initial_capacity};
+
     // Initialize cached top-of-book
     cached_tob_.symbol = symbol_;
 }
