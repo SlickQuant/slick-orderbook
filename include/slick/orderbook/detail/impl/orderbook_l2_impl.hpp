@@ -11,9 +11,6 @@ SLICK_NAMESPACE_BEGIN
 
 SLICK_OB_INLINE OrderBookL2::OrderBookL2(SymbolId symbol, std::size_t initial_capacity)
     : symbol_(symbol),
-      sides_{},
-      observers_(),
-      cached_tob_(),
       tob_seq_(0),
       last_seq_num_(0) {
     // Initialize level containers

@@ -15,11 +15,8 @@ SLICK_OB_INLINE OrderBookL3::OrderBookL3(SymbolId symbol,
                          std::size_t initial_order_capacity,
                          std::size_t initial_level_capacity)
     : symbol_(symbol),
-      levels_{},
       order_map_(initial_order_capacity),
       order_pool_(initial_order_capacity),
-      observers_(),
-      cached_tob_(),
       last_seq_num_(0) {
     // Initialize level maps with comparators
     // Note: Clang-17 with GCC-14 libstdc++ has issues with aggregate initialization in member init list
