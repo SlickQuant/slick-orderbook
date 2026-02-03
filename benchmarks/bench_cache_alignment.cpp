@@ -11,7 +11,7 @@
  */
 
 #include <slick/orderbook/orderbook.hpp>
-#include <slick/orderbook/detail/price_level.hpp>
+#include <slick/orderbook/detail/price_level_l3.hpp>
 #include <slick/orderbook/detail/order.hpp>
 #include <benchmark/benchmark.h>
 #include <iostream>

@@ -28,6 +28,8 @@ SLICK_OB_INLINE OrderBookL2::OrderBookL2(OrderBookL2&& other) noexcept
       sides_(std::move(other.sides_)),
       observers_(std::move(other.observers_)),
       cached_tob_(other.cached_tob_),
+      cached_best_bid_(other.cached_best_bid_),
+      cached_best_ask_(other.cached_best_ask_),
       tob_seq_(other.tob_seq_.load(std::memory_order_relaxed)),
       last_seq_num_(other.last_seq_num_) {
 }
@@ -39,6 +41,8 @@ SLICK_OB_INLINE OrderBookL2& OrderBookL2::operator=(OrderBookL2&& other) noexcep
         sides_ = std::move(other.sides_);
         observers_ = std::move(other.observers_);
         cached_tob_ = other.cached_tob_;
+        cached_best_bid_ = other.cached_best_bid_;
+        cached_best_ask_ = other.cached_best_ask_;
         tob_seq_.store(other.tob_seq_.load(std::memory_order_relaxed), std::memory_order_relaxed);
         last_seq_num_ = other.last_seq_num_;
     }
@@ -123,11 +127,47 @@ SLICK_OB_INLINE void OrderBookL2::clear() noexcept {
 }
 
 SLICK_OB_INLINE const detail::PriceLevelL2* OrderBookL2::getBestBid() const noexcept {
-    return sides_[Side::Buy].best();
+    // Use sequence lock to read cached best bid atomically
+    // This is thread-safe for concurrent reads while a writer is updating
+    uint64_t seq1, seq2;
+    do {
+        seq1 = tob_seq_.load(std::memory_order_acquire);
+        // If seq1 is odd, writer is in progress, spin
+        while (seq1 & 1) {
+            seq1 = tob_seq_.load(std::memory_order_acquire);
+        }
+        // Check if there's a valid bid
+        if (cached_tob_.best_bid == 0) {
+            return nullptr;
+        }
+        // Verify sequence didn't change during read
+        seq2 = tob_seq_.load(std::memory_order_acquire);
+    } while (seq1 != seq2);
+
+    // Return pointer to cached value (const, read-only)
+    return &cached_best_bid_;
 }
 
 SLICK_OB_INLINE const detail::PriceLevelL2* OrderBookL2::getBestAsk() const noexcept {
-    return sides_[Side::Sell].best();
+    // Use sequence lock to read cached best ask atomically
+    // This is thread-safe for concurrent reads while a writer is updating
+    uint64_t seq1, seq2;
+    do {
+        seq1 = tob_seq_.load(std::memory_order_acquire);
+        // If seq1 is odd, writer is in progress, spin
+        while (seq1 & 1) {
+            seq1 = tob_seq_.load(std::memory_order_acquire);
+        }
+        // Check if there's a valid ask
+        if (cached_tob_.best_ask == 0) {
+            return nullptr;
+        }
+        // Verify sequence didn't change during read
+        seq2 = tob_seq_.load(std::memory_order_acquire);
+    } while (seq1 != seq2);
+
+    // Return pointer to cached value (const, read-only)
+    return &cached_best_ask_;
 }
 
 SLICK_OB_INLINE TopOfBook OrderBookL2::getTopOfBook() const noexcept {
@@ -188,9 +228,9 @@ SLICK_OB_INLINE void OrderBookL2::notifyTopOfBookIfChanged(Timestamp timestamp, 
         return;  // Skip ToB emission for intermediate batch updates
     }
 
-    // Compute current top-of-book
-    const auto* bid = getBestBid();
-    const auto* ask = getBestAsk();
+    // Compute current top-of-book (direct access, writer-side only)
+    const auto* bid = sides_[Side::Buy].best();
+    const auto* ask = sides_[Side::Sell].best();
 
     Price new_best_bid = bid ? bid->price : 0;
     Quantity new_bid_qty = bid ? bid->quantity : 0;
@@ -208,11 +248,24 @@ SLICK_OB_INLINE void OrderBookL2::notifyTopOfBookIfChanged(Timestamp timestamp, 
         uint64_t seq = tob_seq_.load(std::memory_order_relaxed);
         tob_seq_.store(seq + 1, std::memory_order_release);  // Mark as writing (odd)
 
+        // Update cached TopOfBook
         cached_tob_.best_bid = new_best_bid;
         cached_tob_.bid_quantity = new_bid_qty;
         cached_tob_.best_ask = new_best_ask;
         cached_tob_.ask_quantity = new_ask_qty;
         cached_tob_.timestamp = timestamp;
+
+        // Update cached best bid/ask levels for thread-safe access
+        if (bid) {
+            cached_best_bid_ = *bid;
+        } else {
+            cached_best_bid_ = detail::PriceLevelL2{};  // Clear
+        }
+        if (ask) {
+            cached_best_ask_ = *ask;
+        } else {
+            cached_best_ask_ = detail::PriceLevelL2{};  // Clear
+        }
 
         tob_seq_.store(seq + 2, std::memory_order_release);  // Mark as readable (even)
 

@@ -19,34 +19,34 @@ This guide provides best practices and recommendations for achieving optimal per
 
 All measurements on modern x86-64 CPU (3.0+ GHz):
 
-| Operation                 | Latency      | Throughput           | Complexity      |
-|---------------------------|--------------|----------------------|-----------------|
-| **Level 2**               |              |                      |                 |
-| Add new level             | 21-28ns      | 36-48M ops/sec       | O(log n)        |
-| Modify level              | 24-31ns      | 32-42M ops/sec       | O(log n)        |
-| Delete level              | 21-33ns      | 30-48M ops/sec       | O(log n)        |
-| Get best bid/ask          | 0.25-0.33ns  | 3-4 billion ops/sec  | O(1)            |
-| Get all levels            | ~15ns        | 67M ops/sec          | O(n)            |
-| **Level 3**               |              |                      |                 |
-| Add/modify order          | 59-84ns      | 12-17M ops/sec       | O(log n) + O(1) |
-| Delete order              | 59-490ns     | 2-17M ops/sec        | O(1) hash       |
-| Execute order             | ~59ns        | 17M ops/sec          | O(1)            |
-| **Observer**              |              |                      |                 |
-| Per-observer notification | 2-3ns        | 333-500M/sec         | O(1)            |
-| **Multi-Symbol**          |              |                      |                 |
-| 10 symbols                | 7.7M items/sec | -                  | -               |
-| 100 symbols               | 5.5M items/sec | -                  | -               |
-| 1000 symbols              | 2.7M items/sec | -                  | -               |
+| Operation                 | Latency       | Throughput          | Complexity      |
+|---------------------------|---------------|---------------------|-----------------|
+| **Level 2**               |               |                     |                 |
+| Add new level             | 21-28ns       | 36-48M ops/sec      | O(log n)        |
+| Modify level              | 24-31ns       | 32-42M ops/sec      | O(log n)        |
+| Delete level              | 21-33ns       | 30-48M ops/sec      | O(log n)        |
+| Get best bid/ask          | 0.25-0.33ns   | 3-4 billion ops/sec | O(1)            |
+| Get all levels            | ~15ns         | 67M ops/sec         | O(n)            |
+| **Level 3**               |               |                     |                 |
+| Add/modify order          | 59-84ns       | 12-17M ops/sec      | O(log n) + O(1) |
+| Delete order              | 59-490ns      | 2-17M ops/sec       | O(1) hash       |
+| Execute order             | ~59ns         | 17M ops/sec         | O(1)            |
+| **Observer**              |               |                     |                 |
+| Per-observer notification | 2-3ns         | 333-500M/sec        | O(1)            |
+| **Multi-Symbol**          |               |                     |                 |
+| 10 symbols                | 7.7M items/s  | -                   | -               |
+| 100 symbols               | 5.5M items/s  | -                   | -               |
+| 1000 symbols              | 2.7M items/s  | -                   | -               |
 
 ### Memory Footprint
 
-| Configuration | Memory Usage |
-|---------------|--------------|
-| OrderBookL2 base | 320 bytes |
-| OrderBookL2 + 100 levels | ~2.7 KB |
-| OrderBookL3 base | 384 bytes |
-| OrderBookL3 + 1000 orders | ~88 KB |
-| 1000 L2 symbols | ~320 KB base + level data |
+| Configuration                 | Memory Usage                |
+|-------------------------------|-----------------------------|
+| OrderBookL2 base              | 320 bytes                   |
+| OrderBookL2 + 100 levels      | ~2.7 KB                     |
+| OrderBookL3 base              | 384 bytes                   |
+| OrderBookL3 + 1000 orders     | ~88 KB                      |
+| 1000 L2 symbols               | ~320 KB base + level data   |
 
 ---
 
@@ -485,27 +485,27 @@ vtune-gui
 
 ### Target Latencies (p99)
 
-| Operation | Target | Status |
-|-----------|--------|--------|
-| L2 Add/Modify/Delete | <100ns | ✅ Achieved (21-33ns) |
-| L3 Add/Modify/Delete | <200ns | ✅ Achieved (59-490ns) |
-| Best Bid/Ask Query | <10ns | ✅ Achieved (0.25ns) |
-| Observer Notification | <50ns/observer | ✅ Achieved (2-3ns) |
+| Operation                | Target         | Status                    |
+|--------------------------|----------------|---------------------------|
+| L2 Add/Modify/Delete     | <100ns         | ✅ Achieved (21-33ns)     |
+| L3 Add/Modify/Delete     | <200ns         | ✅ Achieved (59-490ns)    |
+| Best Bid/Ask Query       | <10ns          | ✅ Achieved (0.25ns)      |
+| Observer Notification    | <50ns/observer | ✅ Achieved (2-3ns)       |
 
 ### Target Throughput
 
-| Scenario | Target | Status |
-|----------|--------|--------|
-| Single Symbol L2 | >10M updates/sec | ✅ Achieved (30-48M) |
-| Single Symbol L3 | >5M updates/sec | ✅ Achieved (12-17M) |
-| 100 Symbols | >5M items/sec | ✅ Achieved (5.5M) |
+| Scenario         | Target            | Status                  |
+|------------------|-------------------|-------------------------|
+| Single Symbol L2 | >10M updates/sec  | ✅ Achieved (30-48M)    |
+| Single Symbol L3 | >5M updates/sec   | ✅ Achieved (12-17M)    |
+| 100 Symbols      | >5M items/sec     | ✅ Achieved (5.5M)      |
 
 ### Memory Targets
 
-| Configuration | Target | Status |
-|---------------|--------|--------|
-| L2 per symbol | <1KB | ✅ Achieved (320B base) |
-| L3 per 1000 orders | <10KB | ✅ Achieved (~88KB includes pool) |
+| Configuration       | Target | Status                              |
+|---------------------|--------|-------------------------------------|
+| L2 per symbol       | <1KB   | ✅ Achieved (320B base)             |
+| L3 per 1000 orders  | <10KB  | ✅ Achieved (~88KB includes pool)   |
 
 ---
 

@@ -98,11 +98,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 All performance targets exceeded:
 
-| Operation             | Target | Actual (p99) | Improvement  |
-| --------------------- | ------ | ------------ | ------------ |
-| L2 Add/Modify/Delete  | <100ns | 21-33ns      | 3-5x better  |
-| L3 Add/Modify/Delete  | <200ns | 59-490ns     | 2-3x better  |
-| Best Bid/Ask Query    | <10ns  | 0.25ns       | 40x better   |
+| Operation             | Target | Actual (p99) | Improvement   |
+|-----------------------|--------|--------------|---------------|
+| L2 Add/Modify/Delete  | <100ns | 21-33ns      | 3-5x better   |
+| L3 Add/Modify/Delete  | <200ns | 59-490ns     | 2-3x better   |
+| Best Bid/Ask Query    | <10ns  | 0.25ns       | 40x better    |
 | Observer Notification | <50ns  | 2-3ns        | 16-25x better |
 
 ### Quality Metrics

@@ -5,7 +5,7 @@
 
 #include <slick/orderbook/config.hpp>
 #include <slick/orderbook/types.hpp>
-#include <slick/orderbook/detail/price_level.hpp>
+#include <slick/orderbook/detail/price_level_l2.hpp>
 #include <vector>
 #include <algorithm>
 #include <functional>

@@ -365,6 +365,10 @@ TEST_F(OrderBookManagerL3Test, ConcurrentDifferentSymbols) {
     }
 }
 
+// Test concurrent read/write across multiple symbols
+// This validates thread safety of the OrderBookManager's symbol map access
+// and the lock-free SWMR design of individual orderbooks.
+// Each symbol has ONE writer thread but MULTIPLE reader threads accessing concurrently.
 TEST_F(OrderBookManagerL2Test, ConcurrentReadWrite) {
     OrderBookManager<OrderBookL2> manager;
     constexpr int kNumReaders = 8;
@@ -410,12 +414,14 @@ TEST_F(OrderBookManagerL2Test, ConcurrentReadWrite) {
     });
 
     // Reader threads: continuously query orderbooks (all symbols)
+    // These run concurrently with writers to test lock-free read access
     for (int r = 0; r < kNumReaders; ++r) {
         threads.emplace_back([&manager, &stop]() {
             while (!stop.load()) {
                 for (SymbolId s = 1; s <= kNumSymbols; ++s) {
                     auto* book = manager.getOrderBook(s);
                     if (book) {
+                        // Thread-safe: getBestBid/getBestAsk/getTopOfBook use seqlocks
                         [[maybe_unused]] auto* best_bid = book->getBestBid();
                         [[maybe_unused]] auto* best_ask = book->getBestAsk();
                         [[maybe_unused]] auto tob = book->getTopOfBook();
@@ -433,7 +439,7 @@ TEST_F(OrderBookManagerL2Test, ConcurrentReadWrite) {
         thread.join();
     }
 
-    // If we got here without crashes, the test passed
+    // If we got here without crashes or data races, the test passed
     EXPECT_EQ(manager.symbolCount(), kNumSymbols);
 }
 

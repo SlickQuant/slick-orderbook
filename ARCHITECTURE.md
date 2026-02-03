@@ -77,7 +77,7 @@ Level 3 orderbook tracks individual orders with unique IDs, maintaining time pri
 OrderBookL3 (384 bytes, cache-aligned)
 ├── SymbolId symbol_id (4 bytes)
 ├── TopOfBook cached_tob_ (48 bytes)
-├── std::array<LevelContainerL3, 2> books_ (2 × variable)
+├── std::array<PriceLevelMap, SideCount> levels_; (2 × variable)
 │   ├── [0] = Buy side price levels
 │   └── [1] = Sell side price levels
 ├── OrderMap order_map_ (hash table for O(1) lookup)
@@ -239,9 +239,22 @@ Critical structures are 64-byte aligned to cache line boundaries.
 
 **Per-Symbol Isolation**:
 
-- Each `OrderBook` instance is updated by a single thread
-- Multiple readers can query simultaneously
-- No locking within orderbook operations
+- Each `OrderBook` instance is updated by a single thread (writer)
+- Multiple readers can query simultaneously via lock-free seqlock mechanism
+- No mutex locking within orderbook operations
+
+**Thread-Safe Read Operations** (use sequence locks):
+
+- `getTopOfBook()` - Full best bid/ask snapshot
+- `getBestBid()` - Best bid price level
+- `getBestAsk()` - Best ask price level
+
+**NOT Thread-Safe** (require writer-exclusive access):
+
+- `getLevels()` - Returns vector copy, iterator invalidation risk
+- `getLevel()` - Direct pointer to vector element
+- `getLevelByIndex()` - Direct pointer to vector element
+- All write operations (`updateLevel()`, `deleteLevel()`, etc.)
 
 **OrderBookManager Thread Safety**:
 
@@ -508,12 +521,12 @@ class OrderBookL3 {
 
 ### Measured Results
 
-| Metric        | Target  | Actual    | Factor       |
-| ------------- | ------- | --------- | ------------ |
-| L2 Add/Modify | <100ns  | 21-33ns   | 3-5x faster  |
-| L3 Add/Modify | <200ns  | 59-490ns  | 2-3x faster  |
-| Best Bid/Ask  | <10ns   | 0.25ns    | 40x faster   |
-| Observer      | <50ns   | 2-3ns     | 16-25x faster |
+| Metric        | Target | Actual   | Factor        |
+|---------------|--------|----------|---------------|
+| L2 Add/Modify | <100ns | 21-33ns  | 3-5x faster   |
+| L3 Add/Modify | <200ns | 59-490ns | 2-3x faster   |
+| Best Bid/Ask  | <10ns  | 0.25ns   | 40x faster    |
+| Observer      | <50ns  | 2-3ns    | 16-25x faster |
 
 ### Hot Spots (from profiling)
 

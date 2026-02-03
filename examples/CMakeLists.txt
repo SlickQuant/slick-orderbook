@@ -16,7 +16,6 @@ target_link_libraries(simple_l2_orderbook
 target_include_directories(simple_l2_orderbook
     PRIVATE
         ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/include_private
 )
 
 # L3 OrderBook Example
@@ -32,7 +31,6 @@ target_link_libraries(simple_l3_orderbook
 target_include_directories(simple_l3_orderbook
     PRIVATE
         ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/include_private
 )
 
 # Multi-Symbol OrderBook Example
@@ -48,7 +46,6 @@ target_link_libraries(multi_symbol_orderbook
 target_include_directories(multi_symbol_orderbook
     PRIVATE
         ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/include_private
 )
 
 find_package(coinbase-advanced-cpp CONFIG QUIET)
@@ -77,7 +74,6 @@ target_link_libraries(coinbase_integration
 target_include_directories(coinbase_integration
     PRIVATE
         ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/include_private
 )
 
 message(STATUS "Coinbase integration example enabled")

@@ -7,7 +7,7 @@
 #include <slick/orderbook/types.hpp>
 #include <slick/orderbook/events.hpp>
 #include <slick/orderbook/observer.hpp>
-#include <slick/orderbook/detail/price_level.hpp>
+#include <slick/orderbook/detail/price_level_l2.hpp>
 #include <slick/orderbook/detail/level_container.hpp>
 #include <memory>
 #include <vector>
@@ -166,7 +166,9 @@ private:
     std::array<detail::LevelContainer, SideCount> sides_;               // Bid and ask sides (indexed by Side enum)
     ObserverManager observers_;                                         // Observer notifications
     TopOfBook cached_tob_;                                              // Cached top-of-book for efficient change detection
-    std::atomic<uint64_t> tob_seq_;                                     // Sequence lock for cached_tob_ (odd = writing, even = readable)
+    detail::PriceLevelL2 cached_best_bid_;                              // Cached best bid (for thread-safe access)
+    detail::PriceLevelL2 cached_best_ask_;                              // Cached best ask (for thread-safe access)
+    std::atomic<uint64_t> tob_seq_;                                     // Sequence lock for cached_tob_ and best bid/ask (odd = writing, even = readable)
     uint64_t last_seq_num_;                                             // Last processed sequence number (0 = not tracking)
 };
 

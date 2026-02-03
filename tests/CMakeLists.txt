@@ -40,7 +40,6 @@ target_include_directories(slick_orderbook_tests
     PRIVATE
         ${CMAKE_CURRENT_SOURCE_DIR}
         ${CMAKE_SOURCE_DIR}/include
-        ${CMAKE_SOURCE_DIR}/include_private
 )
 
 # Set linker language to C++ (needed for LTO with header-only mode)

@@ -7,7 +7,8 @@
 #include <slick/orderbook/types.hpp>
 #include <slick/orderbook/events.hpp>
 #include <slick/orderbook/observer.hpp>
-#include <slick/orderbook/detail/price_level.hpp>
+#include <slick/orderbook/detail/price_level_l2.hpp>
+#include <slick/orderbook/detail/price_level_l3.hpp>
 #include <slick/orderbook/detail/order.hpp>
 #include <slick/orderbook/detail/order_map.hpp>
 #include <slick/orderbook/detail/memory_pool.hpp>
@@ -64,12 +65,12 @@ public:
         Comparator compare_;
 
         // Default constructor (for array initialization on MSVC)
-        PriceComparator() : compare_(detail::BidComparator{}) {}
+        PriceComparator() : compare_(detail::BidComparatorL3{}) {}
 
         explicit PriceComparator(Side side)
             : compare_(side == Side::Buy
-                ? Comparator{detail::BidComparator{}}
-                : Comparator{detail::AskComparator{}}
+                ? Comparator{detail::BidComparatorL3{}}
+                : Comparator{detail::AskComparatorL3{}}
             )
         {}
         bool operator()(Price a, Price b) const noexcept {

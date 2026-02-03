@@ -31,6 +31,7 @@ elseif(MSVC)
     add_compile_options(
         /W4
         /wd4324  # Suppress C4324: structure was padded due to alignment specifier (intentional for cache alignment)
+        /wd4996
         /std:c++latest  # Enable C++23 features including flat_map
         $<$<CONFIG:Release>:/O2>
         $<$<CONFIG:Release>:/GL>  # Whole program optimization
@@ -60,15 +61,16 @@ set(SLICK_ORDERBOOK_HEADERS
     include/slick/orderbook/orderbook.hpp
 )
 
-# Private headers
-set(SLICK_ORDERBOOK_PRIVATE_HEADERS
-    include_private/slick/orderbook/detail/price_level.hpp
-    include_private/slick/orderbook/detail/order.hpp
-    include_private/slick/orderbook/detail/flat_map.hpp
-    include_private/slick/orderbook/detail/intrusive_list.hpp
-    include_private/slick/orderbook/detail/memory_pool.hpp
-    include_private/slick/orderbook/detail/level_container.hpp
-    include_private/slick/orderbook/detail/order_map.hpp
+# Detail headers (now public)
+set(SLICK_ORDERBOOK_DETAIL_HEADERS
+    include/slick/orderbook/detail/price_level_l2.hpp
+    include/slick/orderbook/detail/price_level_l3.hpp
+    include/slick/orderbook/detail/order.hpp
+    include/slick/orderbook/detail/flat_map.hpp
+    include/slick/orderbook/detail/intrusive_list.hpp
+    include/slick/orderbook/detail/memory_pool.hpp
+    include/slick/orderbook/detail/level_container.hpp
+    include/slick/orderbook/detail/order_map.hpp
 )
 
 # Library target
@@ -78,7 +80,6 @@ if(SLICK_ORDERBOOK_HEADER_ONLY)
     target_compile_definitions(slick-orderbook INTERFACE SLICK_ORDERBOOK_HEADER_ONLY)
     target_include_directories(slick-orderbook INTERFACE
         $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include_private>
         $<INSTALL_INTERFACE:include>
     )
 
@@ -100,8 +101,6 @@ else()
         PUBLIC
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
             $<INSTALL_INTERFACE:include>
-        PRIVATE
-            ${CMAKE_CURRENT_SOURCE_DIR}/include_private
     )
 endif()
 

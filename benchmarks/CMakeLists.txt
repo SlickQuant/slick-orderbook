@@ -24,9 +24,9 @@ if(MSVC)
     )
 endif()
 
-# All benchmarks need access to private headers for compiled mode
+# All benchmarks use public headers only (detail headers now public)
 set(BENCHMARK_INCLUDE_DIRS
-    ${CMAKE_SOURCE_DIR}/include_private
+    # Empty - all headers are now in public include/
 )
 
 # Benchmark executables
@@ -56,10 +56,9 @@ target_include_directories(bench_market_replay PRIVATE ${BENCHMARK_INCLUDE_DIRS}
 
 add_executable(bench_cache_alignment bench_cache_alignment.cpp)
 target_link_libraries(bench_cache_alignment PRIVATE slick::orderbook benchmark::benchmark)
-# Allow access to private headers for alignment verification
+# All headers now public
 target_include_directories(bench_cache_alignment PRIVATE
     ${CMAKE_SOURCE_DIR}/include
-    ${CMAKE_SOURCE_DIR}/include_private
 )
 
 # Set linker language to C++ for all benchmarks (needed for LTO with header-only mode)

@@ -126,7 +126,6 @@ FILE_PATTERNS          = *.hpp \
                          *.h \
                          *.md
 RECURSIVE              = YES
-EXCLUDE                = include_private/
 EXCLUDE_SYMLINKS       = NO
 EXCLUDE_PATTERNS       = */build/* \
                          */.*/* \

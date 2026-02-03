@@ -5,12 +5,12 @@
 #include <coinbase/websocket.hpp>
 #include <iostream>
 #include <iomanip>
+#include <sstream>
 #include <chrono>
 #include <thread>
 #include <ctime>
 #include <csignal>
 #include <atomic>
-#include <format>
 
 using WebSocketClient = coinbase::WebSocketClient;
 
@@ -68,7 +68,9 @@ public:
         auto now = std::chrono::system_clock::now();
         auto now_time_t = std::chrono::system_clock::to_time_t(now);
         std::tm local_tm = *std::localtime(&now_time_t);
-        std::string str_local_now = std::format("{:%F %T}", local_tm);
+        std::ostringstream oss;
+        oss << std::put_time(&local_tm, "%F %T");
+        std::string str_local_now = oss.str();
 
         std::cout << "\n" << std::string(70, '=') << "\n";
         std::cout << symbol_ << " Order Book - "
