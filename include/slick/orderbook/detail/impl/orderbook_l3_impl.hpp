@@ -19,9 +19,10 @@ SLICK_OB_INLINE OrderBookL3::OrderBookL3(SymbolId symbol,
       order_pool_(initial_order_capacity),
       last_seq_num_(0) {
     // Initialize level maps with comparators
-    // Note: Clang-17 with GCC-14 libstdc++ has issues with aggregate initialization in member init list
-    levels_[Side::Buy] = PriceLevelMap{PriceComparator{Side::Buy}};
-    levels_[Side::Sell] = PriceLevelMap{PriceComparator{Side::Sell}};
+    // Note: Clang-17 with GCC-14 libstdc++ has issues with aggregate initialization
+    // Use constructor syntax instead of brace initialization to avoid C++23 tuple conversion issues
+    levels_[Side::Buy] = PriceLevelMap(PriceComparator(Side::Buy));
+    levels_[Side::Sell] = PriceLevelMap(PriceComparator(Side::Sell));
 
     // Reserve capacity for price levels (flat_map doesn't have reserve in C++23)
     // This will be used during insertions to pre-allocate space
