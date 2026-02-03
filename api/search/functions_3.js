@@ -1,5 +1,7 @@
 var searchData=
 [
-  ['emitsnapshot_0',['emitsnapshot',['../classslick_1_1orderbook_1_1OrderBookL2.html#a94a257f0d49f4a9a5259234b7c3e4e1b',1,'slick::orderbook::OrderBookL2::emitSnapshot()'],['../classslick_1_1orderbook_1_1OrderBookL3.html#a716189c2480de8adecec25681ca60031',1,'slick::orderbook::OrderBookL3::emitSnapshot(Timestamp timestamp)']]],
-  ['executeorder_1',['executeOrder',['../classslick_1_1orderbook_1_1OrderBookL3.html#a7ebc08169c83644aef738ff7c3b20156',1,'slick::orderbook::OrderBookL3']]]
+  ['deallocate_0',['deallocate',['../classslick_1_1orderbook_1_1detail_1_1ObjectPool.html#a010fa7dfec7bf55eda20b3557100eb23',1,'slick::orderbook::detail::ObjectPool']]],
+  ['deletelevel_1',['deleteLevel',['../classslick_1_1orderbook_1_1OrderBookL2.html#a92faf069bffc184aca513b6211957563',1,'slick::orderbook::OrderBookL2']]],
+  ['deleteorder_2',['deleteOrder',['../classslick_1_1orderbook_1_1OrderBookL3.html#a36e6971be4c1b8a84c9e8574180fdd43',1,'slick::orderbook::OrderBookL3']]],
+  ['destroy_3',['destroy',['../classslick_1_1orderbook_1_1detail_1_1ObjectPool.html#a82124a6ba45fe7be505163d8870a9205',1,'slick::orderbook::detail::ObjectPool']]]
 ];

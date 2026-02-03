@@ -1,0 +1,3 @@
+<map id="slick::orderbook::detail::OrderMap" name="slick::orderbook::detail::OrderMap">
+<area shape="rect" id="Node000001" title="Hash table for fast OrderId &#45;&gt; Order* lookup Uses std::unordered_map for simplicity and performance P..." alt="" coords="5,5,168,285"/>
+</map>

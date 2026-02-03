@@ -1,5 +1,4 @@
 var searchData=
 [
-  ['pricecomparator_0',['PriceComparator',['../structslick_1_1orderbook_1_1OrderBookL3_1_1PriceComparator.html',1,'slick::orderbook::OrderBookL3']]],
-  ['pricelevelupdate_1',['PriceLevelUpdate',['../structslick_1_1orderbook_1_1PriceLevelUpdate.html',1,'slick::orderbook']]]
+  ['constiterator_0',['ConstIterator',['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1ConstIterator.html',1,'slick::orderbook::detail::IntrusiveList']]]
 ];

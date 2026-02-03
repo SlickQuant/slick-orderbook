@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['quantity_0',['quantity',['../structslick_1_1orderbook_1_1PriceLevelUpdate.html#a266a054445504169664461f22510451d',1,'slick::orderbook::PriceLevelUpdate::quantity'],['../structslick_1_1orderbook_1_1OrderUpdate.html#a09f24f5876d30430b6af07e26bdced37',1,'slick::orderbook::OrderUpdate::quantity'],['../structslick_1_1orderbook_1_1Trade.html#a0d4b66ff20abbed66265e0b62b5674c8',1,'slick::orderbook::Trade::quantity']]]
+  ['quantity_0',['quantity',['../structslick_1_1orderbook_1_1detail_1_1Order.html#a6b95805c608988456813105ba1685bfb',1,'slick::orderbook::detail::Order::quantity'],['../structslick_1_1orderbook_1_1detail_1_1PriceLevelL2.html#ad017ab7943d8960bf64ec124274c9c61',1,'slick::orderbook::detail::PriceLevelL2::quantity'],['../structslick_1_1orderbook_1_1PriceLevelUpdate.html#a266a054445504169664461f22510451d',1,'slick::orderbook::PriceLevelUpdate::quantity'],['../structslick_1_1orderbook_1_1OrderUpdate.html#a09f24f5876d30430b6af07e26bdced37',1,'slick::orderbook::OrderUpdate::quantity'],['../structslick_1_1orderbook_1_1Trade.html#a0d4b66ff20abbed66265e0b62b5674c8',1,'slick::orderbook::Trade::quantity']]]
 ];

@@ -1,0 +1,7 @@
+<map id="slick::orderbook::detail::PriceLevelL3" name="slick::orderbook::detail::PriceLevelL3">
+<area shape="rect" id="Node000001" title="Price level for Level 3 orderbook (order&#45;by&#45;order) Maintains a queue of individual orders at this pri..." alt="" coords="13,735,189,1075"/>
+<area shape="rect" id="Node000002" href="$classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html" title=" " alt="" coords="5,377,197,672"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="104,672,104,718,99,718,99,672"/>
+<area shape="rect" id="Node000003" href="$classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html" title="Intrusive doubly&#45;linked list for zero&#45;allocation order management." alt="" coords="8,5,195,300"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="104,314,104,377,99,377,99,314"/>
+</map>

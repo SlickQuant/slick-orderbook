@@ -1,5 +1,6 @@
 var namespaceslick_1_1orderbook =
 [
+    [ "detail", "namespaceslick_1_1orderbook_1_1detail.html", "namespaceslick_1_1orderbook_1_1detail" ],
     [ "IOrderBookObserver", "classslick_1_1orderbook_1_1IOrderBookObserver.html", "classslick_1_1orderbook_1_1IOrderBookObserver" ],
     [ "ObserverManager", "classslick_1_1orderbook_1_1ObserverManager.html", "classslick_1_1orderbook_1_1ObserverManager" ],
     [ "OrderBookL2", "classslick_1_1orderbook_1_1OrderBookL2.html", "classslick_1_1orderbook_1_1OrderBookL2" ],

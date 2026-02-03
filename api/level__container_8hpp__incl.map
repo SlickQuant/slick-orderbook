@@ -1,0 +1,24 @@
+<map id="slick/orderbook/detail/level_container.hpp" name="slick/orderbook/detail/level_container.hpp">
+<area shape="rect" id="Node000001" title=" " alt="" coords="226,5,389,45"/>
+<area shape="rect" id="Node000002" href="$config_8hpp.html" title=" " alt="" coords="5,255,199,280"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="226,41,128,62,87,77,63,95,53,112,49,131,54,171,70,210,88,242,84,245,65,213,49,173,44,131,48,110,59,92,85,73,126,57,225,35"/>
+<area shape="rect" id="Node000004" href="$types_8hpp.html" title=" " alt="" coords="161,181,352,207"/>
+<area shape="poly" id="edge3_Node000001_Node000004" title=" " alt="" coords="304,46,267,169,262,168,299,45"/>
+<area shape="rect" id="Node000007" href="$price__level__l2_8hpp.html" title=" " alt="" coords="73,93,235,133"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="275,48,201,89,198,84,272,43"/>
+<area shape="rect" id="Node000008" title=" " alt="" coords="311,101,373,126"/>
+<area shape="poly" id="edge10_Node000001_Node000008" title=" " alt="" coords="317,45,335,87,330,89,313,47"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="398,101,483,126"/>
+<area shape="poly" id="edge11_Node000001_Node000009" title=" " alt="" coords="338,43,413,91,410,95,335,48"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="508,101,595,126"/>
+<area shape="poly" id="edge12_Node000001_Node000010" title=" " alt="" coords="362,43,507,94,505,99,360,48"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="67,328,137,353"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="105,280,105,314,99,314,99,280"/>
+<area shape="poly" id="edge4_Node000004_Node000002" title=" " alt="" coords="233,209,141,251,139,246,231,204"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="223,255,290,280"/>
+<area shape="poly" id="edge5_Node000004_Node000005" title=" " alt="" coords="259,207,259,241,254,241,254,207"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="315,255,412,280"/>
+<area shape="poly" id="edge6_Node000004_Node000006" title=" " alt="" coords="275,204,336,245,333,249,272,209"/>
+<area shape="poly" id="edge8_Node000007_Node000002" title=" " alt="" coords="150,135,113,242,108,241,145,133"/>
+<area shape="poly" id="edge9_Node000007_Node000004" title=" " alt="" coords="180,131,232,171,229,175,177,136"/>
+</map>

@@ -1,0 +1,4 @@
+<map id="slick::orderbook::detail::Order" name="slick::orderbook::detail::Order">
+<area shape="rect" id="Node000001" title="Order structure for Level 3 orderbook Uses intrusive list design for zero&#45;allocation order queues at ..." alt="" coords="5,5,168,265"/>
+<area shape="poly" id="edge1_Node000001_Node000001" title=" " alt="" coords="170,88,188,105,195,135,192,156,184,172,179,169,187,155,189,135,183,107,167,92"/>
+</map>

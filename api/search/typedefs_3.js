@@ -1,4 +1,5 @@
 var searchData=
 [
-  ['quantity_0',['Quantity',['../namespaceslick_1_1orderbook.html#a21187169371b8cf74060371e141b8f3a',1,'slick::orderbook']]]
+  ['iterator_0',['iterator',['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a62a0a2c1e39551c84364cf3b363c4f96',1,'slick::orderbook::detail::IntrusiveList::iterator'],['../classslick_1_1orderbook_1_1detail_1_1LevelContainer.html#a3f88d14414b883c887d7d2a6a383301f',1,'slick::orderbook::detail::LevelContainer::iterator'],['../classslick_1_1orderbook_1_1detail_1_1OrderMap.html#a5d3d12b3d3df7e48c96b3bc9b501779c',1,'slick::orderbook::detail::OrderMap::iterator']]],
+  ['iterator_5fcategory_1',['iterator_category',['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html#a1b47bc63e492b301247135791221ab9c',1,'slick::orderbook::detail::IntrusiveList::Iterator::iterator_category'],['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1ConstIterator.html#adf6acf966fe3f98f469fc37adbc1036e',1,'slick::orderbook::detail::IntrusiveList::ConstIterator::iterator_category']]]
 ];

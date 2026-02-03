@@ -1,7 +1,8 @@
 var searchData=
 [
   ['passive_5forder_5fid_0',['passive_order_id',['../structslick_1_1orderbook_1_1Trade.html#aba2f7461777a9b9e038fc1f382d22bd2',1,'slick::orderbook::Trade']]],
-  ['price_1',['price',['../structslick_1_1orderbook_1_1PriceLevelUpdate.html#a0e3198ac4133e1b19bd98290a4927bde',1,'slick::orderbook::PriceLevelUpdate::price'],['../structslick_1_1orderbook_1_1OrderUpdate.html#a432b07dcda5acad2ff779cb383e5634c',1,'slick::orderbook::OrderUpdate::price'],['../structslick_1_1orderbook_1_1Trade.html#a8cee394fb511e59c95257f702de1d7ac',1,'slick::orderbook::Trade::price']]],
-  ['price_5flevel_5findex_2',['price_level_index',['../structslick_1_1orderbook_1_1OrderUpdate.html#a2c1e159be8b1602d815081d479b4fc0b',1,'slick::orderbook::OrderUpdate']]],
-  ['priority_3',['priority',['../structslick_1_1orderbook_1_1OrderUpdate.html#ace354dfd249611a14906ae496f394bf1',1,'slick::orderbook::OrderUpdate']]]
+  ['prev_1',['prev',['../structslick_1_1orderbook_1_1detail_1_1Order.html#a62a553e3d3b2873a99977c4b98d3670f',1,'slick::orderbook::detail::Order']]],
+  ['price_2',['price',['../structslick_1_1orderbook_1_1detail_1_1Order.html#ac6f3f92107e8adeec15db31cca3e9167',1,'slick::orderbook::detail::Order::price'],['../structslick_1_1orderbook_1_1detail_1_1PriceLevelL2.html#a7d94bb0a8bd35cc84fde78aff9735459',1,'slick::orderbook::detail::PriceLevelL2::price'],['../structslick_1_1orderbook_1_1detail_1_1PriceLevelL3.html#acd31746f3bd8c8c13e20c33c7e130755',1,'slick::orderbook::detail::PriceLevelL3::price'],['../structslick_1_1orderbook_1_1PriceLevelUpdate.html#a0e3198ac4133e1b19bd98290a4927bde',1,'slick::orderbook::PriceLevelUpdate::price'],['../structslick_1_1orderbook_1_1OrderUpdate.html#a432b07dcda5acad2ff779cb383e5634c',1,'slick::orderbook::OrderUpdate::price'],['../structslick_1_1orderbook_1_1Trade.html#a8cee394fb511e59c95257f702de1d7ac',1,'slick::orderbook::Trade::price']]],
+  ['price_5flevel_5findex_3',['price_level_index',['../structslick_1_1orderbook_1_1OrderUpdate.html#a2c1e159be8b1602d815081d479b4fc0b',1,'slick::orderbook::OrderUpdate']]],
+  ['priority_4',['priority',['../structslick_1_1orderbook_1_1detail_1_1Order.html#aff56c8f0c9720567d75e502a2660961a',1,'slick::orderbook::detail::Order::priority'],['../structslick_1_1orderbook_1_1OrderUpdate.html#ace354dfd249611a14906ae496f394bf1',1,'slick::orderbook::OrderUpdate::priority']]]
 ];
