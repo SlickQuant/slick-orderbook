@@ -49,6 +49,7 @@ jobs:
       if: github.ref == 'refs/heads/main'
       uses: peaceiris/actions-gh-pages@v4
       with:
+        github_token: ${{ github.token }}
         publish_dir: ./docs/api/html
         destination_dir: api
 

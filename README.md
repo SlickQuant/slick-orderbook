@@ -1,8 +1,11 @@
 # Slick OrderBook
 
+[![CI](https://github.com/SlickQuant/slick-orderbook/workflows/CI/badge.svg)](https://github.com/SlickQuant/slick-orderbook/actions/workflows/ci.yml)
+[![Documentation](https://github.com/SlickQuant/slick-orderbook/workflows/Documentation/badge.svg)](https://github.com/SlickQuant/slick-orderbook/actions/workflows/documentation.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![C++23](https://img.shields.io/badge/C%2B%2B-23-blue.svg)](https://en.cppreference.com/w/cpp/23)
-[![Platform](https://img.shields.io/badge/platform-linux%20%7C%20macos%20%7C%20windows-lightgrey.svg)]()
+[![Platform](https://img.shields.io/badge/platform-linux%20%7C%20macos%20%7C%20windows-lightgrey.svg)](https://github.com/SlickQuant/slick-orderbook)
+[![Release](https://img.shields.io/github/v/release/SlickQuant/slick-orderbook)](https://github.com/SlickQuant/slick-orderbook/releases)
 
 A **high-performance, low-latency C++ library** for managing financial market order books. Optimized for microsecond-level performance in high-frequency trading systems.
 
