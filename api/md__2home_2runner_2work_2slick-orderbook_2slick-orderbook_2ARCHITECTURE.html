@@ -93,8 +93,8 @@ $(document).ready(function(){initNavTree('md__2home_2runner_2work_2slick-orderbo
   <div class="headertitle"><div class="title">Slick OrderBook - Architecture Guide</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md25"></a> This document provides a comprehensive overview of the internal architecture, design decisions, and implementation details of the Slick OrderBook library.</p>
-<h1><a class="anchor" id="autotoc_md27"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md24"></a> This document provides a comprehensive overview of the internal architecture, design decisions, and implementation details of the Slick OrderBook library.</p>
+<h1><a class="anchor" id="autotoc_md26"></a>
 Table of Contents</h1>
 <ol type="1">
 <li>Overview</li>
@@ -107,7 +107,7 @@ Table of Contents</h1>
 <li>Design Patterns</li>
 </ol>
 <hr  />
-<h1><a class="anchor" id="autotoc_md29"></a>
+<h1><a class="anchor" id="autotoc_md28"></a>
 Overview</h1>
 <p>Slick OrderBook is designed with three primary goals:</p>
 <ol type="1">
@@ -115,7 +115,7 @@ Overview</h1>
 <li><b>Zero Allocations</b>: Object pooling eliminates runtime allocations in hot paths</li>
 <li><b>Scalability</b>: Efficient management of thousands of symbols</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md30"></a>
+<h2><a class="anchor" id="autotoc_md29"></a>
 Architecture Principles</h2>
 <ul>
 <li><b>Performance First</b>: Every design decision prioritizes latency and throughput</li>
@@ -125,9 +125,9 @@ Architecture Principles</h2>
 <li><b>Single Responsibility</b>: Clear separation of concerns</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md32"></a>
+<h1><a class="anchor" id="autotoc_md31"></a>
 Core Components</h1>
-<h2><a class="anchor" id="autotoc_md33"></a>
+<h2><a class="anchor" id="autotoc_md32"></a>
 OrderBookL2 - Aggregated Price Levels</h2>
 <p>Level 2 orderbook maintains aggregated quantities at each price level without tracking individual orders.</p>
 <p><b>Key Features</b>:</p>
@@ -146,7 +146,7 @@ OrderBookL2 - Aggregated Price Levels</h2>
 <div class="line">│   └── [1] = Sell side (asks, ascending order)</div>
 <div class="line">└── ObserverManager observers_ (variable size)</div>
 </div><!-- fragment --><p><b>Hot Path</b>: <code>updateLevel()</code> → <code>getOrCreateLevel()</code> → binary search → notify observers</p>
-<h2><a class="anchor" id="autotoc_md34"></a>
+<h2><a class="anchor" id="autotoc_md33"></a>
 OrderBookL3 - Order-by-Order Tracking</h2>
 <p>Level 3 orderbook tracks individual orders with unique IDs, maintaining time priority within each price level.</p>
 <p><b>Key Features</b>:</p>
@@ -166,7 +166,7 @@ OrderBookL3 - Order-by-Order Tracking</h2>
 <div class="line">├── OrderMap order_map_ (hash table for O(1) lookup)</div>
 <div class="line">└── ObjectPool&lt;Order&gt; order_pool_ (pre-allocated orders)</div>
 </div><!-- fragment --><p><b>Hot Path</b>: <code>addOrModifyOrder()</code> → hash lookup → pool allocate → intrusive list insert</p>
-<h2><a class="anchor" id="autotoc_md35"></a>
+<h2><a class="anchor" id="autotoc_md34"></a>
 OrderBookManager - Multi-Symbol Coordination</h2>
 <p>Template-based manager for handling multiple symbols efficiently.</p>
 <p><b>Key Features</b>:</p>
@@ -184,9 +184,9 @@ OrderBookManager - Multi-Symbol Coordination</h2>
 <div class="line">    shared_lock → check existence → if missing:</div>
 <div class="line">        exclusive_lock → double-check → create → insert</div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md37"></a>
+<h1><a class="anchor" id="autotoc_md36"></a>
 Data Structures</h1>
-<h2><a class="anchor" id="autotoc_md38"></a>
+<h2><a class="anchor" id="autotoc_md37"></a>
 FlatMap - Cache-Friendly Sorted Storage</h2>
 <p>Alias to <code>std::flat_map</code> (C++23) for storing price levels in sorted order.</p>
 <p><b>Advantages</b>:</p>
@@ -207,7 +207,7 @@ FlatMap - Cache-Friendly Sorted Storage</h2>
 <li>Compiler optimizations tailored to standard containers</li>
 <li>Reduced maintenance burden</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md39"></a>
+<h2><a class="anchor" id="autotoc_md38"></a>
 IntrusiveList - Zero-Allocation Order Queue</h2>
 <p>Doubly-linked list where nodes embed list pointers directly.</p>
 <p>**Advantages**:</p>
@@ -224,7 +224,7 @@ IntrusiveList - Zero-Allocation Order Queue</h2>
 <div class="line">    Order* next;</div>
 <div class="line">};</div>
 </div><!-- fragment --><p>**Use Case**: Maintaining order priority within a single price level.</p>
-<h2><a class="anchor" id="autotoc_md40"></a>
+<h2><a class="anchor" id="autotoc_md39"></a>
 ObjectPool - Pre-Allocated Memory</h2>
 <p>Free-list based object pool for Order structures.</p>
 <p>**Key Features**:</p>
@@ -255,9 +255,9 @@ ObjectPool - Pre-Allocated Memory</h2>
 <li>Better cache locality (pre-allocated contiguous blocks)</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md42"></a>
+<h1><a class="anchor" id="autotoc_md41"></a>
 Memory Management</h1>
-<h2><a class="anchor" id="autotoc_md43"></a>
+<h2><a class="anchor" id="autotoc_md42"></a>
 Cache Alignment Strategy</h2>
 <p>Critical structures are 64-byte aligned to cache line boundaries.</p>
 <p><b>Aligned Structures</b>:</p>
@@ -277,7 +277,7 @@ Cache Alignment Strategy</h2>
 <li>Memory overhead: ~40 bytes per OrderBookL2, ~24 bytes per OrderBookL3</li>
 <li>Benefit outweighs cost (measured ~10% improvement in cold cache scenarios)</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md44"></a>
+<h2><a class="anchor" id="autotoc_md43"></a>
 Memory Footprint</h2>
 <p><b>OrderBookL2</b>:</p>
 <ul>
@@ -292,14 +292,13 @@ Memory Footprint</h2>
 <li>1000 orders: ~88 KB total (within &lt;10KB target per 1000 orders for L3 pool overhead)</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md46"></a>
+<h1><a class="anchor" id="autotoc_md45"></a>
 Threading Model</h1>
-<h2><a class="anchor" id="autotoc_md47"></a>
+<h2><a class="anchor" id="autotoc_md46"></a>
 Single-Writer, Multiple-Reader (SWMR)</h2>
 <p><b>Per-Symbol Isolation</b>:</p>
 <ul>
 <li>Each <code>OrderBook</code> instance is updated by a single thread (writer)</li>
-<li>Multiple readers can query simultaneously via lock-free seqlock mechanism</li>
 <li>No mutex locking within orderbook operations</li>
 </ul>
 <p><b>Thread-Safe Read Operations</b> (use sequence locks):</p>
@@ -326,12 +325,10 @@ Single-Writer, Multiple-Reader (SWMR)</h2>
 <li><b>Write</b> (exclusive lock): <code>getOrCreateOrderBook()</code> - exclusive access for creation</li>
 <li><b>Per-Symbol Updates</b>: No cross-symbol locking (each orderbook independent)</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md48"></a>
+<h2><a class="anchor" id="autotoc_md47"></a>
 Observer Notifications</h2>
-<p><b>Lock-Free Callback Invocation</b>:</p>
 <div class="fragment"><div class="line"><span class="keywordtype">void</span> notifyObservers(<span class="keyword">const</span> Event&amp; event) {</div>
 <div class="line">    <span class="comment">// Observers stored in std::vector&lt;std::shared_ptr&lt;Observer&gt;&gt;</span></div>
-<div class="line">    <span class="comment">// Iteration is lock-free (single writer updates observer list)</span></div>
 <div class="line">    <span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; observer : observers_) {</div>
 <div class="line">        observer-&gt;onEvent(event);</div>
 <div class="line">    }</div>
@@ -339,13 +336,12 @@ Observer Notifications</h2>
 </div><!-- fragment --><p><b>Thread Safety Guarantee</b>:</p>
 <ul>
 <li>Observer registration/removal: Must be done from orderbook's writer thread</li>
-<li>Callback invocation: Lock-free iteration over shared_ptr vector</li>
 <li>Observer lifetime: Managed by shared_ptr (automatic cleanup)</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md50"></a>
+<h1><a class="anchor" id="autotoc_md49"></a>
 Performance Optimizations</h1>
-<h2><a class="anchor" id="autotoc_md51"></a>
+<h2><a class="anchor" id="autotoc_md50"></a>
 1. Cached TopOfBook</h2>
 <p><b>Problem</b>: Repeatedly computing best bid/ask is expensive.</p>
 <p><b>Solution</b>: Cache TopOfBook and update incrementally.</p>
@@ -358,7 +354,7 @@ Performance Optimizations</h1>
 <div class="line">    }</div>
 <div class="line">};</div>
 </div><!-- fragment --><p><b>Benefit</b>: Best bid/ask queries are 0.25ns (40x faster than target).</p>
-<h2><a class="anchor" id="autotoc_md52"></a>
+<h2><a class="anchor" id="autotoc_md51"></a>
 2. Array Indexing by Side</h2>
 <p><b>Problem</b>: Storing bid/ask books separately requires branching.</p>
 <p><b>Solution</b>: Use <code>Side</code> enum (0=Buy, 1=Sell) as array index.</p>
@@ -366,7 +362,7 @@ Performance Optimizations</h1>
 <div class="line"> </div>
 <div class="line">std::array&lt;LevelContainer, 2&gt; books_;  <span class="comment">// O(1) access: books_[side]</span></div>
 </div><!-- fragment --><p><b>Benefit</b>: Eliminates branch mispredictions, enables compiler optimizations.</p>
-<h2><a class="anchor" id="autotoc_md53"></a>
+<h2><a class="anchor" id="autotoc_md52"></a>
 3. Quantity=0 Deletion</h2>
 <p><b>Problem</b>: Explicit "action" enums (Add/Modify/Delete) complicate API.</p>
 <p><b>Solution</b>: Quantity=0 implies deletion.</p>
@@ -378,7 +374,7 @@ Performance Optimizations</h1>
 <div class="line">    }</div>
 <div class="line">}</div>
 </div><!-- fragment --><p><b>Benefit</b>: Simpler API, reduced event payload size, fewer branches.</p>
-<h2><a class="anchor" id="autotoc_md54"></a>
+<h2><a class="anchor" id="autotoc_md53"></a>
 4. Return Pairs for Efficiency</h2>
 <p><b>Problem</b>: Calculating level index multiple times is wasteful.</p>
 <p><b>Solution</b>: Return <code>std::pair&lt;Level*, uint16_t&gt;</code> from helpers.</p>
@@ -386,7 +382,7 @@ Performance Optimizations</h1>
 <div class="line"><span class="comment">// level_idx calculated once using std::distance()</span></div>
 <div class="line">notifyObservers(..., level_idx);  <span class="comment">// Pass pre-calculated index</span></div>
 </div><!-- fragment --><p><b>Benefit</b>: Single calculation, clean syntax via structured bindings.</p>
-<h2><a class="anchor" id="autotoc_md55"></a>
+<h2><a class="anchor" id="autotoc_md54"></a>
 5. Zero-Copy Iteration</h2>
 <p><b>Problem</b>: Returning <code>std::vector&lt;Level&gt;</code> copies data.</p>
 <p><b>Solution</b>: Return <code>const std::span&lt;const Level&gt;</code> or const reference.</p>
@@ -395,9 +391,9 @@ Performance Optimizations</h1>
 <div class="line">}</div>
 </div><!-- fragment --><p><b>Benefit</b>: No allocations, no copies, just a pointer/size pair.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md57"></a>
+<h1><a class="anchor" id="autotoc_md56"></a>
 Event System</h1>
-<h2><a class="anchor" id="autotoc_md58"></a>
+<h2><a class="anchor" id="autotoc_md57"></a>
 Event Types</h2>
 <ol type="1">
 <li><b>PriceLevelUpdate</b>: L2 level changes<ul>
@@ -432,9 +428,9 @@ Observer Interface</h2>
 <li>Use case: Suppress UI updates during snapshot load</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md61"></a>
+<h1><a class="anchor" id="autotoc_md63"></a>
 Design Patterns</h1>
-<h2><a class="anchor" id="autotoc_md62"></a>
+<h2><a class="anchor" id="autotoc_md64"></a>
 1. Template-Based Polymorphism (CRTP)</h2>
 <p><b>Why</b>: Eliminate virtual dispatch overhead in hot paths.</p>
 <div class="fragment"><div class="line"><span class="keyword">template</span>&lt;<span class="keyword">typename</span> OrderBookType&gt;</div>
@@ -446,7 +442,7 @@ Design Patterns</h1>
 <div class="line">OrderBookManager&lt;OrderBookL2&gt; l2_manager;</div>
 <div class="line">OrderBookManager&lt;OrderBookL3&gt; l3_manager;</div>
 </div><!-- fragment --><p><b>Benefit</b>: Zero-cost abstraction, full inlining.</p>
-<h2><a class="anchor" id="autotoc_md63"></a>
+<h2><a class="anchor" id="autotoc_md65"></a>
 2. Policy-Based Design</h2>
 <p><b>Why</b>: Compile-time customization without runtime overhead.</p>
 <div class="fragment"><div class="line"><span class="keyword">template</span>&lt;ComparatorPolicy Comp&gt;</div>
@@ -458,7 +454,7 @@ Design Patterns</h1>
 <div class="line"><span class="keyword">struct </span>BidComparator { <span class="comment">/* descending */</span> };</div>
 <div class="line"><span class="keyword">struct </span>AskComparator { <span class="comment">/* ascending */</span> };</div>
 </div><!-- fragment --><p><b>Benefit</b>: Single codebase, multiple behaviors, zero overhead.</p>
-<h2><a class="anchor" id="autotoc_md64"></a>
+<h2><a class="anchor" id="autotoc_md66"></a>
 3. Observer Pattern (Non-Virtual)</h2>
 <p><b>Why</b>: Lock-free notifications, flexible observation.</p>
 <div class="fragment"><div class="line">std::vector&lt;std::shared_ptr&lt;IOrderBookObserver&gt;&gt; observers_;</div>
@@ -469,7 +465,7 @@ Design Patterns</h1>
 <div class="line">    }</div>
 <div class="line">}</div>
 </div><!-- fragment --><p><b>Trade-off</b>: Virtual dispatch for observers (acceptable since notification is outside critical path).</p>
-<h2><a class="anchor" id="autotoc_md65"></a>
+<h2><a class="anchor" id="autotoc_md67"></a>
 4. RAII for Resource Management</h2>
 <p><b>Why</b>: Automatic cleanup, exception safety.</p>
 <div class="fragment"><div class="line"><span class="keyword">class </span>OrderBookL3 {</div>
@@ -480,9 +476,9 @@ Design Patterns</h1>
 <div class="line">};</div>
 </div><!-- fragment --><p><b>Benefit</b>: No manual memory management, leak-proof.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md68"></a>
+<h1><a class="anchor" id="autotoc_md69"></a>
 Build Modes</h1>
-<h2><a class="anchor" id="autotoc_md69"></a>
+<h2><a class="anchor" id="autotoc_md70"></a>
 Compiled Library (Default)</h2>
 <p><b>Advantages</b>:</p>
 <ul>
@@ -497,7 +493,7 @@ Compiled Library (Default)</h2>
 <li>Implementation in <code>src/</code></li>
 <li>Explicit template instantiations in <code>src/instantiations/</code></li>
 </ul>
-<h2><a class="anchor" id="autotoc_md72"></a>
+<h2><a class="anchor" id="autotoc_md71"></a>
 Header-Only Mode</h2>
 <p><b>Advantages</b>:</p>
 <ul>
@@ -512,9 +508,9 @@ Header-Only Mode</h2>
 </ul>
 <p><b>Trade-off</b>: Longer compile times, larger binaries.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md75"></a>
+<h1><a class="anchor" id="autotoc_md73"></a>
 Performance Profile</h1>
-<h2><a class="anchor" id="autotoc_md76"></a>
+<h2><a class="anchor" id="autotoc_md74"></a>
 Measured Results</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -528,7 +524,7 @@ Measured Results</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Observer   </td><td class="markdownTableBodyNone">&lt;50ns   </td><td class="markdownTableBodyNone">2-3ns   </td><td class="markdownTableBodyNone">16-25x faster   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md77"></a>
+<h2><a class="anchor" id="autotoc_md75"></a>
 Hot Spots (from profiling)</h2>
 <ol type="1">
 <li>**<code>std::lower_bound</code>**: Binary search in FlatMap (expected, optimal for &lt;100 levels)</li>
@@ -536,7 +532,7 @@ Hot Spots (from profiling)</h2>
 <li>**`getBestBid`/`getBestAsk`**: Cached access (0.25ns)</li>
 <li>**Benchmark framework overhead**: Google Benchmark iteration overhead</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md78"></a>
+<h2><a class="anchor" id="autotoc_md76"></a>
 Cache Behavior</h2>
 <ul>
 <li>**94.6% kernel time** in profiler indicates excellent cache utilization</li>
@@ -545,9 +541,9 @@ Cache Behavior</h2>
 <li>False sharing prevented by cache alignment</li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md80"></a>
+<h1><a class="anchor" id="autotoc_md78"></a>
 Future Considerations</h1>
-<h2><a class="anchor" id="autotoc_md81"></a>
+<h2><a class="anchor" id="autotoc_md79"></a>
 Potential Enhancements</h2>
 <ol type="1">
 <li><b>SIMD for Observer Iteration</b>: Vectorize observer notification loop</li>
@@ -556,7 +552,7 @@ Potential Enhancements</h2>
 <li><b>Lock-Free Reads</b>: Sequence locks for concurrent readers</li>
 <li><b>Batch Processing</b>: Amortize overhead across multiple updates</li>
 </ol>
-<h2><a class="anchor" id="autotoc_md82"></a>
+<h2><a class="anchor" id="autotoc_md80"></a>
 Not Planned (Premature Optimization)</h2>
 <ol type="1">
 <li><b>Assembly-Level Tuning</b>: Current performance exceeds targets by 2-40x</li>
@@ -564,7 +560,7 @@ Not Planned (Premature Optimization)</h2>
 <li><b>Hand-Rolled Allocators</b>: ObjectPool meets all needs</li>
 </ol>
 <hr  />
-<h1><a class="anchor" id="autotoc_md84"></a>
+<h1><a class="anchor" id="autotoc_md82"></a>
 Conclusion</h1>
 <p>Slick OrderBook achieves its performance goals through:</p>
 <ol type="1">
