@@ -89,7 +89,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        clang_version: [18]
+        clang_version: [18, 19]
 
     steps:
     - uses: actions/checkout@v4
@@ -109,6 +109,9 @@ jobs:
     - name: Install vcpkg Dependencies
       run: |
         vcpkg install nlohmann-json openssl boost-beast jwt-cpp
+
+    - name: Clean build dir
+      run: rm -rf build
 
     - name: Configure CMake
       run: |
