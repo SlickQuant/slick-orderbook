@@ -89,4 +89,3 @@ jobs:
         config: .markdownlint.json
         files: '*.md docs/*.md'
         ignore: 'build'
-        version: '0.37.0'
