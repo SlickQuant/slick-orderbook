@@ -33,23 +33,23 @@ var NAVTREE =
       [ "Basic Usage - Level 2 OrderBook", "index.html#autotoc_md6", null ],
       [ "Basic Usage - Level 3 OrderBook", "index.html#autotoc_md7", null ],
       [ "Multi-Symbol Management", "index.html#autotoc_md8", null ],
-      [ "Observer Pattern - Real-Time Notifications", "index.html#autotoc_md9", null ]
+      [ "Observer Pattern - Real-Time Notifications", "index.html#autotoc_md10", null ]
     ] ],
-    [ "📚 Documentation", "index.html#autotoc_md10", null ],
-    [ "🏗️ Architecture Highlights", "index.html#autotoc_md11", [
-      [ "Cache-Optimized Data Structures", "index.html#autotoc_md12", null ],
-      [ "Zero-Cost Abstractions", "index.html#autotoc_md13", null ]
+    [ "📚 Documentation", "index.html#autotoc_md11", null ],
+    [ "🏗️ Architecture Highlights", "index.html#autotoc_md12", [
+      [ "Cache-Optimized Data Structures", "index.html#autotoc_md13", null ],
+      [ "Zero-Cost Abstractions", "index.html#autotoc_md14", null ]
     ] ],
-    [ "🔧 CMake Options", "index.html#autotoc_md14", null ],
-    [ "📦 Integration", "index.html#autotoc_md15", [
-      [ "CMake FetchContent", "index.html#autotoc_md16", null ],
-      [ "Header-Only Mode", "index.html#autotoc_md17", null ]
+    [ "🔧 CMake Options", "index.html#autotoc_md15", null ],
+    [ "📦 Integration", "index.html#autotoc_md16", [
+      [ "CMake FetchContent", "index.html#autotoc_md17", null ],
+      [ "Header-Only Mode", "index.html#autotoc_md18", null ]
     ] ],
-    [ "🧪 Testing", "index.html#autotoc_md18", null ],
-    [ "📊 Benchmarking", "index.html#autotoc_md19", null ],
-    [ "📄 License", "index.html#autotoc_md20", null ],
-    [ "🙏 Acknowledgments", "index.html#autotoc_md21", null ],
-    [ "📧 Contact", "index.html#autotoc_md22", null ],
+    [ "🧪 Testing", "index.html#autotoc_md19", null ],
+    [ "📊 Benchmarking", "index.html#autotoc_md20", null ],
+    [ "📄 License", "index.html#autotoc_md21", null ],
+    [ "🙏 Acknowledgments", "index.html#autotoc_md22", null ],
+    [ "📧 Contact", "index.html#autotoc_md23", null ],
     [ "Slick OrderBook - Architecture Guide", "md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html", [
       [ "Table of Contents", "md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md25", null ],
       [ "Overview", "md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md27", [
@@ -103,7 +103,7 @@ var NAVTREE =
         [ "Potential Enhancements", "md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md75", null ],
         [ "Not Planned (Premature Optimization)", "md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md76", null ]
       ] ],
-      [ "Conclusion", "md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md78", null ]
+      [ "Conclusion", "md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md79", null ]
     ] ],
     [ "Performance Guide", "md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html", [
       [ "Table of Contents", "md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md81", null ],

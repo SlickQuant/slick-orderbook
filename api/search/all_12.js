@@ -9,7 +9,7 @@ var searchData=
   ['insertorder_6',['insertOrder',['../structslick_1_1orderbook_1_1detail_1_1PriceLevelL3.html#aabea28dbdc1bd9fc1ab6781b471b1176',1,'slick::orderbook::detail::PriceLevelL3']]],
   ['insertorupdate_7',['insertOrUpdate',['../classslick_1_1orderbook_1_1detail_1_1LevelContainer.html#ad86e3e95011970ee8c3d00d9eb01447b',1,'slick::orderbook::detail::LevelContainer']]],
   ['installation_8',['Installation',['../index.html#autotoc_md5',1,'']]],
-  ['integration_9',['📦 Integration',['../index.html#autotoc_md15',1,'']]],
+  ['integration_9',['📦 Integration',['../index.html#autotoc_md16',1,'']]],
   ['intel_20vtune_10',['Intel VTune',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md120',1,'']]],
   ['interface_11',['Observer Interface',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md57',1,'']]],
   ['interpreting_20results_12',['Interpreting Results',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md114',1,'']]],

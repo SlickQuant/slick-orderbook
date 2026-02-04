@@ -7,7 +7,7 @@ var searchData=
   ['passive_5forder_5fid_4',['passive_order_id',['../structslick_1_1orderbook_1_1Trade.html#aba2f7461777a9b9e038fc1f382d22bd2',1,'slick::orderbook::Trade']]],
   ['paths_5',['9. Thread Affinity for Critical Paths',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md96',1,'']]],
   ['pattern_20non_20virtual_6',['3. Observer Pattern (Non-Virtual)',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md62',1,'']]],
-  ['pattern_20real_20time_20notifications_7',['Observer Pattern - Real-Time Notifications',['../index.html#autotoc_md9',1,'']]],
+  ['pattern_20real_20time_20notifications_7',['Observer Pattern - Real-Time Notifications',['../index.html#autotoc_md10',1,'']]],
   ['patterns_8',['Design Patterns',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md59',1,'']]],
   ['perf_9',['Linux perf',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md119',1,'']]],
   ['performance_10',['📈 Performance',['../index.html#autotoc_md2',1,'']]],

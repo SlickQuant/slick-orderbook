@@ -3,7 +3,7 @@ var searchData=
   ['raii_20for_20resource_20management_0',['4. RAII for Resource Management',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md63',1,'']]],
   ['reader_20swmr_1',['Single-Writer, Multiple-Reader (SWMR)',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md45',1,'']]],
   ['readme_2emd_2',['README.md',['../README_8md.html',1,'']]],
-  ['real_20time_20notifications_3',['Observer Pattern - Real-Time Notifications',['../index.html#autotoc_md9',1,'']]],
+  ['real_20time_20notifications_3',['Observer Pattern - Real-Time Notifications',['../index.html#autotoc_md10',1,'']]],
   ['reference_4',['reference',['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a3974d17a9ace1e840f1c0d4a662bf4bb',1,'slick::orderbook::detail::IntrusiveList::reference'],['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html#ac670792a1a60999bb22a329a72bbaed3',1,'slick::orderbook::detail::IntrusiveList::Iterator::reference'],['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1ConstIterator.html#a4b54626c2f3187efc6002bbe258e01c7',1,'slick::orderbook::detail::IntrusiveList::ConstIterator::reference']]],
   ['references_5',['6. Use Const References',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md93',1,'']]],
   ['release_20builds_6',['10. Use Release Builds',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md97',1,'']]],

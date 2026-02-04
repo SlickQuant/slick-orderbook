@@ -12,7 +12,7 @@ var searchData=
   ['memory_5fpool_2ehpp_9',['memory_pool.hpp',['../memory__pool_8hpp.html',1,'']]],
   ['midprice_10',['midPrice',['../structslick_1_1orderbook_1_1TopOfBook.html#aed63302393f8593db76cc0d49c8b3fb4',1,'slick::orderbook::TopOfBook']]],
   ['minimize_20observer_20count_11',['5. Minimize Observer Count',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md92',1,'']]],
-  ['mode_12',['mode',['../index.html#autotoc_md17',1,'Header-Only Mode'],['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md67',1,'Header-Only Mode']]],
+  ['mode_12',['mode',['../index.html#autotoc_md18',1,'Header-Only Mode'],['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md67',1,'Header-Only Mode']]],
   ['model_13',['Threading Model',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md44',1,'']]],
   ['modes_14',['Build Modes',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md65',1,'']]],
   ['modifyorder_15',['modifyOrder',['../classslick_1_1orderbook_1_1OrderBookL3.html#a849cb0147b8463d5c9afd2956d83db60',1,'slick::orderbook::OrderBookL3']]],
