@@ -92,7 +92,8 @@ $(document).ready(function(){initNavTree('namespaceslick_1_1orderbook_1_1detail.
 <div class="header">
   <div class="summary">
 <a href="#nested-classes">Classes</a> &#124;
-<a href="#typedef-members">Typedefs</a>  </div>
+<a href="#typedef-members">Typedefs</a> &#124;
+<a href="#func-members">Functions</a>  </div>
   <div class="headertitle"><div class="title">slick::orderbook::detail Namespace Reference</div></div>
 </div><!--header-->
 <div class="contents">
@@ -139,6 +140,13 @@ Typedefs</h2></td></tr>
 <tr class="memitem:ae17090efbfed2db91635353b5af9d569"><td class="memTemplItemLeft" align="right" valign="top">using&#160;</td><td class="memTemplItemRight" valign="bottom"><a class="el" href="namespaceslick_1_1orderbook_1_1detail.html#ae17090efbfed2db91635353b5af9d569">FlatMap</a> = std::map&lt; Key, Value, Compare &gt;</td></tr>
 <tr class="memdesc:ae17090efbfed2db91635353b5af9d569"><td class="mdescLeft">&#160;</td><td class="mdescRight">Cache-friendly sorted map.  <br /></td></tr>
 <tr class="separator:ae17090efbfed2db91635353b5af9d569"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Functions</h2></td></tr>
+<tr class="memitem:a1899e20c64f49444135490b15340b12d" id="r_a1899e20c64f49444135490b15340b12d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceslick_1_1orderbook_1_1detail.html#a1899e20c64f49444135490b15340b12d">tsanAcquire</a> (const void *addr)</td></tr>
+<tr class="separator:a1899e20c64f49444135490b15340b12d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9e123bfe3b6d4ea048be81c62fc644ad" id="r_a9e123bfe3b6d4ea048be81c62fc644ad"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="namespaceslick_1_1orderbook_1_1detail.html#a9e123bfe3b6d4ea048be81c62fc644ad">tsanRelease</a> (const void *addr)</td></tr>
+<tr class="separator:a9e123bfe3b6d4ea048be81c62fc644ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <h2 class="groupheader">Typedef Documentation</h2>
 <a id="ae17090efbfed2db91635353b5af9d569" name="ae17090efbfed2db91635353b5af9d569"></a>
@@ -172,6 +180,71 @@ template&lt;typename Key , typename Value , typename Compare  = std::less&lt;Key
 </dl>
 
 <p class="definition">Definition at line <a class="el" href="flat__map_8hpp_source.html#l00037">37</a> of file <a class="el" href="flat__map_8hpp_source.html">flat_map.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Function Documentation</h2>
+<a id="a1899e20c64f49444135490b15340b12d" name="a1899e20c64f49444135490b15340b12d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a1899e20c64f49444135490b15340b12d">&#9670;&#160;</a></span>tsanAcquire()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void slick::orderbook::detail::tsanAcquire </td>
+          <td>(</td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>addr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00031">31</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+
+<p class="reference">References <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00031">tsanAcquire()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00203">slick::orderbook::OrderBookL2::getBestAsk()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00178">slick::orderbook::OrderBookL2::getBestBid()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00228">slick::orderbook::OrderBookL2::getTopOfBook()</a>, and <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00031">tsanAcquire()</a>.</p>
+
+</div>
+</div>
+<a id="a9e123bfe3b6d4ea048be81c62fc644ad" name="a9e123bfe3b6d4ea048be81c62fc644ad"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9e123bfe3b6d4ea048be81c62fc644ad">&#9670;&#160;</a></span>tsanRelease()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">void slick::orderbook::detail::tsanRelease </td>
+          <td>(</td>
+          <td class="paramtype">const void *&#160;</td>
+          <td class="paramname"><em>addr</em></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00039">39</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+
+<p class="reference">References <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00039">tsanRelease()</a>.</p>
+
+<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00203">slick::orderbook::OrderBookL2::getBestAsk()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00178">slick::orderbook::OrderBookL2::getBestBid()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00228">slick::orderbook::OrderBookL2::getTopOfBook()</a>, and <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00039">tsanRelease()</a>.</p>
 
 </div>
 </div>

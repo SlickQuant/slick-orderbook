@@ -19,5 +19,6 @@ var types_8hpp =
     ] ],
     [ "opposite", "types_8hpp.html#a76596b90680db7a80290903cd8c0c075", null ],
     [ "toString", "types_8hpp.html#aa03bb53f742a2199fd77a62a8e31fa46", null ],
-    [ "toString", "types_8hpp.html#a6d54fe8535b890b1a7b67d207764d45f", null ]
+    [ "toString", "types_8hpp.html#a6d54fe8535b890b1a7b67d207764d45f", null ],
+    [ "INVALID_INDEX", "types_8hpp.html#a8f35c17374c9cdb79082dbc6576f0587", null ]
 ];

@@ -40,5 +40,6 @@ var namespaceslick_1_1orderbook =
     ] ],
     [ "opposite", "namespaceslick_1_1orderbook.html#a76596b90680db7a80290903cd8c0c075", null ],
     [ "toString", "namespaceslick_1_1orderbook.html#aa03bb53f742a2199fd77a62a8e31fa46", null ],
-    [ "toString", "namespaceslick_1_1orderbook.html#a6d54fe8535b890b1a7b67d207764d45f", null ]
+    [ "toString", "namespaceslick_1_1orderbook.html#a6d54fe8535b890b1a7b67d207764d45f", null ],
+    [ "INVALID_INDEX", "namespaceslick_1_1orderbook.html#a8f35c17374c9cdb79082dbc6576f0587", null ]
 ];
