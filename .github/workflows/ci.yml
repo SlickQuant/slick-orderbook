@@ -298,8 +298,8 @@ jobs:
 
     - name: Generate Coverage Report
       run: |
-        lcov --gcov-tool gcov-14 --capture --directory build --output-file coverage.info
-        lcov --gcov-tool gcov-14 --remove coverage.info '/usr/*' '*/tests/*' '*/build/*' --output-file coverage.info
+        lcov --gcov-tool gcov-14 --capture --directory build --output-file coverage.info --ignore-errors mismatch,inconsistent
+        lcov --gcov-tool gcov-14 --remove coverage.info '/usr/*' '*/tests/*' '*/build/*' --output-file coverage.info --ignore-errors unused
         lcov --list coverage.info
 
     - name: Upload Coverage to Codecov
