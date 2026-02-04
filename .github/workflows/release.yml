@@ -64,6 +64,7 @@ jobs:
       id: create_release
       uses: softprops/action-gh-release@v2
       with:
+        tag_name: v${{ steps.get_version.outputs.version }}
         name: Release ${{ steps.get_version.outputs.version }}
         body_path: RELEASE_NOTES.md
         draft: false
@@ -122,6 +123,7 @@ jobs:
     - name: Upload Release Asset
       uses: softprops/action-gh-release@v2
       with:
+        tag_name: v${{ needs.create-release.outputs.version }}
         files: slick-orderbook-${{ needs.create-release.outputs.version }}-linux-${{ matrix.arch }}.tar.gz
 
   # ============================================================================
@@ -166,6 +168,7 @@ jobs:
     - name: Upload Release Asset
       uses: softprops/action-gh-release@v2
       with:
+        tag_name: v${{ needs.create-release.outputs.version }}
         files: slick-orderbook-${{ needs.create-release.outputs.version }}-windows-x64.zip
 
   # ============================================================================
@@ -215,6 +218,7 @@ jobs:
     - name: Upload Release Asset
       uses: softprops/action-gh-release@v2
       with:
+        tag_name: v${{ needs.create-release.outputs.version }}
         files: slick-orderbook-${{ needs.create-release.outputs.version }}-macos-arm64.tar.gz
 
   # ============================================================================
@@ -239,4 +243,5 @@ jobs:
     - name: Upload Documentation
       uses: softprops/action-gh-release@v2
       with:
+        tag_name: v${{ needs.create-release.outputs.version }}
         files: slick-orderbook-${{ needs.create-release.outputs.version }}-docs.tar.gz
