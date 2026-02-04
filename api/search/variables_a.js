@@ -1,5 +1,6 @@
 var searchData=
 [
   ['timestamp_0',['timestamp',['../structslick_1_1orderbook_1_1detail_1_1Order.html#a343e86bc94dbe84786803551369f93f6',1,'slick::orderbook::detail::Order::timestamp'],['../structslick_1_1orderbook_1_1detail_1_1PriceLevelL2.html#a88c3c1831d3f7244969120bb74ad77c6',1,'slick::orderbook::detail::PriceLevelL2::timestamp'],['../structslick_1_1orderbook_1_1PriceLevelUpdate.html#ad5c8f07891b5f789673845eec418e36f',1,'slick::orderbook::PriceLevelUpdate::timestamp'],['../structslick_1_1orderbook_1_1OrderUpdate.html#a4888d2fe3288f8202554e07b1a4b4124',1,'slick::orderbook::OrderUpdate::timestamp'],['../structslick_1_1orderbook_1_1Trade.html#a676bf4908453e1775fcbd2705b2f364b',1,'slick::orderbook::Trade::timestamp'],['../structslick_1_1orderbook_1_1TopOfBook.html#aef849b33fd8b8bd120b0a78d4e8fcf79',1,'slick::orderbook::TopOfBook::timestamp']]],
-  ['total_5fquantity_1',['total_quantity',['../structslick_1_1orderbook_1_1detail_1_1PriceLevelL3.html#a45c9276eae032630cee6c22f32305501',1,'slick::orderbook::detail::PriceLevelL3']]]
+  ['tob_5fseq_5f_1',['tob_seq_',['../classslick_1_1orderbook_1_1OrderBookL2.html#a2c6bebef988db34d6e10f0a7512fab7e',1,'slick::orderbook::OrderBookL2']]],
+  ['total_5fquantity_2',['total_quantity',['../structslick_1_1orderbook_1_1detail_1_1PriceLevelL3.html#a45c9276eae032630cee6c22f32305501',1,'slick::orderbook::detail::PriceLevelL3']]]
 ];

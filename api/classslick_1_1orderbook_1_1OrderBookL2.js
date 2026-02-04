@@ -1,7 +1,7 @@
 var classslick_1_1orderbook_1_1OrderBookL2 =
 [
     [ "OrderBookL2", "classslick_1_1orderbook_1_1OrderBookL2.html#ada9f62c65c631b58a908bc2ed64272ac", null ],
-    [ "~OrderBookL2", "classslick_1_1orderbook_1_1OrderBookL2.html#aea9904a139139b6ca4eec64ed243449a", null ],
+    [ "~OrderBookL2", "classslick_1_1orderbook_1_1OrderBookL2.html#a347f5159717c90b9d5f4992ed6683dc8", null ],
     [ "OrderBookL2", "classslick_1_1orderbook_1_1OrderBookL2.html#a7034e75843912791552fe30b6a712ec5", null ],
     [ "OrderBookL2", "classslick_1_1orderbook_1_1OrderBookL2.html#aa7d46694ece12b329fa83e8300b3285d", null ],
     [ "addObserver", "classslick_1_1orderbook_1_1OrderBookL2.html#ad0f5af7f001d1969f0a3758043ea2e8a", null ],
@@ -20,10 +20,20 @@ var classslick_1_1orderbook_1_1OrderBookL2 =
     [ "isEmpty", "classslick_1_1orderbook_1_1OrderBookL2.html#aa38a9c28035d4bf63bad8538bfae314e", null ],
     [ "isEmpty", "classslick_1_1orderbook_1_1OrderBookL2.html#a2e1cbd8a0e44861016551d3f5b623820", null ],
     [ "levelCount", "classslick_1_1orderbook_1_1OrderBookL2.html#a2e8a4fa5f7af66ef42677ce780d3cfd8", null ],
+    [ "notifyTopOfBookIfChanged", "classslick_1_1orderbook_1_1OrderBookL2.html#a49136ba63ac0bbfe24a93d907cbf7bab", null ],
     [ "observerCount", "classslick_1_1orderbook_1_1OrderBookL2.html#a511cbc6140f267c23c89b9d0016b358d", null ],
     [ "operator=", "classslick_1_1orderbook_1_1OrderBookL2.html#a766c4f9059134931d76f0cfbfc0a1557", null ],
     [ "operator=", "classslick_1_1orderbook_1_1OrderBookL2.html#a2de6fcaa1ed579997693a452fa3ac1d0", null ],
     [ "removeObserver", "classslick_1_1orderbook_1_1OrderBookL2.html#adaa4f0c92c1d4005c3dd8e936a284f6f", null ],
     [ "symbol", "classslick_1_1orderbook_1_1OrderBookL2.html#a77643d69cf216c592d4ba747f6072e8f", null ],
-    [ "updateLevel", "classslick_1_1orderbook_1_1OrderBookL2.html#ab09c9eb1fe62d14dff4e415c6fac285b", null ]
+    [ "updateLevel", "classslick_1_1orderbook_1_1OrderBookL2.html#ab09c9eb1fe62d14dff4e415c6fac285b", null ],
+    [ "cached_best_ask_", "classslick_1_1orderbook_1_1OrderBookL2.html#a245d11d9401191e80a4090dbd22a2879", null ],
+    [ "cached_best_bid_", "classslick_1_1orderbook_1_1OrderBookL2.html#acf2003a356b9b8a2720991a2d532993f", null ],
+    [ "cached_tob_", "classslick_1_1orderbook_1_1OrderBookL2.html#a1028b5c797aeb1087b128511adddebb5", null ],
+    [ "change_starting_index_", "classslick_1_1orderbook_1_1OrderBookL2.html#a520f72d0a4023d438bf26bd7eebbe9c5", null ],
+    [ "last_seq_num_", "classslick_1_1orderbook_1_1OrderBookL2.html#a544d3113bdf9990714bbf97e2f1a5529", null ],
+    [ "observers_", "classslick_1_1orderbook_1_1OrderBookL2.html#a0ea33d8a6d41f6ee9aaab67ff6d944c9", null ],
+    [ "sides_", "classslick_1_1orderbook_1_1OrderBookL2.html#ae1c7b5dfb0d0f7836e2ab9d6cd711b2b", null ],
+    [ "symbol_", "classslick_1_1orderbook_1_1OrderBookL2.html#a6d5f1dcb9dec1cbb0304b7c56e2fc178", null ],
+    [ "tob_seq_", "classslick_1_1orderbook_1_1OrderBookL2.html#a2c6bebef988db34d6e10f0a7512fab7e", null ]
 ];

@@ -1,3 +1,22 @@
 <map id="slick::orderbook::OrderBookL2" name="slick::orderbook::OrderBookL2">
-<area shape="rect" id="Node000001" title="Level 2 OrderBook &#45; aggregated price levels." alt="" coords="5,5,216,271"/>
+<area shape="rect" id="Node000001" title="Level 2 OrderBook &#45; aggregated price levels." alt="" coords="490,888,702,1213"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="49,611,284,705"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="204,704,248,756,298,809,388,889,478,961,475,965,384,893,294,813,244,759,200,707"/>
+<area shape="rect" id="Node000003" href="$classslick_1_1orderbook_1_1detail_1_1LevelContainer.html" title="Container for storing sorted price levels Uses a sorted vector for cache&#45;friendly storage (optimal fo..." alt="" coords="5,133,168,413"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="88,413,97,481,115,540,138,595,133,597,110,542,92,482,83,414"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="192,241,307,306"/>
+<area shape="poly" id="edge3_Node000002_Node000004" title=" " alt="" coords="242,320,179,611,174,610,237,319"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="309,5,331,71"/>
+<area shape="poly" id="edge4_Node000004_Node000005" title=" " alt="" coords="311,52,294,72,280,96,268,128,261,162,253,225,248,224,255,161,263,127,275,94,290,69,307,49"/>
+<area shape="rect" id="Node000010" title=" " alt="" coords="331,241,456,306"/>
+<area shape="poly" id="edge10_Node000010_Node000005" title=" " alt="" coords="334,53,357,94,378,161,390,224,385,225,373,162,352,96,329,56"/>
+<area shape="rect" id="Node000006" href="$classslick_1_1orderbook_1_1ObserverManager.html" title="Observer manager for notifying multiple observers Uses type erasure to support both concept&#45;based and..." alt="" coords="503,518,689,798"/>
+<area shape="poly" id="edge5_Node000001_Node000006" title=" " alt="" coords="599,798,599,872,593,872,593,798"/>
+<area shape="rect" id="Node000007" href="$structslick_1_1orderbook_1_1TopOfBook.html" title="Top&#45;of&#45;book snapshot &#45; best bid and ask." alt="" coords="713,505,909,811"/>
+<area shape="poly" id="edge6_Node000001_Node000007" title=" " alt="" coords="730,812,695,875,691,872,725,809"/>
+<area shape="rect" id="Node000008" href="$structslick_1_1orderbook_1_1detail_1_1PriceLevelL2.html" title="Price level for Level 2 orderbook (aggregated) Stores total quantity at a specific price point." alt="" coords="933,518,1096,798"/>
+<area shape="poly" id="edge7_Node000001_Node000008" title=" " alt="" coords="935,799,923,812,875,860,822,904,718,980,715,975,819,900,871,856,919,809,931,795"/>
+<area shape="rect" id="Node000009" title=" " alt="" coords="308,625,479,691"/>
+<area shape="poly" id="edge8_Node000001_Node000009" title=" " alt="" coords="412,690,507,872,502,875,408,692"/>
+<area shape="poly" id="edge9_Node000009_Node000010" title=" " alt="" coords="396,320,396,625,391,625,391,320"/>
 </map>

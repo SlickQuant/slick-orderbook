@@ -11,7 +11,5 @@ var namespaceslick_1_1orderbook_1_1detail =
     [ "OrderMap", "classslick_1_1orderbook_1_1detail_1_1OrderMap.html", "classslick_1_1orderbook_1_1detail_1_1OrderMap" ],
     [ "PriceLevelL2", "structslick_1_1orderbook_1_1detail_1_1PriceLevelL2.html", "structslick_1_1orderbook_1_1detail_1_1PriceLevelL2" ],
     [ "PriceLevelL3", "structslick_1_1orderbook_1_1detail_1_1PriceLevelL3.html", "structslick_1_1orderbook_1_1detail_1_1PriceLevelL3" ],
-    [ "FlatMap", "namespaceslick_1_1orderbook_1_1detail.html#ae17090efbfed2db91635353b5af9d569", null ],
-    [ "tsanAcquire", "namespaceslick_1_1orderbook_1_1detail.html#a1899e20c64f49444135490b15340b12d", null ],
-    [ "tsanRelease", "namespaceslick_1_1orderbook_1_1detail.html#a9e123bfe3b6d4ea048be81c62fc644ad", null ]
+    [ "FlatMap", "namespaceslick_1_1orderbook_1_1detail.html#ae17090efbfed2db91635353b5af9d569", null ]
 ];
