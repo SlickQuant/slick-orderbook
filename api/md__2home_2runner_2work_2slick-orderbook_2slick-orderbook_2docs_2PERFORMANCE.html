@@ -93,8 +93,8 @@ $(document).ready(function(){initNavTree('md__2home_2runner_2work_2slick-orderbo
   <div class="headertitle"><div class="title">Performance Guide</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md24"></a> This guide provides best practices and recommendations for achieving optimal performance with Slick OrderBook.</p>
-<h1><a class="anchor" id="autotoc_md26"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md25"></a> This guide provides best practices and recommendations for achieving optimal performance with Slick OrderBook.</p>
+<h1><a class="anchor" id="autotoc_md36"></a>
 Table of Contents</h1>
 <ol type="1">
 <li>Performance Characteristics</li>
@@ -105,9 +105,9 @@ Table of Contents</h1>
 <li>Profiling</li>
 </ol>
 <hr  />
-<h1><a class="anchor" id="autotoc_md28"></a>
+<h1><a class="anchor" id="autotoc_md40"></a>
 Performance Characteristics</h1>
-<h2><a class="anchor" id="autotoc_md29"></a>
+<h2><a class="anchor" id="autotoc_md41"></a>
 Measured Performance (p99 Latency)</h2>
 <p>All measurements on modern x86-64 CPU (3.0+ GHz):</p>
 <table class="markdownTable">
@@ -146,7 +146,7 @@ Measured Performance (p99 Latency)</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">1000 symbols   </td><td class="markdownTableBodyNone">2.7M items/s   </td><td class="markdownTableBodyNone">-   </td><td class="markdownTableBodyNone">-   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md37"></a>
+<h2><a class="anchor" id="autotoc_md47"></a>
 Memory Footprint</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -163,9 +163,9 @@ Memory Footprint</h2>
 <td class="markdownTableBodyNone">1000 L2 symbols   </td><td class="markdownTableBodyNone">~320 KB base + level data   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md41"></a>
+<h1><a class="anchor" id="autotoc_md50"></a>
 Best Practices</h1>
-<h2><a class="anchor" id="autotoc_md46"></a>
+<h2><a class="anchor" id="autotoc_md52"></a>
 1. Choose the Right Orderbook Type</h2>
 <p><b>Use OrderBookL2 when:</b></p>
 <ul>
@@ -186,14 +186,14 @@ Best Practices</h1>
 <li>L2 is ~2-3x faster than L3 for updates</li>
 <li>L2 uses ~30x less memory than L3 (for 1000 orders)</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md48"></a>
+<h2><a class="anchor" id="autotoc_md55"></a>
 2. Pre-Allocate When Possible</h2>
 <p><b>ObjectPool Pre-Allocation:</b></p>
 <div class="fragment"><div class="line">OrderBookL3 book(symbol_id);</div>
 <div class="line"><span class="comment">// Pre-allocate space for expected order count</span></div>
 <div class="line">book.reserve(1000);  <span class="comment">// Avoids pool growth during trading hours</span></div>
 </div><!-- fragment --><p><b>Benefit</b>: Eliminates allocation overhead during hot path.</p>
-<h2><a class="anchor" id="autotoc_md51"></a>
+<h2><a class="anchor" id="autotoc_md56"></a>
 3. Use Batch Updates for Snapshots</h2>
 <p><b>Don't:</b></p>
 <div class="fragment"><div class="line"><span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; level : snapshot) {</div>
@@ -204,7 +204,7 @@ Best Practices</h1>
 <div class="fragment"><div class="line"><span class="comment">// Notify observers once for the entire snapshot</span></div>
 <div class="line">book.emitSnapshot(seq_num, timestamp);</div>
 </div><!-- fragment --><p><b>Benefit</b>: Reduces observer overhead from O(n) notifications to O(1).</p>
-<h2><a class="anchor" id="autotoc_md53"></a>
+<h2><a class="anchor" id="autotoc_md57"></a>
 4. Filter Events at the Observer</h2>
 <p><b>Efficient Top-N Filtering:</b></p>
 <div class="fragment"><div class="line"><span class="keyword">class </span>TopNObserver : <span class="keyword">public</span> IOrderBookObserver {</div>
@@ -216,7 +216,7 @@ Best Practices</h1>
 <div class="line">    }</div>
 <div class="line">};</div>
 </div><!-- fragment --><p><b>Benefit</b>: Reduces processing overhead for deep orderbooks.</p>
-<h2><a class="anchor" id="autotoc_md55"></a>
+<h2><a class="anchor" id="autotoc_md58"></a>
 5. Minimize Observer Count</h2>
 <p><b>Each observer adds ~2-3ns per event:</b></p>
 <ul>
@@ -225,7 +225,7 @@ Best Practices</h1>
 <li>100 observers: ~200ns overhead</li>
 </ul>
 <p><b>Recommendation</b>: Aggregate multiple consumers into a single observer when possible.</p>
-<h2><a class="anchor" id="autotoc_md59"></a>
+<h2><a class="anchor" id="autotoc_md60"></a>
 6. Use Const References</h2>
 <p><b>Don't:</b></p>
 <div class="fragment"><div class="line">std::vector&lt;PriceLevelL2&gt; levels = book.getLevelsL2(Side::Buy);  <span class="comment">// COPY!</span></div>
@@ -235,7 +235,7 @@ Best Practices</h1>
 <div class="line">    <span class="comment">// Process level</span></div>
 <div class="line">}</div>
 </div><!-- fragment --><p><b>Benefit</b>: Eliminates unnecessary copies.</p>
-<h2><a class="anchor" id="autotoc_md60"></a>
+<h2><a class="anchor" id="autotoc_md61"></a>
 7. Cache TopOfBook Queries</h2>
 <p><b>If querying multiple times per update:</b></p>
 <div class="fragment"><div class="line"><span class="comment">// Cache the result</span></div>
@@ -243,7 +243,7 @@ Best Practices</h1>
 <div class="line">Price spread = tob.getSpread();</div>
 <div class="line">Price mid = tob.getMidPrice();</div>
 </div><!-- fragment --><p><b>Note</b>: <code>getTopOfBook()</code> is already O(1) (0.25ns), but avoiding multiple calls helps.</p>
-<h2><a class="anchor" id="autotoc_md62"></a>
+<h2><a class="anchor" id="autotoc_md64"></a>
 8. Use Fixed-Point Arithmetic</h2>
 <p><b>Prices are stored as <code>int64_t</code>:</b></p>
 <div class="fragment"><div class="line"><span class="comment">// For 4 decimal places: multiply by 10000</span></div>
@@ -268,22 +268,22 @@ Best Practices</h1>
 <div class="line"><span class="comment">// In your market data handler thread:</span></div>
 <div class="line">pinToCPU(2);  <span class="comment">// Pin to CPU 2</span></div>
 </div><!-- fragment --><p><b>Benefit</b>: Reduces cache misses and context switch overhead.</p>
-<h2><a class="anchor" id="autotoc_md69"></a>
+<h2><a class="anchor" id="autotoc_md67"></a>
 10. Use Release Builds</h2>
 <p><b>Always benchmark in Release mode:</b></p>
 <div class="fragment"><div class="line">cmake -DCMAKE_BUILD_TYPE=Release ..</div>
 </div><!-- fragment --><p><b>Performance difference</b>: Debug builds can be 10-100x slower!</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md72"></a>
+<h1><a class="anchor" id="autotoc_md70"></a>
 Common Pitfalls</h1>
-<h2><a class="anchor" id="autotoc_md74"></a>
+<h2><a class="anchor" id="autotoc_md71"></a>
 ❌ Pitfall 1: Copying Orderbooks</h2>
 <div class="fragment"><div class="line">OrderBookL2 book1(1);</div>
 <div class="line">OrderBookL2 book2 = book1;  <span class="comment">// EXPENSIVE COPY!</span></div>
 </div><!-- fragment --><p><b>Why it's bad</b>: Copies all internal state (price levels, observers, pools).</p>
 <p><b>Solution</b>: Use pointers or references:</p>
 <div class="fragment"><div class="line">OrderBookL2* book_ptr = manager.getOrderBook(1);</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md77"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md73"></a>
 ❌ Pitfall 2: Excessive Observer Notifications</h2>
 <div class="fragment"><div class="line"><span class="keywordflow">for</span> (<span class="keywordtype">int</span> i = 0; i &lt; 1000; ++i) {</div>
 <div class="line">    book.updateLevel(Side::Buy, base_price - i, qty, ts, seq);</div>
@@ -291,7 +291,7 @@ Common Pitfalls</h1>
 <div class="line">}</div>
 </div><!-- fragment --><p><b>Why it's bad</b>: O(n × m) where n = updates, m = observers.</p>
 <p><b>Solution</b>: Batch updates or use snapshot mode.</p>
-<h2><a class="anchor" id="autotoc_md79"></a>
+<h2><a class="anchor" id="autotoc_md74"></a>
 ❌ Pitfall 3: Unnecessary Conversions</h2>
 <div class="fragment"><div class="line"><span class="comment">// Getting L2 from L3 repeatedly</span></div>
 <div class="line"><span class="keywordflow">for</span> (...) {</div>
@@ -301,23 +301,23 @@ Common Pitfalls</h1>
 <p><b>Solution</b>: Cache the result if querying multiple times:</p>
 <div class="fragment"><div class="line"><span class="keyword">const</span> <span class="keyword">auto</span>&amp; levels = l3_book.getLevelsL2(Side::Buy);</div>
 <div class="line"><span class="comment">// Use levels multiple times</span></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md80"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md76"></a>
 ❌ Pitfall 4: Not Using OrderBookManager</h2>
 <div class="fragment"><div class="line">std::map&lt;SymbolId, OrderBookL2&gt; books;  <span class="comment">// Manual management</span></div>
 </div><!-- fragment --><p><b>Why it's bad</b>: No thread safety, manual memory management, no optimization.</p>
 <p><b>Solution</b>: Use OrderBookManager:</p>
 <div class="fragment"><div class="line">OrderBookManager&lt;OrderBookL2&gt; manager;</div>
 <div class="line"><span class="keyword">auto</span>* book = manager.getOrCreateOrderBook(symbol_id);</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md82"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md78"></a>
 ❌ Pitfall 5: Debug Assertions in Production</h2>
 <div class="fragment"><div class="line"><span class="comment">// With NDEBUG not defined:</span></div>
 <div class="line">book.updateLevel(...);  <span class="comment">// Includes assertion checks</span></div>
 </div><!-- fragment --><p><b>Why it's bad</b>: Assertions add overhead in hot paths.</p>
 <p><b>Solution</b>: Always build production with Release mode (<code>-DNDEBUG</code>).</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md89"></a>
+<h1><a class="anchor" id="autotoc_md80"></a>
 Optimization Techniques</h1>
-<h2><a class="anchor" id="autotoc_md90"></a>
+<h2><a class="anchor" id="autotoc_md84"></a>
 Technique 1: Compiler Optimizations</h2>
 <p><b>Enable maximum optimizations:</b></p>
 <div class="fragment"><div class="line">set(CMAKE_CXX_FLAGS_RELEASE &quot;-O3 -march=native -DNDEBUG&quot;)</div>
@@ -327,7 +327,7 @@ Technique 1: Compiler Optimizations</h2>
 <li><code>-march=native</code>: CPU-specific instructions (AVX2, etc.)</li>
 <li><code>-DNDEBUG</code>: Disable assertions</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md92"></a>
+<h2><a class="anchor" id="autotoc_md86"></a>
 Technique 2: Profile-Guided Optimization (PGO)</h2>
 <p><b>Step 1: Build with profiling:</b></p>
 <div class="fragment"><div class="line">cmake -B build-pgo -DCMAKE_CXX_FLAGS=&quot;-fprofile-generate&quot;</div>
@@ -338,7 +338,7 @@ Technique 2: Profile-Guided Optimization (PGO)</h2>
 <div class="fragment"><div class="line">cmake -B build-pgo-opt -DCMAKE_CXX_FLAGS=&quot;-fprofile-use&quot;</div>
 <div class="line">cmake --build build-pgo-opt</div>
 </div><!-- fragment --><p><b>Benefit</b>: 5-15% performance improvement.</p>
-<h2><a class="anchor" id="autotoc_md96"></a>
+<h2><a class="anchor" id="autotoc_md88"></a>
 Technique 3: Huge Pages (Linux)</h2>
 <p><b>Enable huge pages for orderbook memory:</b></p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;sys/mman.h&gt;</span></div>
@@ -349,7 +349,7 @@ Technique 3: Huge Pages (Linux)</h2>
 <div class="line">    system(<span class="stringliteral">&quot;echo always &gt; /sys/kernel/mm/transparent_hugepage/enabled&quot;</span>);</div>
 <div class="line">}</div>
 </div><!-- fragment --><p><b>Benefit</b>: Reduces TLB misses for large multi-symbol deployments.</p>
-<h2><a class="anchor" id="autotoc_md98"></a>
+<h2><a class="anchor" id="autotoc_md90"></a>
 Technique 4: NUMA Awareness</h2>
 <p><b>Pin memory to local NUMA node:</b></p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;numa.h&gt;</span></div>
@@ -360,9 +360,9 @@ Technique 4: NUMA Awareness</h2>
 <div class="line">}</div>
 </div><!-- fragment --><p><b>Benefit</b>: Reduces memory access latency.</p>
 <hr  />
-<h1><a class="anchor" id="autotoc_md103"></a>
+<h1><a class="anchor" id="autotoc_md92"></a>
 Benchmarking</h1>
-<h2><a class="anchor" id="autotoc_md104"></a>
+<h2><a class="anchor" id="autotoc_md93"></a>
 Running Benchmarks</h2>
 <p><b>Basic benchmarking:</b></p>
 <div class="fragment"><div class="line"># Build with benchmarks enabled</div>
@@ -380,7 +380,7 @@ Running Benchmarks</h2>
 <div class="line"> </div>
 <div class="line"># Output to JSON for analysis</div>
 <div class="line">./build/benchmarks/bench_orderbook_l2 --benchmark_out=results.json --benchmark_out_format=json</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md105"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md95"></a>
 Interpreting Results</h2>
 <p><b>Benchmark output:</b></p>
 <div class="fragment"><div class="line">BM_L2_AddNewLevel/10     21.2 ns    21.2 ns  33057584</div>
@@ -391,7 +391,7 @@ Interpreting Results</h2>
 <li><b>Iterations</b>: Number of samples (higher = more reliable)</li>
 <li><b>Items/sec</b>: Throughput (calculated automatically)</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md107"></a>
+<h2><a class="anchor" id="autotoc_md98"></a>
 Custom Benchmarks</h2>
 <p><b>Template for custom benchmarks:</b></p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;benchmark/benchmark.h&gt;</span></div>
@@ -420,9 +420,9 @@ Custom Benchmarks</h2>
 <div class="ttc" id="anamespaceslick_1_1orderbook_html_a5355a0a7f10f6c2d6c9a27f9954cf03fa0fdce9f0ade221c1e1341e11f6029a00"><div class="ttname"><a href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa0fdce9f0ade221c1e1341e11f6029a00">slick::orderbook::Buy</a></div><div class="ttdeci">@ Buy</div><div class="ttdef"><b>Definition</b> <a href="types_8hpp_source.html#l00036">types.hpp:36</a></div></div>
 <div class="ttc" id="aorderbook_8hpp_html"><div class="ttname"><a href="orderbook_8hpp.html">orderbook.hpp</a></div></div>
 </div><!-- fragment --><hr  />
-<h1><a class="anchor" id="autotoc_md110"></a>
+<h1><a class="anchor" id="autotoc_md101"></a>
 Profiling</h1>
-<h2><a class="anchor" id="autotoc_md112"></a>
+<h2><a class="anchor" id="autotoc_md102"></a>
 Visual Studio Performance Profiler (Windows)</h2>
 <p><b>Quick profiling:</b></p>
 <ol type="1">
@@ -433,7 +433,7 @@ Visual Studio Performance Profiler (Windows)</h2>
 <li>Run and analyze Hot Path view</li>
 </ol>
 <p>See benchmarks/PROFILING_GUIDE.md for detailed instructions.</p>
-<h2><a class="anchor" id="autotoc_md115"></a>
+<h2><a class="anchor" id="autotoc_md105"></a>
 Linux perf</h2>
 <p><b>Profile hot functions:</b></p>
 <div class="fragment"><div class="line"># Record profiling data</div>
@@ -446,7 +446,7 @@ Linux perf</h2>
 <div class="line"># - updateLevel</div>
 <div class="line"># - std::lower_bound (binary search)</div>
 <div class="line"># - observer callbacks</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md117"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md107"></a>
 Intel VTune</h2>
 <p><b>Cache miss analysis:</b></p>
 <div class="fragment"><div class="line"># Profile cache behavior</div>
@@ -461,9 +461,9 @@ Intel VTune</h2>
 <li>Hot functions: <code>std::lower_bound</code>, <code>updateLevel</code></li>
 </ul>
 <hr  />
-<h1><a class="anchor" id="autotoc_md121"></a>
+<h1><a class="anchor" id="autotoc_md109"></a>
 Performance Targets</h1>
-<h2><a class="anchor" id="autotoc_md123"></a>
+<h2><a class="anchor" id="autotoc_md111"></a>
 Target Latencies (p99)</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -477,7 +477,7 @@ Target Latencies (p99)</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Observer Notification   </td><td class="markdownTableBodyNone">&lt;50ns/observer   </td><td class="markdownTableBodyNone">✅ Achieved (2-3ns)   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md124"></a>
+<h2><a class="anchor" id="autotoc_md115"></a>
 Target Throughput</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -489,7 +489,7 @@ Target Throughput</h2>
 <tr class="markdownTableRowOdd">
 <td class="markdownTableBodyNone">100 Symbols   </td><td class="markdownTableBodyNone">&gt;5M items/sec   </td><td class="markdownTableBodyNone">✅ Achieved (5.5M)   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md125"></a>
+<h2><a class="anchor" id="autotoc_md116"></a>
 Memory Targets</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -500,7 +500,7 @@ Memory Targets</h2>
 <td class="markdownTableBodyNone">L3 per 1000 orders   </td><td class="markdownTableBodyNone">&lt;10KB   </td><td class="markdownTableBodyNone">✅ Achieved (~88KB includes pool)   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md127"></a>
+<h1><a class="anchor" id="autotoc_md120"></a>
 Conclusion</h1>
 <p>Slick OrderBook is designed for ultra-low latency with <b>all performance targets exceeded by 2-40x</b>. Follow the best practices in this guide to achieve optimal performance in your application.</p>
 <p><b>Key Takeaways</b>:</p>
