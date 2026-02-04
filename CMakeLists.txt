@@ -11,6 +11,7 @@ option(SLICK_ORDERBOOK_BUILD_SHARED "Build shared library" OFF)
 option(SLICK_ORDERBOOK_BUILD_TESTS "Build tests" ON)
 option(SLICK_ORDERBOOK_BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(SLICK_ORDERBOOK_BUILD_EXAMPLES "Build examples" ON)
+option(SLICK_ORDERBOOK_ENABLE_LTO "Enable LTO/IPO in Release builds" ON)
 
 # Optimization flags
 if(NOT CMAKE_BUILD_TYPE)
@@ -23,7 +24,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
         -Wall -Wextra -Wpedantic
         $<$<CONFIG:Release>:-O3>
         $<$<CONFIG:Release>:-march=native>
-        $<$<CONFIG:Release>:-flto>
+        $<$<AND:$<CONFIG:Release>,$<BOOL:${SLICK_ORDERBOOK_ENABLE_LTO}>>:-flto>
     )
 elseif(MSVC)
     add_definitions(-D_WIN32_WINNT=0x0601)
@@ -33,10 +34,10 @@ elseif(MSVC)
         /wd4996
         /std:c++latest  # Enable C++23 features including flat_map
         $<$<CONFIG:Release>:/O2>
-        $<$<CONFIG:Release>:/GL>  # Whole program optimization
+        $<$<AND:$<CONFIG:Release>,$<BOOL:${SLICK_ORDERBOOK_ENABLE_LTO}>>:/GL>  # Whole program optimization
     )
     add_link_options(
-        $<$<CONFIG:Release>:/LTCG>  # Link-time code generation (required with /GL)
+        $<$<AND:$<CONFIG:Release>,$<BOOL:${SLICK_ORDERBOOK_ENABLE_LTO}>>:/LTCG>  # Link-time code generation (required with /GL)
     )
 endif()
 

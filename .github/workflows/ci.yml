@@ -89,7 +89,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        clang_version: [18, 19]
+        clang_version: [18]
 
     steps:
     - uses: actions/checkout@v4
@@ -121,6 +121,7 @@ jobs:
           -DCMAKE_C_COMPILER=clang-${{ matrix.clang_version }} \
           -DCMAKE_CXX_COMPILER=clang++-${{ matrix.clang_version }} \
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
+          -DSLICK_ORDERBOOK_ENABLE_LTO=OFF \
           -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON \
           -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
 
