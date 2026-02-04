@@ -49,7 +49,8 @@ jobs:
         cmake -B build -G Ninja \
           -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" \
           -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
-          -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} \
+          -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
+          -DCMAKE_CXX_COMPILER=g++-14 \
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
           -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON \
           -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
@@ -60,7 +61,8 @@ jobs:
         cmake -B build -G Ninja \
           -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" \
           -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
-          -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} \
+          -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
+          -DCMAKE_CXX_COMPILER=g++-14 \
           -DSLICK_ORDERBOOK_HEADER_ONLY=ON \
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
           -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON \
@@ -113,6 +115,7 @@ jobs:
         cmake -B build -G Ninja \
           -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" \
           -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+          -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
           -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} \
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
           -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON \

@@ -6,6 +6,7 @@
 #include <slick/orderbook/config.hpp>
 #include <cstdint>
 #include <string_view>
+#include <limits>
 
 SLICK_NAMESPACE_BEGIN
 
@@ -27,6 +28,8 @@ using SymbolId = uint16_t;
 
 /// Timestamp in nanoseconds since epoch
 using Timestamp = uint64_t;
+
+constexpr uint16_t INVALID_INDEX = std::numeric_limits<uint16_t>::max();
 
 /// Order side - using enum for easy array indexing
 enum Side : uint8_t {

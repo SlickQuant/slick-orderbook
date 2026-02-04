@@ -159,8 +159,7 @@ private:
     /// Notify observers of top-of-book update if best changed
     /// Updates cached_tob_ after notification
     /// @param timestamp Update timestamp
-    /// @param update_flags Change flags from the update (used to check LastInBatch)
-    void notifyTopOfBookIfChanged(Timestamp timestamp, uint8_t update_flags);
+    void notifyTopOfBookIfChanged(Timestamp timestamp);
 
     SymbolId symbol_;                                                   // Symbol identifier
     std::array<detail::LevelContainer, SideCount> sides_;               // Bid and ask sides (indexed by Side enum)
@@ -170,6 +169,7 @@ private:
     detail::PriceLevelL2 cached_best_ask_;                              // Cached best ask (for thread-safe access)
     std::atomic<uint64_t> tob_seq_;                                     // Sequence lock for cached_tob_ and best bid/ask (odd = writing, even = readable)
     uint64_t last_seq_num_;                                             // Last processed sequence number (0 = not tracking)
+    uint16_t change_starting_index_ = INVALID_INDEX;                    // The lowerest level had changed in a batch. The value reset to INVALID_INDEX after TopOfBook change notified
 };
 
 SLICK_NAMESPACE_END

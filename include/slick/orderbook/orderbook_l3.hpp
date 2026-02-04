@@ -298,16 +298,16 @@ private:
     /// Notify observers of top-of-book update if best changed
     /// Updates cached_tob_ after notification
     /// @param timestamp Update timestamp
-    /// @param update_flags Change flags from the update (used to check LastInBatch)
-    void notifyTopOfBookIfChanged(Timestamp timestamp, uint8_t update_flags);
+    void notifyTopOfBookIfChanged(Timestamp timestamp);
 
     SymbolId symbol_;                                           // Symbol identifier
-    std::array<PriceLevelMap, SideCount> levels_;              // Price levels per side (indexed by Side enum)
+    std::array<PriceLevelMap, SideCount> levels_;               // Price levels per side (indexed by Side enum)
     detail::OrderMap order_map_;                                // OrderId -> Order* lookup
-    detail::ObjectPool<detail::Order> order_pool_;             // Memory pool for Order objects
+    detail::ObjectPool<detail::Order> order_pool_;              // Memory pool for Order objects
     ObserverManager observers_;                                 // Observer notifications
     TopOfBook cached_tob_;                                      // Cached top-of-book for efficient change detection
     uint64_t last_seq_num_;                                     // Last processed sequence number (0 = not tracking)
+    uint16_t change_starting_index_ = INVALID_INDEX;            // The lowerest level had changed in a batch. The value reset to INVALID_INDEX after TopOfBook change notified
 };
 
 SLICK_NAMESPACE_END

@@ -7,7 +7,44 @@
 #define SLICK_OB_INLINE inline
 #endif
 
+#if defined(__has_feature)
+#define SLICK_HAS_FEATURE(x) __has_feature(x)
+#else
+#define SLICK_HAS_FEATURE(x) 0
+#endif
+
+#if defined(__SANITIZE_THREAD__)
+#define SLICK_TSAN_ENABLED 1
+#elif defined(__clang__) && SLICK_HAS_FEATURE(thread_sanitizer)
+#define SLICK_TSAN_ENABLED 1
+#else
+#define SLICK_TSAN_ENABLED 0
+#endif
+
+#if SLICK_TSAN_ENABLED
+#include <sanitizer/tsan_interface.h>
+#endif
+
 SLICK_NAMESPACE_BEGIN
+
+namespace detail {
+SLICK_OB_INLINE void tsanAcquire(const void* addr) {
+#if SLICK_TSAN_ENABLED
+    __tsan_acquire(addr);
+#else
+    (void)addr;
+#endif
+}
+
+SLICK_OB_INLINE void tsanRelease(const void* addr) {
+#if SLICK_TSAN_ENABLED
+    __tsan_release(addr);
+#else
+    (void)addr;
+#endif
+}
+} // namespace detail
+
 
 SLICK_OB_INLINE OrderBookL2::OrderBookL2(SymbolId symbol, std::size_t initial_capacity)
     : symbol_(symbol),
@@ -68,6 +105,9 @@ SLICK_OB_INLINE void OrderBookL2::updateLevel(Side side, Price price, Quantity q
         if (it != sides_[side].end()) {
             uint16_t level_idx = static_cast<uint16_t>(std::distance(sides_[side].begin(), it));
 
+            // track starting index
+            change_starting_index_ = std::min<uint16_t>(change_starting_index_, level_idx);
+
             // Delete the level
             sides_[side].erase(it);
 
@@ -80,7 +120,10 @@ SLICK_OB_INLINE void OrderBookL2::updateLevel(Side side, Price price, Quantity q
             // Notify with level_index, flags, and seq_num
             PriceLevelUpdate update{symbol_, side, price, 0, timestamp, level_idx, change_flags, seq_num};
             observers_.notifyPriceLevelUpdate(update);
-            notifyTopOfBookIfChanged(timestamp, change_flags);
+            if (change_starting_index_ == 0 && is_last_in_batch) {
+                notifyTopOfBookIfChanged(timestamp);
+                change_starting_index_ = INVALID_INDEX;
+            }
         }
     } else {
         // Insert or update level
@@ -88,6 +131,9 @@ SLICK_OB_INLINE void OrderBookL2::updateLevel(Side side, Price price, Quantity q
 
         // Calculate level index
         uint16_t level_idx = static_cast<uint16_t>(std::distance(sides_[side].begin(), it));
+
+        // track starting index
+        change_starting_index_ = std::min<uint16_t>(change_starting_index_, level_idx);
 
         // Determine change flags based on what actually changed
         uint8_t change_flags = 0;
@@ -107,7 +153,10 @@ SLICK_OB_INLINE void OrderBookL2::updateLevel(Side side, Price price, Quantity q
         // Notify observers
         PriceLevelUpdate update{symbol_, side, price, quantity, timestamp, level_idx, change_flags, seq_num};
         observers_.notifyPriceLevelUpdate(update);
-        notifyTopOfBookIfChanged(timestamp, change_flags);
+        if (change_starting_index_ == 0 && is_last_in_batch) {
+            notifyTopOfBookIfChanged(timestamp);
+            change_starting_index_ = INVALID_INDEX;
+        }
     }
 }
 
@@ -136,12 +185,15 @@ SLICK_OB_INLINE const detail::PriceLevelL2* OrderBookL2::getBestBid() const noex
         while (seq1 & 1) {
             seq1 = tob_seq_.load(std::memory_order_acquire);
         }
+        detail::tsanAcquire(&tob_seq_);
         // Check if there's a valid bid
         if (cached_tob_.best_bid == 0) {
+            detail::tsanRelease(&tob_seq_);
             return nullptr;
         }
         // Verify sequence didn't change during read
         seq2 = tob_seq_.load(std::memory_order_acquire);
+        detail::tsanRelease(&tob_seq_);
     } while (seq1 != seq2);
 
     // Return pointer to cached value (const, read-only)
@@ -158,12 +210,15 @@ SLICK_OB_INLINE const detail::PriceLevelL2* OrderBookL2::getBestAsk() const noex
         while (seq1 & 1) {
             seq1 = tob_seq_.load(std::memory_order_acquire);
         }
+        detail::tsanAcquire(&tob_seq_);
         // Check if there's a valid ask
         if (cached_tob_.best_ask == 0) {
+            detail::tsanRelease(&tob_seq_);
             return nullptr;
         }
         // Verify sequence didn't change during read
         seq2 = tob_seq_.load(std::memory_order_acquire);
+        detail::tsanRelease(&tob_seq_);
     } while (seq1 != seq2);
 
     // Return pointer to cached value (const, read-only)
@@ -180,10 +235,12 @@ SLICK_OB_INLINE TopOfBook OrderBookL2::getTopOfBook() const noexcept {
         while (seq1 & 1) {
             seq1 = tob_seq_.load(std::memory_order_acquire);
         }
+        detail::tsanAcquire(&tob_seq_);
         // Read the cached value
         tob = cached_tob_;
         // Check if a write occurred during read
         seq2 = tob_seq_.load(std::memory_order_acquire);
+        detail::tsanRelease(&tob_seq_);
     } while (seq1 != seq2);
     return tob;
 }
@@ -221,13 +278,7 @@ SLICK_OB_INLINE bool OrderBookL2::isEmpty() const noexcept {
     return sides_[Side::Buy].empty() && sides_[Side::Sell].empty();
 }
 
-SLICK_OB_INLINE void OrderBookL2::notifyTopOfBookIfChanged(Timestamp timestamp, uint8_t update_flags) {
-    // Only emit ToB if LastInBatch flag is set
-    // (defaults to true for single operations, false for intermediate batch updates)
-    if ((update_flags & LastInBatch) == 0) {
-        return;  // Skip ToB emission for intermediate batch updates
-    }
-
+SLICK_OB_INLINE void OrderBookL2::notifyTopOfBookIfChanged(Timestamp timestamp) {
     // Compute current top-of-book (direct access, writer-side only)
     const auto* bid = sides_[Side::Buy].best();
     const auto* ask = sides_[Side::Sell].best();
@@ -244,6 +295,7 @@ SLICK_OB_INLINE void OrderBookL2::notifyTopOfBookIfChanged(Timestamp timestamp, 
                             (cached_tob_.ask_quantity != new_ask_qty);
 
     if (bid_changed || ask_changed) {
+        detail::tsanAcquire(&tob_seq_);
         // Update cached values using sequence lock (odd = writing, even = readable)
         uint64_t seq = tob_seq_.load(std::memory_order_relaxed);
         tob_seq_.store(seq + 1, std::memory_order_release);  // Mark as writing (odd)
@@ -268,6 +320,7 @@ SLICK_OB_INLINE void OrderBookL2::notifyTopOfBookIfChanged(Timestamp timestamp, 
         }
 
         tob_seq_.store(seq + 2, std::memory_order_release);  // Mark as readable (even)
+        detail::tsanRelease(&tob_seq_);
 
         // Notify observers
         observers_.notifyTopOfBookUpdate(cached_tob_);
