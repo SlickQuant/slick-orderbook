@@ -7,6 +7,9 @@
       "pattern": "^https://github.com/SlickQuant"
     },
     {
+      "pattern": "^https://www.intel.com"
+    },
+    {
       "pattern": "^\\.\\./"
     },
     {

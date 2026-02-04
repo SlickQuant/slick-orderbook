@@ -8,10 +8,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ### Changed
+
 - ThreadSanitizer detection moved to `config.hpp` with `__TSAN__` fallback and override support
 - Virtualize OrderBookL2 and OrderBookL3 distructor to allow inheritance
 
 ### Tests
+
 - Skip `OrderBookManagerL2Test.ConcurrentReadWrite` when ThreadSanitizer is enabled
 
 ## [1.0.0] - 2026-02-03
