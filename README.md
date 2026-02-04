@@ -14,7 +14,6 @@ A **high-performance, low-latency C++ library** for managing financial market or
 - **🚀 Blazing Fast**: Sub-100ns L2 operations, sub-200ns L3 operations (p99)
 - **📊 Dual Market Data**: Level 2 (aggregated) and Level 3 (order-by-order) support
 - **🎯 Multi-Symbol**: Efficient management of thousands of instruments
-- **🔔 Observer Pattern**: Lock-free event notifications
 - **🔧 Flexible Build**: Compiled library (default) or header-only mode
 - **🧩 Protocol Agnostic**: Generic design works with any exchange feed
 - **⚡ Zero Allocations**: Object pooling eliminates runtime allocations in hot paths
@@ -228,12 +227,6 @@ int main() {
 - **Template-Based**: No virtual dispatch in hot paths
 - **Concepts**: C++23 concepts for compile-time type checking
 - **Inline Everything**: Aggressive inlining for sub-nanosecond operations
-
-### Lock-Free Design
-
-- **Single-Writer per Symbol**: No locking within orderbook operations
-- **Lock-Free Reads**: Multiple readers can query simultaneously
-- **Observer Notifications**: Lock-free callback invocation
 
 ## 🔧 CMake Options
 

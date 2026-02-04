@@ -115,7 +115,6 @@ All performance targets exceeded:
   - OrderBookManager: 17 tests
 - **Platform Support**: Linux (GCC 14, Clang 17), Windows (MSVC 2022), macOS
 - **Build Modes**: Compiled library (default), Header-only mode
-- **Thread Safety**: Single-writer per symbol, lock-free multiple readers
 
 ### Technical Details
 

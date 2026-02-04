@@ -30,7 +30,7 @@ SLICK_NAMESPACE_BEGIN
 namespace detail {
 SLICK_OB_INLINE void tsanAcquire(const void* addr) {
 #if SLICK_TSAN_ENABLED
-    __tsan_acquire(addr);
+    __tsan_acquire(const_cast<void*>(addr));
 #else
     (void)addr;
 #endif
@@ -38,7 +38,7 @@ SLICK_OB_INLINE void tsanAcquire(const void* addr) {
 
 SLICK_OB_INLINE void tsanRelease(const void* addr) {
 #if SLICK_TSAN_ENABLED
-    __tsan_release(addr);
+    __tsan_release(const_cast<void*>(addr));
 #else
     (void)addr;
 #endif

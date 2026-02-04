@@ -87,7 +87,6 @@ Key design principles:
 - **Zero Allocations**: Object pooling eliminates runtime allocations
 - **Cache Friendly**: 64-byte cache alignment, contiguous memory layouts
 - **Template-Based**: Zero-cost abstractions, no virtual dispatch in hot paths
-- **Lock-Free**: Single-writer per symbol, lock-free reads
 
 See [Architecture Guide](../../ARCHITECTURE.md) for internal details.
 

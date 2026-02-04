@@ -240,7 +240,6 @@ Critical structures are 64-byte aligned to cache line boundaries.
 **Per-Symbol Isolation**:
 
 - Each `OrderBook` instance is updated by a single thread (writer)
-- Multiple readers can query simultaneously via lock-free seqlock mechanism
 - No mutex locking within orderbook operations
 
 **Thread-Safe Read Operations** (use sequence locks):
@@ -273,12 +272,9 @@ class OrderBookManager {
 
 ### Observer Notifications
 
-**Lock-Free Callback Invocation**:
-
 ```cpp
 void notifyObservers(const Event& event) {
     // Observers stored in std::vector<std::shared_ptr<Observer>>
-    // Iteration is lock-free (single writer updates observer list)
     for (const auto& observer : observers_) {
         observer->onEvent(event);
     }
@@ -288,7 +284,6 @@ void notifyObservers(const Event& event) {
 **Thread Safety Guarantee**:
 
 - Observer registration/removal: Must be done from orderbook's writer thread
-- Callback invocation: Lock-free iteration over shared_ptr vector
 - Observer lifetime: Managed by shared_ptr (automatic cleanup)
 
 ---
