@@ -7,6 +7,8 @@
 #include <vector>
 #include <algorithm>
 #include <chrono>
+#include <slick/orderbook/config.hpp>
+
 
 using namespace slick::orderbook;
 
@@ -370,6 +372,9 @@ TEST_F(OrderBookManagerL3Test, ConcurrentDifferentSymbols) {
 // and the lock-free SWMR design of individual orderbooks.
 // Each symbol has ONE writer thread but MULTIPLE reader threads accessing concurrently.
 TEST_F(OrderBookManagerL2Test, ConcurrentReadWrite) {
+#if SLICK_TSAN_ENABLED
+    GTEST_SKIP() << "Disabled under TSAN (lock-free read path is not TSAN-friendly).";
+#endif
     OrderBookManager<OrderBookL2> manager;
     constexpr int kNumReaders = 8;
     constexpr int kNumSymbols = 10;

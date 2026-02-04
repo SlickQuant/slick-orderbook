@@ -29,6 +29,33 @@
 #endif
 
 // Compiler feature detection
+#if defined(__has_feature)
+    #define SLICK_HAS_FEATURE(x) __has_feature(x)
+#else
+    #define SLICK_HAS_FEATURE(x) 0
+#endif
+
+// ThreadSanitizer detection
+#ifndef SLICK_TSAN_ENABLED
+#if defined(__SANITIZE_THREAD__)
+    #define SLICK_TSAN_ENABLED 1
+#elif defined(__TSAN__)
+    #define SLICK_TSAN_ENABLED 1
+#elif SLICK_HAS_FEATURE(thread_sanitizer)
+    #define SLICK_TSAN_ENABLED 1
+#else
+    #define SLICK_TSAN_ENABLED 0
+#endif
+
+#endif
+
+#if defined(__SANITIZE_ADDRESS__) || defined(__ASAN__) || SLICK_HAS_FEATURE(address_sanitizer)
+#define SLICK_ASAN_ENABLED 1
+#else
+#define SLICK_ASAN_ENABLED 0
+#endif
+
+// Compiler concepts detection
 #if defined(__cpp_concepts) && __cpp_concepts >= 201907L
     #define SLICK_HAS_CONCEPTS 1
 #else

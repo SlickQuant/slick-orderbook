@@ -45,7 +45,7 @@ public:
     explicit OrderBookL2(SymbolId symbol, std::size_t initial_capacity = 32);
 
     /// Destructor
-    ~OrderBookL2() = default;
+    virtual ~OrderBookL2() = default;
 
     // Non-copyable, movable (manual implementation due to std::atomic member)
     OrderBookL2(const OrderBookL2&) = delete;
@@ -155,7 +155,7 @@ public:
     /// @param timestamp Snapshot timestamp
     void emitSnapshot(Timestamp timestamp);
 
-private:
+protected:
     /// Notify observers of top-of-book update if best changed
     /// Updates cached_tob_ after notification
     /// @param timestamp Update timestamp

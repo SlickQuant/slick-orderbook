@@ -7,44 +7,7 @@
 #define SLICK_OB_INLINE inline
 #endif
 
-#if defined(__has_feature)
-#define SLICK_HAS_FEATURE(x) __has_feature(x)
-#else
-#define SLICK_HAS_FEATURE(x) 0
-#endif
-
-#if defined(__SANITIZE_THREAD__)
-#define SLICK_TSAN_ENABLED 1
-#elif defined(__clang__) && SLICK_HAS_FEATURE(thread_sanitizer)
-#define SLICK_TSAN_ENABLED 1
-#else
-#define SLICK_TSAN_ENABLED 0
-#endif
-
-#if SLICK_TSAN_ENABLED
-#include <sanitizer/tsan_interface.h>
-#endif
-
 SLICK_NAMESPACE_BEGIN
-
-namespace detail {
-SLICK_OB_INLINE void tsanAcquire(const void* addr) {
-#if SLICK_TSAN_ENABLED
-    __tsan_acquire(const_cast<void*>(addr));
-#else
-    (void)addr;
-#endif
-}
-
-SLICK_OB_INLINE void tsanRelease(const void* addr) {
-#if SLICK_TSAN_ENABLED
-    __tsan_release(const_cast<void*>(addr));
-#else
-    (void)addr;
-#endif
-}
-} // namespace detail
-
 
 SLICK_OB_INLINE OrderBookL2::OrderBookL2(SymbolId symbol, std::size_t initial_capacity)
     : symbol_(symbol),
@@ -185,15 +148,12 @@ SLICK_OB_INLINE const detail::PriceLevelL2* OrderBookL2::getBestBid() const noex
         while (seq1 & 1) {
             seq1 = tob_seq_.load(std::memory_order_acquire);
         }
-        detail::tsanAcquire(&tob_seq_);
         // Check if there's a valid bid
         if (cached_tob_.best_bid == 0) {
-            detail::tsanRelease(&tob_seq_);
             return nullptr;
         }
         // Verify sequence didn't change during read
         seq2 = tob_seq_.load(std::memory_order_acquire);
-        detail::tsanRelease(&tob_seq_);
     } while (seq1 != seq2);
 
     // Return pointer to cached value (const, read-only)
@@ -210,15 +170,12 @@ SLICK_OB_INLINE const detail::PriceLevelL2* OrderBookL2::getBestAsk() const noex
         while (seq1 & 1) {
             seq1 = tob_seq_.load(std::memory_order_acquire);
         }
-        detail::tsanAcquire(&tob_seq_);
         // Check if there's a valid ask
         if (cached_tob_.best_ask == 0) {
-            detail::tsanRelease(&tob_seq_);
             return nullptr;
         }
         // Verify sequence didn't change during read
         seq2 = tob_seq_.load(std::memory_order_acquire);
-        detail::tsanRelease(&tob_seq_);
     } while (seq1 != seq2);
 
     // Return pointer to cached value (const, read-only)
@@ -235,12 +192,10 @@ SLICK_OB_INLINE TopOfBook OrderBookL2::getTopOfBook() const noexcept {
         while (seq1 & 1) {
             seq1 = tob_seq_.load(std::memory_order_acquire);
         }
-        detail::tsanAcquire(&tob_seq_);
         // Read the cached value
         tob = cached_tob_;
         // Check if a write occurred during read
         seq2 = tob_seq_.load(std::memory_order_acquire);
-        detail::tsanRelease(&tob_seq_);
     } while (seq1 != seq2);
     return tob;
 }
@@ -295,7 +250,6 @@ SLICK_OB_INLINE void OrderBookL2::notifyTopOfBookIfChanged(Timestamp timestamp) 
                             (cached_tob_.ask_quantity != new_ask_qty);
 
     if (bid_changed || ask_changed) {
-        detail::tsanAcquire(&tob_seq_);
         // Update cached values using sequence lock (odd = writing, even = readable)
         uint64_t seq = tob_seq_.load(std::memory_order_relaxed);
         tob_seq_.store(seq + 1, std::memory_order_release);  // Mark as writing (odd)
@@ -320,7 +274,6 @@ SLICK_OB_INLINE void OrderBookL2::notifyTopOfBookIfChanged(Timestamp timestamp) 
         }
 
         tob_seq_.store(seq + 2, std::memory_order_release);  // Mark as readable (even)
-        detail::tsanRelease(&tob_seq_);
 
         // Notify observers
         observers_.notifyTopOfBookUpdate(cached_tob_);

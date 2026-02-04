@@ -88,7 +88,7 @@ public:
                         std::size_t initial_level_capacity = 32);
 
     /// Destructor
-    ~OrderBookL3();
+    virtual ~OrderBookL3();
 
     // Non-copyable, movable
     OrderBookL3(const OrderBookL3&) = delete;
@@ -271,7 +271,7 @@ public:
     /// @param timestamp Snapshot timestamp
     void emitSnapshot(Timestamp timestamp);
 
-private:
+protected:
     /// Get or create price level, returns pointer, index and if new level created
     std::tuple<detail::PriceLevelL3*, uint16_t, bool> getOrCreateLevel(Side side, Price price);
 
@@ -300,6 +300,7 @@ private:
     /// @param timestamp Update timestamp
     void notifyTopOfBookIfChanged(Timestamp timestamp);
 
+protected:
     SymbolId symbol_;                                           // Symbol identifier
     std::array<PriceLevelMap, SideCount> levels_;               // Price levels per side (indexed by Side enum)
     detail::OrderMap order_map_;                                // OrderId -> Order* lookup
