@@ -89,7 +89,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        compiler: [clang-17]
+        clang_version: [18]
 
     steps:
     - uses: actions/checkout@v4
@@ -104,7 +104,7 @@ jobs:
     - name: Install System Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }}
+        sudo apt-get install -y cmake ninja-build clang-${{ matrix.clang_version }}
 
     - name: Install vcpkg Dependencies
       run: |
@@ -115,8 +115,8 @@ jobs:
         cmake -B build -G Ninja \
           -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" \
           -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
-          -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
-          -DCMAKE_CXX_COMPILER=${{ matrix.compiler }} \
+          -DCMAKE_C_COMPILER=clang-${{ matrix.clang_version }} \
+          -DCMAKE_CXX_COMPILER=clang++-${{ matrix.clang_version }} \
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
           -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON \
           -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
@@ -325,13 +325,13 @@ jobs:
     - name: Install Dependencies
       run: |
         sudo apt-get update
-        sudo apt-get install -y cmake ninja-build clang-17 clang-tidy-17
+        sudo apt-get install -y cmake ninja-build clang-18 clang-tidy-18
 
     - name: Configure CMake
       run: |
         cmake -B build -G Ninja \
           -DCMAKE_BUILD_TYPE=Debug \
-          -DCMAKE_CXX_COMPILER=clang++-17 \
+          -DCMAKE_CXX_COMPILER=clang++-18 \
           -DCMAKE_EXPORT_COMPILE_COMMANDS=ON \
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
           -DSLICK_ORDERBOOK_BUILD_EXAMPLES=OFF \
@@ -339,7 +339,7 @@ jobs:
 
     - name: Run clang-tidy
       run: |
-        find include -name "*.hpp" -print0 | xargs -0 -n1 clang-tidy-17 -p build --warnings-as-errors='*' || true
+        find include -name "*.hpp" -print0 | xargs -0 -n1 clang-tidy-18 -p build --warnings-as-errors='*' || true
 
   # ============================================================================
   # Status Check (Required for PRs)

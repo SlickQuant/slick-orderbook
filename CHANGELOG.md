@@ -113,7 +113,7 @@ All performance targets exceeded:
   - OrderBookL2: 27 tests
   - OrderBookL3: 68 tests
   - OrderBookManager: 17 tests
-- **Platform Support**: Linux (GCC 14, Clang 17), Windows (MSVC 2022), macOS
+- **Platform Support**: Linux (GCC 14, Clang 18), Windows (MSVC 2022), macOS
 - **Build Modes**: Compiled library (default), Header-only mode
 
 ### Technical Details

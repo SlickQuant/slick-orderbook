@@ -1,8 +1,6 @@
 cmake_minimum_required(VERSION 3.20)
 project(slick-orderbook VERSION 1.0.0 LANGUAGES CXX)
 
-# C++23 required for std::flat_map
-# Workarounds applied for Clang 17 + GCC 14 libstdc++ compatibility issues (avoid structured bindings)
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)

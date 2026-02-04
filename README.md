@@ -36,7 +36,7 @@ All performance targets exceeded by **2-40x**:
 
 ### Prerequisites
 
-- **C++23 compiler**: GCC 14+, Clang 17+, or MSVC 2022+ (17.6+)
+- **C++23 compiler**: GCC 14+, Clang 18+, or MSVC 2022+ (17.6+)
 - **CMake**: 3.20 or higher
 - **Git**: For cloning the repository
 
