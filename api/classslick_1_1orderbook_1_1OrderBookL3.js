@@ -30,7 +30,7 @@ var classslick_1_1orderbook_1_1OrderBookL3 =
     [ "isEmpty", "classslick_1_1orderbook_1_1OrderBookL3.html#a8686f2ad05cb3ef601e1c691abe6b1f6", null ],
     [ "isEmpty", "classslick_1_1orderbook_1_1OrderBookL3.html#ac51de8e690231d4a93f8728d31155fd9", null ],
     [ "levelCount", "classslick_1_1orderbook_1_1OrderBookL3.html#af21ca90c2bf3fb1f3b47d5536b550a2a", null ],
-    [ "modifyOrder", "classslick_1_1orderbook_1_1OrderBookL3.html#a849cb0147b8463d5c9afd2956d83db60", null ],
+    [ "modifyOrder", "classslick_1_1orderbook_1_1OrderBookL3.html#ac59a3f1031642c44750e51a06e7c1287", null ],
     [ "notifyOrderDelete", "classslick_1_1orderbook_1_1OrderBookL3.html#a009da24c8245a6b99d0a32b47df13ee8", null ],
     [ "notifyOrderUpdate", "classslick_1_1orderbook_1_1OrderBookL3.html#a7d9ea107c6d6234ffdba2523da063132", null ],
     [ "notifyPriceLevelUpdate", "classslick_1_1orderbook_1_1OrderBookL3.html#a21ced2f2b50346c5a6e2686abe3d5a03", null ],
