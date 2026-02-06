@@ -7,6 +7,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- Enhanced iterator support for `IntrusiveList`
+  - **Reverse iterators**: `rbegin()`, `rend()`, `crbegin()`, `crend()`
+    - Custom `ReverseIterator` and `ConstReverseIterator` classes (cannot use `std::reverse_iterator` due to nullptr end)
+    - Stores pointer to list head to enable decrement from `rend()` (required for `std::prev` compatibility)
+  - **Forward iterators**: Enhanced `Iterator` and `ConstIterator`
+    - Stores pointer to list tail to enable decrement from `end()` (required for `std::prev` compatibility)
+  - Full bidirectional iteration support for both forward and reverse iterators
+  - Compatible with standard library iterator utilities (`std::next`, `std::prev`, `std::advance`, `std::distance`)
+
 ### Changed
 
 - ThreadSanitizer detection moved to `config.hpp` with `__TSAN__` fallback and override support
@@ -15,6 +26,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Tests
 
 - Skip `OrderBookManagerL2Test.ConcurrentReadWrite` when ThreadSanitizer is enabled
+- Added 9 comprehensive tests for `IntrusiveList` reverse iterators
+  - `ReverseIteration` - Basic reverse iteration
+  - `ReverseIterationConst` - Const reverse iteration and crbegin/crend
+  - `ReverseIterationEmpty` - Empty list edge case
+  - `ReverseIterationSingleElement` - Single element edge case
+  - `ReverseIteratorDecrement` - Decrement operator
+  - `ReverseIteratorPostIncrement` - Post-increment operator
+  - `ReverseIteratorBidirectional` - Bidirectional movement
+  - `StdIteratorUtilities` - Standard library utilities with forward iterators
+  - `StdIteratorUtilitiesReverse` - Standard library utilities with reverse iterators
 
 ## [1.0.0] - 2026-02-03
 

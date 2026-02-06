@@ -3,6 +3,7 @@
 
 #include <slick/orderbook/detail/intrusive_list.hpp>
 #include <gtest/gtest.h>
+#include <iterator>
 
 using namespace slick::orderbook::detail;
 
@@ -268,4 +269,233 @@ TEST_F(IntrusiveListTest, MoveAssignment) {
     EXPECT_EQ(list2.size(), 2);
     EXPECT_EQ(list2.front(), &node1);
     EXPECT_EQ(list2.back(), &node2);
+}
+
+TEST_F(IntrusiveListTest, ReverseIteration) {
+    TestNode node1(1);
+    TestNode node2(2);
+    TestNode node3(3);
+    TestNode node4(4);
+
+    list.push_back(&node1);
+    list.push_back(&node2);
+    list.push_back(&node3);
+    list.push_back(&node4);
+
+    // Reverse iteration using rbegin/rend
+    int expected = 4;
+    for (auto it = list.rbegin(); it != list.rend(); ++it) {
+        EXPECT_EQ(it->value, expected--);
+    }
+    EXPECT_EQ(expected, 0);
+
+    // Verify values in reverse order
+    auto rit = list.rbegin();
+    EXPECT_EQ(rit->value, 4);
+    ++rit;
+    EXPECT_EQ(rit->value, 3);
+    ++rit;
+    EXPECT_EQ(rit->value, 2);
+    ++rit;
+    EXPECT_EQ(rit->value, 1);
+    ++rit;
+    EXPECT_EQ(rit, list.rend());
+}
+
+TEST_F(IntrusiveListTest, ReverseIterationConst) {
+    TestNode node1(1);
+    TestNode node2(2);
+    TestNode node3(3);
+
+    list.push_back(&node1);
+    list.push_back(&node2);
+    list.push_back(&node3);
+
+    const auto& const_list = list;
+
+    // Const reverse iteration using rbegin/rend
+    int expected = 3;
+    for (auto it = const_list.rbegin(); it != const_list.rend(); ++it) {
+        EXPECT_EQ(it->value, expected--);
+    }
+    EXPECT_EQ(expected, 0);
+
+    // Using crbegin/crend
+    expected = 3;
+    for (auto it = const_list.crbegin(); it != const_list.crend(); ++it) {
+        EXPECT_EQ(it->value, expected--);
+    }
+    EXPECT_EQ(expected, 0);
+}
+
+TEST_F(IntrusiveListTest, ReverseIterationEmpty) {
+    // Reverse iteration on empty list
+    EXPECT_EQ(list.rbegin(), list.rend());
+    EXPECT_EQ(list.crbegin(), list.crend());
+
+    int count = 0;
+    for (auto it = list.rbegin(); it != list.rend(); ++it) {
+        ++count;
+    }
+    EXPECT_EQ(count, 0);
+}
+
+TEST_F(IntrusiveListTest, ReverseIterationSingleElement) {
+    TestNode node1(42);
+    list.push_back(&node1);
+
+    // Single element reverse iteration
+    auto rit = list.rbegin();
+    EXPECT_EQ(rit->value, 42);
+    ++rit;
+    EXPECT_EQ(rit, list.rend());
+
+    int count = 0;
+    for (auto it = list.rbegin(); it != list.rend(); ++it) {
+        EXPECT_EQ(it->value, 42);
+        ++count;
+    }
+    EXPECT_EQ(count, 1);
+}
+
+TEST_F(IntrusiveListTest, ReverseIteratorDecrement) {
+    TestNode node1(1);
+    TestNode node2(2);
+    TestNode node3(3);
+
+    list.push_back(&node1);
+    list.push_back(&node2);
+    list.push_back(&node3);
+
+    // Test reverse iterator decrement (moving backward in reverse = forward in list)
+    auto rit = list.rend();
+    --rit;
+    EXPECT_EQ(rit->value, 1);
+    --rit;
+    EXPECT_EQ(rit->value, 2);
+    --rit;
+    EXPECT_EQ(rit->value, 3);
+    EXPECT_EQ(rit, list.rbegin());
+}
+
+TEST_F(IntrusiveListTest, ReverseIteratorPostIncrement) {
+    TestNode node1(1);
+    TestNode node2(2);
+
+    list.push_back(&node1);
+    list.push_back(&node2);
+
+    // Test post-increment
+    auto rit = list.rbegin();
+    auto old_rit = rit++;
+    EXPECT_EQ(old_rit->value, 2);
+    EXPECT_EQ(rit->value, 1);
+}
+
+TEST_F(IntrusiveListTest, ReverseIteratorBidirectional) {
+    TestNode node1(1);
+    TestNode node2(2);
+    TestNode node3(3);
+
+    list.push_back(&node1);
+    list.push_back(&node2);
+    list.push_back(&node3);
+
+    // Test bidirectional movement
+    auto rit = list.rbegin();
+    EXPECT_EQ(rit->value, 3);
+
+    ++rit;
+    EXPECT_EQ(rit->value, 2);
+
+    ++rit;
+    EXPECT_EQ(rit->value, 1);
+
+    --rit;
+    EXPECT_EQ(rit->value, 2);
+
+    --rit;
+    EXPECT_EQ(rit->value, 3);
+    EXPECT_EQ(rit, list.rbegin());
+}
+
+TEST_F(IntrusiveListTest, StdIteratorUtilities) {
+    TestNode node1(1);
+    TestNode node2(2);
+    TestNode node3(3);
+    TestNode node4(4);
+    TestNode node5(5);
+
+    list.push_back(&node1);
+    list.push_back(&node2);
+    list.push_back(&node3);
+    list.push_back(&node4);
+    list.push_back(&node5);
+
+    // Test std::next
+    auto it = list.begin();
+    auto next_it = std::next(it);
+    EXPECT_EQ(it->value, 1);
+    EXPECT_EQ(next_it->value, 2);
+
+    auto next_it_2 = std::next(it, 2);
+    EXPECT_EQ(next_it_2->value, 3);
+
+    // Test std::prev
+    auto end_it = list.end();
+    auto prev_it = std::prev(end_it);
+    EXPECT_EQ(prev_it->value, 5);
+
+    auto prev_it_3 = std::prev(end_it, 3);
+    EXPECT_EQ(prev_it_3->value, 3);
+
+    // Test std::advance
+    auto adv_it = list.begin();
+    std::advance(adv_it, 2);
+    EXPECT_EQ(adv_it->value, 3);
+
+    std::advance(adv_it, -1);
+    EXPECT_EQ(adv_it->value, 2);
+
+    // Test std::distance
+    auto dist = std::distance(list.begin(), list.end());
+    EXPECT_EQ(dist, 5);
+}
+
+TEST_F(IntrusiveListTest, StdIteratorUtilitiesReverse) {
+    TestNode node1(1);
+    TestNode node2(2);
+    TestNode node3(3);
+    TestNode node4(4);
+
+    list.push_back(&node1);
+    list.push_back(&node2);
+    list.push_back(&node3);
+    list.push_back(&node4);
+
+    // Test std::next with reverse iterators
+    auto rit = list.rbegin();
+    auto next_rit = std::next(rit);
+    EXPECT_EQ(rit->value, 4);
+    EXPECT_EQ(next_rit->value, 3);
+
+    auto next_rit_2 = std::next(rit, 2);
+    EXPECT_EQ(next_rit_2->value, 2);
+
+    // Test std::prev with reverse iterators
+    auto rend_it = list.rend();
+    auto prev_rit = std::prev(rend_it);
+    EXPECT_EQ(prev_rit->value, 1);
+
+    // Test std::advance with reverse iterators
+    auto adv_rit = list.rbegin();
+    std::advance(adv_rit, 2);
+    EXPECT_EQ(adv_rit->value, 2);
+
+    std::advance(adv_rit, -1);
+    EXPECT_EQ(adv_rit->value, 3);
+
+    // Test std::distance with reverse iterators
+    auto dist = std::distance(list.rbegin(), list.rend());
+    EXPECT_EQ(dist, 4);
 }
