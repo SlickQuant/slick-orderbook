@@ -1,3 +1,3 @@
 <map id="slick::orderbook::detail::IntrusiveList&lt; T, NextPtr, PrevPtr &gt;::Iterator" name="slick::orderbook::detail::IntrusiveList&lt; T, NextPtr, PrevPtr &gt;::Iterator">
-<area shape="rect" id="Node000001" title="Forward iterator for intrusive list." alt="" coords="5,5,192,280"/>
+<area shape="rect" id="Node000001" title="Forward iterator for intrusive list We store a pointer to the list&#39;s tail to handle decrement from en..." alt="" coords="5,5,192,280"/>
 </map>

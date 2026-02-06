@@ -33,7 +33,7 @@ var NAVTREE =
       [ "Basic Usage - Level 2 OrderBook", "index.html#autotoc_md6", null ],
       [ "Basic Usage - Level 3 OrderBook", "index.html#autotoc_md7", null ],
       [ "Multi-Symbol Management", "index.html#autotoc_md8", null ],
-      [ "Observer Pattern - Real-Time Notifications", "index.html#autotoc_md10", null ]
+      [ "Observer Pattern - Real-Time Notifications", "index.html#autotoc_md9", null ]
     ] ],
     [ "📚 Documentation", "index.html#autotoc_md11", null ],
     [ "🏗️ Architecture Highlights", "index.html#autotoc_md12", [
@@ -103,7 +103,7 @@ var NAVTREE =
         [ "Potential Enhancements", "md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md75", null ],
         [ "Not Planned (Premature Optimization)", "md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md76", null ]
       ] ],
-      [ "Conclusion", "md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md79", null ]
+      [ "Conclusion", "md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md78", null ]
     ] ],
     [ "Performance Guide", "md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html", [
       [ "Table of Contents", "md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md81", null ],
@@ -172,7 +172,8 @@ var NAVTREE =
         [ "All", "functions.html", "functions_dup" ],
         [ "Functions", "functions_func.html", "functions_func" ],
         [ "Variables", "functions_vars.html", null ],
-        [ "Typedefs", "functions_type.html", null ]
+        [ "Typedefs", "functions_type.html", null ],
+        [ "Related Symbols", "functions_rela.html", null ]
       ] ]
     ] ],
     [ "Files", "files.html", [
@@ -189,9 +190,9 @@ var NAVTREEINDEX =
 [
 "annotated.html",
 "classslick_1_1orderbook_1_1OrderBookManager.html#ab3d57aa7b801e717fb479a22aac6d821",
-"classslick_1_1orderbook_1_1detail_1_1OrderMap.html#a2e87ac3b18a9f5dc7e388d4414c622e8",
-"namespacemembers_func.html",
-"structslick_1_1orderbook_1_1detail_1_1Order.html#a34ae3d4be517f345cbb5dbe9093c2dab"
+"classslick_1_1orderbook_1_1detail_1_1LevelContainer.html#a59a88ae73919b0e6e337287ebd930bde",
+"md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md25",
+"structslick_1_1orderbook_1_1TopOfBook.html#a811de8d7cd5c359af99536a9843c9f02"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

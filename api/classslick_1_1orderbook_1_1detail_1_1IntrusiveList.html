@@ -119,8 +119,14 @@ Classes</h2></td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1ConstIterator.html">ConstIterator</a></td></tr>
 <tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Const iterator.  <a href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1ConstIterator.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1ConstReverseIterator.html">ConstReverseIterator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Const reverse iterator.  <a href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1ConstReverseIterator.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html">Iterator</a></td></tr>
-<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forward iterator for intrusive list.  <a href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html#details">More...</a><br /></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Forward iterator for intrusive list We store a pointer to the list's tail to handle decrement from <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a3db2d948000d920cc079b003fb175c28">end()</a>  <a href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html#details">More...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1ReverseIterator.html">ReverseIterator</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reverse iterator for intrusive list Cannot use std::reverse_iterator because <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a3db2d948000d920cc079b003fb175c28">end()</a> (nullptr) cannot be decremented We store a pointer to the list's head to handle decrement from <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#ab3bf64c5da039cf8bc8d352a0b5bdee9">rend()</a>  <a href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1ReverseIterator.html#details">More...</a><br /></td></tr>
 <tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-types" name="pub-types"></a>
@@ -141,6 +147,10 @@ Public Types</h2></td></tr>
 <tr class="separator:a62a0a2c1e39551c84364cf3b363c4f96"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a98fb386d7c42fccb9fd612a11095576f" id="r_a98fb386d7c42fccb9fd612a11095576f"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a98fb386d7c42fccb9fd612a11095576f">const_iterator</a> = <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1ConstIterator.html">ConstIterator</a></td></tr>
 <tr class="separator:a98fb386d7c42fccb9fd612a11095576f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae8dea2c8bed7547ca6e0e58de71ea236" id="r_ae8dea2c8bed7547ca6e0e58de71ea236"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#ae8dea2c8bed7547ca6e0e58de71ea236">reverse_iterator</a> = <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1ReverseIterator.html">ReverseIterator</a></td></tr>
+<tr class="separator:ae8dea2c8bed7547ca6e0e58de71ea236"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0d329b770d2fdb90cef0867dde368002" id="r_a0d329b770d2fdb90cef0867dde368002"><td class="memItemLeft" align="right" valign="top">using&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a0d329b770d2fdb90cef0867dde368002">const_reverse_iterator</a> = <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1ConstReverseIterator.html">ConstReverseIterator</a></td></tr>
+<tr class="separator:a0d329b770d2fdb90cef0867dde368002"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="pub-methods" name="pub-methods"></a>
 Public Member Functions</h2></td></tr>
@@ -211,6 +221,19 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a5ec8621342de5836a9b87af6fb7cbef4"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac58860a2419f007a35259544284325fd" id="r_ac58860a2419f007a35259544284325fd"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a98fb386d7c42fccb9fd612a11095576f">const_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#ac58860a2419f007a35259544284325fd">cend</a> () const noexcept</td></tr>
 <tr class="separator:ac58860a2419f007a35259544284325fd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6f8d1b6ac26dcb69bead2e326df065ed" id="r_a6f8d1b6ac26dcb69bead2e326df065ed"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#ae8dea2c8bed7547ca6e0e58de71ea236">reverse_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a6f8d1b6ac26dcb69bead2e326df065ed">rbegin</a> () noexcept</td></tr>
+<tr class="memdesc:a6f8d1b6ac26dcb69bead2e326df065ed"><td class="mdescLeft">&#160;</td><td class="mdescRight">Reverse iterators.  <br /></td></tr>
+<tr class="separator:a6f8d1b6ac26dcb69bead2e326df065ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a79dd86910a086dc24373488f109587e1" id="r_a79dd86910a086dc24373488f109587e1"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a0d329b770d2fdb90cef0867dde368002">const_reverse_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a79dd86910a086dc24373488f109587e1">rbegin</a> () const noexcept</td></tr>
+<tr class="separator:a79dd86910a086dc24373488f109587e1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a9a7d8d7c7898bff6fef779886cc2359a" id="r_a9a7d8d7c7898bff6fef779886cc2359a"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a0d329b770d2fdb90cef0867dde368002">const_reverse_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a9a7d8d7c7898bff6fef779886cc2359a">crbegin</a> () const noexcept</td></tr>
+<tr class="separator:a9a7d8d7c7898bff6fef779886cc2359a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab3bf64c5da039cf8bc8d352a0b5bdee9" id="r_ab3bf64c5da039cf8bc8d352a0b5bdee9"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#ae8dea2c8bed7547ca6e0e58de71ea236">reverse_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#ab3bf64c5da039cf8bc8d352a0b5bdee9">rend</a> () noexcept</td></tr>
+<tr class="separator:ab3bf64c5da039cf8bc8d352a0b5bdee9"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a02aba035149423e8bf85f628613881ed" id="r_a02aba035149423e8bf85f628613881ed"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a0d329b770d2fdb90cef0867dde368002">const_reverse_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a02aba035149423e8bf85f628613881ed">rend</a> () const noexcept</td></tr>
+<tr class="separator:a02aba035149423e8bf85f628613881ed"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a038bd6b8431c85f5349740726e952325" id="r_a038bd6b8431c85f5349740726e952325"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a0d329b770d2fdb90cef0867dde368002">const_reverse_iterator</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a038bd6b8431c85f5349740726e952325">crend</a> () const noexcept</td></tr>
+<tr class="separator:a038bd6b8431c85f5349740726e952325"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename T, T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;T::prev&gt;<br />
@@ -229,7 +252,7 @@ class slick::orderbook::detail::IntrusiveList&lt; T, NextPtr, PrevPtr &gt;</div>
 <div class="line"><a class="code hl_class" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html">IntrusiveList&lt;Order&gt;</a> orders;</div>
 <div class="line">orders.<a class="code hl_function" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#abc9ca8c4ba8a088132b9dc6fc2f63e89">push_back</a>(&amp;my_order);</div>
 <div class="ttc" id="aclassslick_1_1orderbook_1_1detail_1_1IntrusiveList_html"><div class="ttname"><a href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html">slick::orderbook::detail::IntrusiveList</a></div><div class="ttdoc">Intrusive doubly-linked list for zero-allocation order management.</div><div class="ttdef"><b>Definition</b> <a href="intrusive__list_8hpp_source.html#l00039">intrusive_list.hpp:39</a></div></div>
-<div class="ttc" id="aclassslick_1_1orderbook_1_1detail_1_1IntrusiveList_html_abc9ca8c4ba8a088132b9dc6fc2f63e89"><div class="ttname"><a href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#abc9ca8c4ba8a088132b9dc6fc2f63e89">slick::orderbook::detail::IntrusiveList::push_back</a></div><div class="ttdeci">constexpr void push_back(T *node) noexcept</div><div class="ttdoc">Add element to back (oldest order, FIFO time priority)</div><div class="ttdef"><b>Definition</b> <a href="intrusive__list_8hpp_source.html#l00234">intrusive_list.hpp:234</a></div></div>
+<div class="ttc" id="aclassslick_1_1orderbook_1_1detail_1_1IntrusiveList_html_abc9ca8c4ba8a088132b9dc6fc2f63e89"><div class="ttname"><a href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#abc9ca8c4ba8a088132b9dc6fc2f63e89">slick::orderbook::detail::IntrusiveList::push_back</a></div><div class="ttdeci">constexpr void push_back(T *node) noexcept</div><div class="ttdoc">Add element to back (oldest order, FIFO time priority)</div><div class="ttdef"><b>Definition</b> <a href="intrusive__list_8hpp_source.html#l00378">intrusive_list.hpp:378</a></div></div>
 <div class="ttc" id="astructslick_1_1orderbook_1_1detail_1_1Order_html"><div class="ttname"><a href="structslick_1_1orderbook_1_1detail_1_1Order.html">slick::orderbook::detail::Order</a></div><div class="ttdoc">Order structure for Level 3 orderbook Uses intrusive list design for zero-allocation order queues at ...</div><div class="ttdef"><b>Definition</b> <a href="order_8hpp_source.html#l00014">order.hpp:14</a></div></div>
 </div><!-- fragment --><dl class="tparams"><dt>Template Parameters</dt><dd>
   <table class="tparams">
@@ -256,7 +279,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00158">158</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00300">300</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -296,6 +319,24 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 
 </div>
 </div>
+<a id="a0d329b770d2fdb90cef0867dde368002" name="a0d329b770d2fdb90cef0867dde368002"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a0d329b770d2fdb90cef0867dde368002">&#9670;&#160;</a></span>const_reverse_iterator</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;T::prev&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html">slick::orderbook::detail::IntrusiveList</a>&lt; T, NextPtr, PrevPtr &gt;::const_reverse_iterator =  <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1ConstReverseIterator.html">ConstReverseIterator</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00302">302</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+
+</div>
+</div>
 <a id="a62a0a2c1e39551c84364cf3b363c4f96" name="a62a0a2c1e39551c84364cf3b363c4f96"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a62a0a2c1e39551c84364cf3b363c4f96">&#9670;&#160;</a></span>iterator</h2>
 
@@ -310,7 +351,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00157">157</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00299">299</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -347,6 +388,24 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 </div><div class="memdoc">
 
 <p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00044">44</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ae8dea2c8bed7547ca6e0e58de71ea236" name="ae8dea2c8bed7547ca6e0e58de71ea236"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae8dea2c8bed7547ca6e0e58de71ea236">&#9670;&#160;</a></span>reverse_iterator</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;T::prev&gt; </div>
+      <table class="memname">
+        <tr>
+          <td class="memname">using <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html">slick::orderbook::detail::IntrusiveList</a>&lt; T, NextPtr, PrevPtr &gt;::reverse_iterator =  <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1ReverseIterator.html">ReverseIterator</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00301">301</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -414,7 +473,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 
 <p>Constructor. </p>
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00161">161</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00305">305</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -501,7 +560,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00171">171</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00315">315</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -531,7 +590,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00214">214</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00358">358</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -562,7 +621,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 
 <p>Get back element. </p>
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00210">210</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00354">354</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -591,7 +650,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00392">392</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00536">536</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -622,7 +681,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 
 <p>Iterators. </p>
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00388">388</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00532">532</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="price__level__l3_8hpp_source.html#l00048">slick::orderbook::detail::PriceLevelL3::insertOrder()</a>.</p>
 
@@ -653,7 +712,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00396">396</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00540">540</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -682,7 +741,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00408">408</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00552">552</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -713,7 +772,65 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 
 <p>Clear list (does not delete elements) </p>
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00372">372</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00516">516</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a9a7d8d7c7898bff6fef779886cc2359a" name="a9a7d8d7c7898bff6fef779886cc2359a"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a9a7d8d7c7898bff6fef779886cc2359a">&#9670;&#160;</a></span>crbegin()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;T::prev&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a0d329b770d2fdb90cef0867dde368002">const_reverse_iterator</a> <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html">slick::orderbook::detail::IntrusiveList</a>&lt; T, NextPtr, PrevPtr &gt;::crbegin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00565">565</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a038bd6b8431c85f5349740726e952325" name="a038bd6b8431c85f5349740726e952325"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a038bd6b8431c85f5349740726e952325">&#9670;&#160;</a></span>crend()</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;T::prev&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a0d329b770d2fdb90cef0867dde368002">const_reverse_iterator</a> <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html">slick::orderbook::detail::IntrusiveList</a>&lt; T, NextPtr, PrevPtr &gt;::crend </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00577">577</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -744,7 +861,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 
 <p>Check if list is empty. </p>
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00191">191</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00335">335</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="price__level__l3_8hpp_source.html#l00043">slick::orderbook::detail::PriceLevelL3::getBestOrder()</a>, <a class="el" href="price__level__l3_8hpp_source.html#l00039">slick::orderbook::detail::PriceLevelL3::getBestOrder()</a>, and <a class="el" href="price__level__l3_8hpp_source.html#l00034">slick::orderbook::detail::PriceLevelL3::isEmpty()</a>.</p>
 
@@ -775,7 +892,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00404">404</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00548">548</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -804,7 +921,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00400">400</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00544">544</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="price__level__l3_8hpp_source.html#l00048">slick::orderbook::detail::PriceLevelL3::insertOrder()</a>.</p>
 
@@ -838,7 +955,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 
 <p>Remove specific element from list O(1) operation - no search required. </p>
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00294">294</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00438">438</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="price__level__l3_8hpp_source.html#l00065">slick::orderbook::detail::PriceLevelL3::removeOrder()</a>.</p>
 
@@ -869,7 +986,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00205">205</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00349">349</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -900,7 +1017,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 
 <p>Get front element. </p>
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00201">201</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00345">345</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="price__level__l3_8hpp_source.html#l00043">slick::orderbook::detail::PriceLevelL3::getBestOrder()</a>, and <a class="el" href="price__level__l3_8hpp_source.html#l00039">slick::orderbook::detail::PriceLevelL3::getBestOrder()</a>.</p>
 
@@ -944,7 +1061,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 
 <p>Insert element after given position O(1) operation. </p>
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00347">347</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00491">491</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -986,7 +1103,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 
 <p>Insert element before given position O(1) operation. </p>
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00321">321</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00465">465</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="price__level__l3_8hpp_source.html#l00048">slick::orderbook::detail::PriceLevelL3::insertOrder()</a>.</p>
 
@@ -1046,7 +1163,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00178">178</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00322">322</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -1077,7 +1194,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 
 <p>Remove back element. </p>
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00271">271</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00415">415</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -1108,7 +1225,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 
 <p>Remove front element. </p>
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00249">249</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00393">393</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -1140,7 +1257,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 
 <p>Add element to back (oldest order, FIFO time priority) </p>
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00234">234</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00378">378</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="price__level__l3_8hpp_source.html#l00048">slick::orderbook::detail::PriceLevelL3::insertOrder()</a>.</p>
 
@@ -1174,7 +1291,125 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 
 <p>Add element to front (newest order, used for LIFO if needed) </p>
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00219">219</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00363">363</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a79dd86910a086dc24373488f109587e1" name="a79dd86910a086dc24373488f109587e1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a79dd86910a086dc24373488f109587e1">&#9670;&#160;</a></span>rbegin() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;T::prev&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a0d329b770d2fdb90cef0867dde368002">const_reverse_iterator</a> <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html">slick::orderbook::detail::IntrusiveList</a>&lt; T, NextPtr, PrevPtr &gt;::rbegin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00561">561</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a6f8d1b6ac26dcb69bead2e326df065ed" name="a6f8d1b6ac26dcb69bead2e326df065ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6f8d1b6ac26dcb69bead2e326df065ed">&#9670;&#160;</a></span>rbegin() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;T::prev&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#ae8dea2c8bed7547ca6e0e58de71ea236">reverse_iterator</a> <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html">slick::orderbook::detail::IntrusiveList</a>&lt; T, NextPtr, PrevPtr &gt;::rbegin </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p>Reverse iterators. </p>
+
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00557">557</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a02aba035149423e8bf85f628613881ed" name="a02aba035149423e8bf85f628613881ed"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a02aba035149423e8bf85f628613881ed">&#9670;&#160;</a></span>rend() <span class="overload">[1/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;T::prev&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a0d329b770d2fdb90cef0867dde368002">const_reverse_iterator</a> <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html">slick::orderbook::detail::IntrusiveList</a>&lt; T, NextPtr, PrevPtr &gt;::rend </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td> const</td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00573">573</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+
+</div>
+</div>
+<a id="ab3bf64c5da039cf8bc8d352a0b5bdee9" name="ab3bf64c5da039cf8bc8d352a0b5bdee9"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab3bf64c5da039cf8bc8d352a0b5bdee9">&#9670;&#160;</a></span>rend() <span class="overload">[2/2]</span></h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;T::prev&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">constexpr <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#ae8dea2c8bed7547ca6e0e58de71ea236">reverse_iterator</a> <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html">slick::orderbook::detail::IntrusiveList</a>&lt; T, NextPtr, PrevPtr &gt;::rend </td>
+          <td>(</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00569">569</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -1205,7 +1440,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 
 <p>Get number of elements. </p>
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00196">196</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00340">340</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="price__level__l3_8hpp_source.html#l00029">slick::orderbook::detail::PriceLevelL3::orderCount()</a>.</p>
 

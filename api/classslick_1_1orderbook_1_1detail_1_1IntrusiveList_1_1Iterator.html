@@ -93,12 +93,13 @@ $(document).ready(function(){initNavTree('classslick_1_1orderbook_1_1detail_1_1I
   <div class="summary">
 <a href="#pub-types">Public Types</a> &#124;
 <a href="#pub-methods">Public Member Functions</a> &#124;
+<a href="#friends">Friends</a> &#124;
 <a href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator-members.html">List of all members</a>  </div>
   <div class="headertitle"><div class="title">slick::orderbook::detail::IntrusiveList&lt; T, NextPtr, PrevPtr &gt;::Iterator Class Reference</div></div>
 </div><!--header-->
 <div class="contents">
 
-<p>Forward iterator for intrusive list.  
+<p>Forward iterator for intrusive list We store a pointer to the list's tail to handle decrement from <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a3db2d948000d920cc079b003fb175c28">end()</a>  
  <a href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html#details">More...</a></p>
 
 <p><code>#include &lt;<a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>&gt;</code></p>
@@ -125,8 +126,8 @@ Public Types</h2></td></tr>
 Public Member Functions</h2></td></tr>
 <tr class="memitem:aa264ba2dd6487b2f1f5c4858336ccef4" id="r_aa264ba2dd6487b2f1f5c4858336ccef4"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html#aa264ba2dd6487b2f1f5c4858336ccef4">Iterator</a> () noexcept</td></tr>
 <tr class="separator:aa264ba2dd6487b2f1f5c4858336ccef4"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae549d71f20a08ba568db3cec57ea58dc" id="r_ae549d71f20a08ba568db3cec57ea58dc"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html#ae549d71f20a08ba568db3cec57ea58dc">Iterator</a> (T *node) noexcept</td></tr>
-<tr class="separator:ae549d71f20a08ba568db3cec57ea58dc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6aa6b547dedf158c8a95131a5b7cd381" id="r_a6aa6b547dedf158c8a95131a5b7cd381"><td class="memItemLeft" align="right" valign="top">constexpr&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html#a6aa6b547dedf158c8a95131a5b7cd381">Iterator</a> (T *node, T *tail) noexcept</td></tr>
+<tr class="separator:a6aa6b547dedf158c8a95131a5b7cd381"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:abfa7cd62f866391b41b52be92abfed59" id="r_abfa7cd62f866391b41b52be92abfed59"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html#ac670792a1a60999bb22a329a72bbaed3">reference</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html#abfa7cd62f866391b41b52be92abfed59">operator*</a> () const noexcept</td></tr>
 <tr class="separator:abfa7cd62f866391b41b52be92abfed59"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5e88094de41b4bbea3c3e9ed4bff9ec1" id="r_a5e88094de41b4bbea3c3e9ed4bff9ec1"><td class="memItemLeft" align="right" valign="top">constexpr <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html#ae3c0e1b04382234daeec493cd5a1661a">pointer</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html#a5e88094de41b4bbea3c3e9ed4bff9ec1">operator-&gt;</a> () const noexcept</td></tr>
@@ -143,12 +144,17 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a947f0fa701d0e610f201f0dca4f4befe"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a0856bb1aa7743757bf70df25abf69454" id="r_a0856bb1aa7743757bf70df25abf69454"><td class="memItemLeft" align="right" valign="top">constexpr bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html#a0856bb1aa7743757bf70df25abf69454">operator!=</a> (const <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html">Iterator</a> &amp;other) const noexcept</td></tr>
 <tr class="separator:a0856bb1aa7743757bf70df25abf69454"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="friends" name="friends"></a>
+Friends</h2></td></tr>
+<tr class="memitem:a5485970bb9da6b5d782fa28638b5658f" id="r_a5485970bb9da6b5d782fa28638b5658f"><td class="memItemLeft" align="right" valign="top">class&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1Iterator.html#a5485970bb9da6b5d782fa28638b5658f">ConstIterator</a></td></tr>
+<tr class="separator:a5485970bb9da6b5d782fa28638b5658f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><div class="compoundTemplParams">template&lt;typename T, T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;T::prev&gt;<br />
-class slick::orderbook::detail::IntrusiveList&lt; T, NextPtr, PrevPtr &gt;::Iterator</div><p>Forward iterator for intrusive list. </p>
+class slick::orderbook::detail::IntrusiveList&lt; T, NextPtr, PrevPtr &gt;::Iterator</div><p>Forward iterator for intrusive list We store a pointer to the list's tail to handle decrement from <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a3db2d948000d920cc079b003fb175c28">end()</a> </p>
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00049">49</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00050">50</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="a493f82de64fc4fb10bab78f246ae1ec2" name="a493f82de64fc4fb10bab78f246ae1ec2"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#a493f82de64fc4fb10bab78f246ae1ec2">&#9670;&#160;</a></span>difference_type</h2>
@@ -164,7 +170,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00053">53</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00054">54</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -182,7 +188,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00051">51</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00052">52</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -200,7 +206,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00054">54</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00055">55</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -218,7 +224,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00055">55</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00056">56</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -236,7 +242,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00052">52</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00053">53</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -266,12 +272,12 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00057">57</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00058">58</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
-<a id="ae549d71f20a08ba568db3cec57ea58dc" name="ae549d71f20a08ba568db3cec57ea58dc"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae549d71f20a08ba568db3cec57ea58dc">&#9670;&#160;</a></span>Iterator() <span class="overload">[2/2]</span></h2>
+<a id="a6aa6b547dedf158c8a95131a5b7cd381" name="a6aa6b547dedf158c8a95131a5b7cd381"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a6aa6b547dedf158c8a95131a5b7cd381">&#9670;&#160;</a></span>Iterator() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -285,18 +291,28 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
           <td class="memname">constexpr <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html">slick::orderbook::detail::IntrusiveList</a>&lt; T, NextPtr, PrevPtr &gt;::Iterator::Iterator </td>
           <td>(</td>
           <td class="paramtype">T *&#160;</td>
-          <td class="paramname"><em>node</em></td><td>)</td>
+          <td class="paramname"><em>node</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">T *&#160;</td>
+          <td class="paramname"><em>tail</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">explicit</span><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">constexpr</span><span class="mlabel">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00058">58</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00059">59</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -327,7 +343,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00094">94</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00100">100</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -356,7 +372,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00060">60</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00061">61</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -385,7 +401,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00068">68</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00069">69</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -415,7 +431,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00073">73</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00074">74</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -444,7 +460,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00079">79</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00080">80</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -474,7 +490,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00084">84</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00090">90</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -503,7 +519,7 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00064">64</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00065">65</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
@@ -533,7 +549,34 @@ template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00090">90</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00096">96</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Friends And Related Symbol Documentation</h2>
+<a id="a5485970bb9da6b5d782fa28638b5658f" name="a5485970bb9da6b5d782fa28638b5658f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a5485970bb9da6b5d782fa28638b5658f">&#9670;&#160;</a></span>ConstIterator</h2>
+
+<div class="memitem">
+<div class="memproto">
+<div class="memtemplate">
+template&lt;typename T , T *T::* NextPtr = &amp;T::next, T *T::* PrevPtr = &amp;T::prev&gt; </div>
+<table class="mlabels">
+  <tr>
+  <td class="mlabels-left">
+      <table class="memname">
+        <tr>
+          <td class="memname">friend class <a class="el" href="classslick_1_1orderbook_1_1detail_1_1IntrusiveList_1_1ConstIterator.html">ConstIterator</a></td>
+        </tr>
+      </table>
+  </td>
+  <td class="mlabels-right">
+<span class="mlabels"><span class="mlabel">friend</span></span>  </td>
+  </tr>
+</table>
+</div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="intrusive__list_8hpp_source.html#l00105">105</a> of file <a class="el" href="intrusive__list_8hpp_source.html">intrusive_list.hpp</a>.</p>
 
 </div>
 </div>
