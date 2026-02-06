@@ -7,6 +7,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Changed
+
+- **BREAKING CHANGE**: `OrderBookL3::modifyOrder()` signature updated to include timestamp and priority parameters
+  - Old signature: `modifyOrder(OrderId, Price, Quantity, seq_num=0, is_last_in_batch=true)`
+  - New signature: `modifyOrder(OrderId, Price, Quantity, Timestamp new_timestamp, uint64_t new_priority=0, seq_num=0, is_last_in_batch=true)`
+  - `new_timestamp` is now required (no default value)
+  - `new_priority` defaults to 0, meaning "use timestamp as priority" for FIFO ordering (matches `addOrder` behavior)
+  - Priority changes at same price level now trigger re-insertion to maintain correct queue position
+  - Order timestamp and priority are properly updated on modification
+
 ## [1.0.1] - 2026-02-06
 
 ### Added

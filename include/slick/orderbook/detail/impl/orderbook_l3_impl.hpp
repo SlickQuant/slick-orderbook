@@ -64,13 +64,12 @@ SLICK_OB_INLINE bool OrderBookL3::addOrModifyOrder(OrderId order_id, Side side, 
         }
 
         // Idempotent update - nothing to do.
-        if (order->price == price && order->quantity == quantity) {
+        if (order->price == price && order->quantity == quantity && order->priority == priority) {
             return true;
         }
 
-        // Use the provided timestamp for update notifications.
-        order->timestamp = timestamp;
-        return modifyOrder(order_id, price, quantity, seq_num, is_last_in_batch);
+        // Call modifyOrder with the new parameters
+        return modifyOrder(order_id, price, quantity, timestamp, priority, seq_num, is_last_in_batch);
     }
 
     if (SLICK_UNLIKELY(quantity <= 0)) {
@@ -139,6 +138,7 @@ SLICK_OB_INLINE bool OrderBookL3::addOrder(OrderId order_id, Side side, Price pr
 }
 
 SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price, Quantity new_quantity,
+                                               Timestamp new_timestamp, uint64_t new_priority,
                                                uint64_t seq_num, bool is_last_in_batch) {
     // Validate sequence number - reject out-of-order (seq_num < last_seq_num)
     if (seq_num > 0) {
@@ -164,16 +164,20 @@ SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price,
         return deleteOrder(order_id, seq_num, is_last_in_batch);
     }
 
-    const Timestamp timestamp = order->timestamp;  // Use original timestamp for modifications
     const Price old_price = order->price;
     const Quantity old_quantity = order->quantity;
+    const uint64_t old_priority = order->priority;
     const Side side = order->side;
+
+    // Calculate effective priority (0 = use timestamp as priority for FIFO ordering)
+    const uint64_t effective_new_priority = (new_priority == 0) ? new_timestamp : new_priority;
 
     // Check what changed
     const bool price_changed = (new_price != old_price);
     const bool quantity_changed = (new_quantity != old_quantity);
+    const bool priority_changed = (effective_new_priority != old_priority);
 
-    if (!price_changed && !quantity_changed) {
+    if (!price_changed && !quantity_changed && !priority_changed) {
         // No change
         return true;
     }
@@ -196,12 +200,14 @@ SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price,
                 old_level_change_flags |= PriceChanged;
             }
             // Don't add LastInBatch to intermediate old level update
-            notifyPriceLevelUpdate(side, old_price, old_level_total, timestamp, old_level_idx, old_level_change_flags, seq_num);
+            notifyPriceLevelUpdate(side, old_price, old_level_total, new_timestamp, old_level_idx, old_level_change_flags, seq_num);
         }
 
         // Update order fields
         order->price = new_price;
         order->quantity = new_quantity;
+        order->timestamp = new_timestamp;
+        order->priority = effective_new_priority;
 
         // Get or create new level
         auto [new_level, new_level_idx, is_new] = getOrCreateLevel(side, new_price);
@@ -226,22 +232,32 @@ SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price,
             new_level_change_flags |= LastInBatch;
         }
 
-        notifyOrderUpdate(order, old_quantity, old_price, timestamp, new_level_idx, order_flags, seq_num);
-        notifyPriceLevelUpdate(side, new_price, new_level->getTotalQuantity(), timestamp, new_level_idx, new_level_change_flags, seq_num);
+        notifyOrderUpdate(order, old_quantity, old_price, new_timestamp, new_level_idx, order_flags, seq_num);
+        notifyPriceLevelUpdate(side, new_price, new_level->getTotalQuantity(), new_timestamp, new_level_idx, new_level_change_flags, seq_num);
         if (change_starting_index_ == 0 && is_last_in_batch) {
-            notifyTopOfBookIfChanged(timestamp);
+            notifyTopOfBookIfChanged(new_timestamp);
             change_starting_index_ = INVALID_INDEX;
         }
 
     } else {
-        // Only quantity changed
+        // Only quantity or priority changed (price stays the same)
         auto [level, level_index, is_new] = getOrCreateLevel(side, old_price);
 
         change_starting_index_ = std::min<uint16_t>(change_starting_index_, level_index);
 
-        // Update quantity
-        level->updateOrderQuantity(old_quantity, new_quantity);
-        order->quantity = new_quantity;
+        if (priority_changed) {
+            // Priority changed - need to re-insert to maintain correct queue position
+            level->removeOrder(order);
+            order->quantity = new_quantity;
+            order->timestamp = new_timestamp;
+            order->priority = effective_new_priority;
+            level->insertOrder(order);
+        } else {
+            // Only quantity changed - update in place
+            level->updateOrderQuantity(old_quantity, new_quantity);
+            order->quantity = new_quantity;
+            order->timestamp = new_timestamp;
+        }
 
         // Notify observers (only quantity changed)
         uint8_t order_flags = QuantityChanged;
@@ -255,10 +271,10 @@ SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price,
             level_change_flags |= LastInBatch;
         }
 
-        notifyOrderUpdate(order, old_quantity, old_price, timestamp, level_index, order_flags, seq_num);
-        notifyPriceLevelUpdate(side, old_price, level->getTotalQuantity(), timestamp, level_index, level_change_flags, seq_num);
+        notifyOrderUpdate(order, old_quantity, old_price, new_timestamp, level_index, order_flags, seq_num);
+        notifyPriceLevelUpdate(side, old_price, level->getTotalQuantity(), new_timestamp, level_index, level_change_flags, seq_num);
         if (change_starting_index_ == 0 && is_last_in_batch) {
-            notifyTopOfBookIfChanged(timestamp);
+            notifyTopOfBookIfChanged(new_timestamp);
             change_starting_index_ = INVALID_INDEX;
         }
     }
@@ -360,13 +376,16 @@ SLICK_OB_INLINE bool OrderBookL3::executeOrder(OrderId order_id, Quantity execut
     }
 
     const Quantity remaining = order->quantity - executed_quantity;
+    const Timestamp timestamp = order->timestamp;  // Preserve original timestamp
+    const Price price = order->price;              // Preserve price
+    const uint64_t priority = order->priority;     // Preserve priority
 
     if (remaining == 0) {
         // Fully executed - delete order (pass through seq_num and is_last_in_batch)
         return deleteOrder(order_id, seq_num, is_last_in_batch);
     } else {
         // Partial execution - reduce quantity (pass through seq_num and is_last_in_batch)
-        return modifyOrder(order_id, order->price, remaining, seq_num, is_last_in_batch);
+        return modifyOrder(order_id, price, remaining, timestamp, priority, seq_num, is_last_in_batch);
     }
 }
 

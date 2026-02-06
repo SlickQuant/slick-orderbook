@@ -201,11 +201,12 @@ TEST_F(OrderBookL3Test, ModifyOrderQuantity) {
     OrderBookL3 book(kSymbol);
 
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
-    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty20));  // Increase quantity
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty20, kTs2));  // Increase quantity
 
     const auto* order = book.findOrder(kOrder1);
     ASSERT_NE(order, nullptr);
     EXPECT_EQ(order->quantity, kQty20);
+    EXPECT_EQ(order->timestamp, kTs2);
 
     const auto* level = book.getBestBid();
     ASSERT_NE(level, nullptr);
@@ -216,11 +217,12 @@ TEST_F(OrderBookL3Test, ModifyOrderPrice) {
     OrderBookL3 book(kSymbol);
 
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
-    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice101, kQty10));  // Change price
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice101, kQty10, kTs2));  // Change price
 
     const auto* order = book.findOrder(kOrder1);
     ASSERT_NE(order, nullptr);
     EXPECT_EQ(order->price, kPrice101);
+    EXPECT_EQ(order->timestamp, kTs2);
 
     // Old level should be gone
     const auto *old_level = book.getLevel(Side::Buy, kPrice100).first;
@@ -236,12 +238,13 @@ TEST_F(OrderBookL3Test, ModifyOrderPriceAndQuantity) {
     OrderBookL3 book(kSymbol);
 
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
-    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice101, kQty20));  // Change both
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice101, kQty20, kTs2));  // Change both
 
     const auto* order = book.findOrder(kOrder1);
     ASSERT_NE(order, nullptr);
     EXPECT_EQ(order->price, kPrice101);
     EXPECT_EQ(order->quantity, kQty20);
+    EXPECT_EQ(order->timestamp, kTs2);
 
     const auto *new_level = book.getLevel(Side::Buy, kPrice101).first;
     ASSERT_NE(new_level, nullptr);
@@ -252,7 +255,7 @@ TEST_F(OrderBookL3Test, ModifyOrderToZeroQuantityDeletes) {
     OrderBookL3 book(kSymbol);
 
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
-    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, 0));  // Delete via quantity=0
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, 0, kTs2));  // Delete via quantity=0
 
     EXPECT_EQ(book.orderCount(), 0);
     EXPECT_TRUE(book.isEmpty());
@@ -281,19 +284,20 @@ TEST_F(OrderBookL3Test, AddOrModifyZeroQuantityNonExistentReturnsFalse) {
 TEST_F(OrderBookL3Test, ModifyNonExistentOrder) {
     OrderBookL3 book(kSymbol);
 
-    EXPECT_FALSE(book.modifyOrder(kOrder1, kPrice100, kQty10));
+    EXPECT_FALSE(book.modifyOrder(kOrder1, kPrice100, kQty10, kTs1));
 }
 
 TEST_F(OrderBookL3Test, ModifyOrderNoChange) {
     OrderBookL3 book(kSymbol);
 
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
-    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty10));  // No change
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty10, kTs1));  // No change (same timestamp and priority=0)
 
     const auto* order = book.findOrder(kOrder1);
     ASSERT_NE(order, nullptr);
     EXPECT_EQ(order->price, kPrice100);
     EXPECT_EQ(order->quantity, kQty10);
+    EXPECT_EQ(order->timestamp, kTs1);
 }
 
 // ============================================================================
@@ -685,7 +689,7 @@ TEST_F(OrderBookL3Test, ObserverModifyOrder) {
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
     observer->order_update_count = 0;  // Reset
 
-    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty20));
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty20, kTs2));
 
     EXPECT_EQ(observer->order_update_count, 1);
     EXPECT_EQ(observer->last_order_update.quantity, kQty20);
@@ -821,7 +825,7 @@ TEST_F(OrderBookL3Test, BatchFlagModifyOrder) {
     observer->reset();
 
     // Modify in batch
-    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty20, 0, false));  // seq_num=0, qty change, not last
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty20, kTs2, 0, 0, false));  // timestamp, priority=0, seq_num=0, not last
     EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice101, kQty30, kTs2, 0, 0, true));  // priority=0, seq_num=0, last
 
     // Should receive 2 order updates, 2 level updates, 1 ToB
@@ -920,7 +924,7 @@ TEST_F(OrderBookL3Test, BatchFlagMixedOperations) {
     // Note: Must explicitly pass priority=0 and seq_num=0 to reach is_last_in_batch parameter
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty40, kTs1, 0, 0, false));
     EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice101, kQty30, kTs1, 0, 0, false));
-    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty50, 0, false));  // seq_num=0, increase qty
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty50, kTs2, 0, 0, false));  // timestamp, priority=0, seq_num=0, increase qty
     EXPECT_TRUE(book.executeOrder(kOrder2, kQty10, 0, false));             // seq_num=0, partial fill
     EXPECT_TRUE(book.deleteOrder(kOrder1, 0, true));                       // seq_num=0, delete, last
 
@@ -952,7 +956,7 @@ TEST_F(OrderBookL3Test, BatchFlagPriceChangeInBatch) {
     observer->reset();
 
     // Modify price in batch (creates level updates for old and new price)
-    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice101, kQty10, 0, true));  // seq_num=0, last
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice101, kQty10, kTs2, 0, 0, true));  // timestamp, priority=0, seq_num=0, last
 
     // Should receive order update, 2 level updates (old price deletion + new price), 1 ToB
     ASSERT_EQ(observer->order_updates.size(), 1);
@@ -999,7 +1003,7 @@ TEST_F(OrderBookL3Test, SequenceNumberTrackingModifyOrder) {
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 100));
     EXPECT_EQ(book.getLastSeqNum(), 100);
 
-    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty20, 101));
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty20, kTs2, 0, 101));
     EXPECT_EQ(book.getLastSeqNum(), 101);
 }
 
@@ -1046,7 +1050,7 @@ TEST_F(OrderBookL3Test, SequenceNumberRejectOutOfOrderModifyOrder) {
     EXPECT_EQ(book.getLastSeqNum(), 100);
 
     // Try out-of-order modify (should fail)
-    EXPECT_FALSE(book.modifyOrder(kOrder1, kPrice100, kQty20, 99));
+    EXPECT_FALSE(book.modifyOrder(kOrder1, kPrice100, kQty20, kTs2, 0, 99));
     EXPECT_EQ(book.getLastSeqNum(), 100);
 
     // Verify order was NOT modified
@@ -1120,7 +1124,7 @@ TEST_F(OrderBookL3Test, SequenceNumberNoTracking) {
     // All updates without seq_num (default = 0)
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
     EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice101, kQty20, kTs2));
-    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty30));
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty30, kTs3));
     EXPECT_TRUE(book.deleteOrder(kOrder2));
 
     // Sequence number should remain 0

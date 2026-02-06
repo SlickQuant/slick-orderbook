@@ -136,12 +136,16 @@ public:
     /// @param order_id Order identifier
     /// @param new_price New price
     /// @param new_quantity New quantity (0 = delete)
+    /// @param new_timestamp Timestamp of the modification (required)
+    /// @param new_priority New priority (default: 0 = use new_timestamp as priority for FIFO ordering)
+    ///                     Use non-zero to explicitly set queue position priority
     /// @param seq_num Exchange sequence number (0 = no tracking, default)
     ///                Out-of-order updates (seq_num < last_seq_num) are rejected
     /// @param is_last_in_batch Set to true if this is the last update in an external batch
     ///                         (enables batching of TopOfBook updates)
     /// @return true if order was found and modified
     bool modifyOrder(OrderId order_id, Price new_price, Quantity new_quantity,
+                     Timestamp new_timestamp, uint64_t new_priority = 0,
                      uint64_t seq_num = 0, bool is_last_in_batch = true);
 
     /// Delete an order

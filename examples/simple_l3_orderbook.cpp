@@ -136,12 +136,12 @@ int main() {
 
     // Modify an order (quantity)
     std::cout << "--- Modifying order 1001 quantity: 100 -> 150 ---\n";
-    book.modifyOrder(1001, PRICE_15000, 150);
+    book.modifyOrder(1001, PRICE_15000, 150, 8000);  // New timestamp
     printOrderBook(book);
 
     // Modify an order (price)
     std::cout << "--- Moving order 1002 from 15000 to 14990 ---\n";
-    book.modifyOrder(1002, PRICE_14990, 200);
+    book.modifyOrder(1002, PRICE_14990, 200, 9000);  // New timestamp
     printOrderBook(book);
 
     // Execute an order partially
