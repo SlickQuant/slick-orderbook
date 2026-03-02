@@ -150,12 +150,13 @@ public:
 
     /// Delete an order
     /// @param order_id Order identifier
+    /// @param timestamp Timestamp of the deletion (required)
     /// @param seq_num Exchange sequence number (0 = no tracking, default)
     ///                Out-of-order updates (seq_num < last_seq_num) are rejected
     /// @param is_last_in_batch Set to true if this is the last update in an external batch
     ///                         (enables batching of TopOfBook updates)
     /// @return true if order was found and deleted
-    bool deleteOrder(OrderId order_id, uint64_t seq_num = 0, bool is_last_in_batch = true) noexcept;
+    bool deleteOrder(OrderId order_id, Timestamp timestamp, uint64_t seq_num = 0, bool is_last_in_batch = true) noexcept;
 
     /// Execute (partially fill) an order
     /// @param order_id Order identifier

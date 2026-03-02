@@ -151,7 +151,7 @@ int main() {
 
     // Delete an order
     std::cout << "--- Deleting order 1003 ---\n";
-    book.deleteOrder(1003);
+    book.deleteOrder(1003, 10000);  // Timestamp for deletion
     printOrderBook(book);
 
     // Get top of book

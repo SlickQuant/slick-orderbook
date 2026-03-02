@@ -308,7 +308,7 @@ TEST_F(OrderBookL3Test, DeleteOrder) {
     OrderBookL3 book(kSymbol);
 
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
-    EXPECT_TRUE(book.deleteOrder(kOrder1));
+    EXPECT_TRUE(book.deleteOrder(kOrder1, kTs2));  // Timestamp for deletion
 
     EXPECT_EQ(book.orderCount(), 0);
     EXPECT_TRUE(book.isEmpty());
@@ -319,7 +319,7 @@ TEST_F(OrderBookL3Test, DeleteOrder) {
 TEST_F(OrderBookL3Test, DeleteNonExistentOrder) {
     OrderBookL3 book(kSymbol);
 
-    EXPECT_FALSE(book.deleteOrder(kOrder1));
+    EXPECT_FALSE(book.deleteOrder(kOrder1, kTs1));  // Timestamp for deletion
 }
 
 TEST_F(OrderBookL3Test, DeleteOrderLeavesOthersIntact) {
@@ -327,7 +327,7 @@ TEST_F(OrderBookL3Test, DeleteOrderLeavesOthersIntact) {
 
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
     EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice100, kQty20, kTs2));
-    EXPECT_TRUE(book.deleteOrder(kOrder1));
+    EXPECT_TRUE(book.deleteOrder(kOrder1, kTs3));
 
     EXPECT_EQ(book.orderCount(), 1);
     EXPECT_NE(book.findOrder(kOrder2), nullptr);
@@ -341,7 +341,7 @@ TEST_F(OrderBookL3Test, DeleteLastOrderRemovesLevel) {
     OrderBookL3 book(kSymbol);
 
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
-    EXPECT_TRUE(book.deleteOrder(kOrder1));
+    EXPECT_TRUE(book.deleteOrder(kOrder1, kTs2));
 
     EXPECT_EQ(book.levelCount(Side::Buy), 0);
     EXPECT_EQ(book.getLevel(Side::Buy, kPrice100).first, nullptr);
@@ -703,7 +703,7 @@ TEST_F(OrderBookL3Test, ObserverDeleteOrder) {
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
     observer->order_update_count = 0;  // Reset
 
-    EXPECT_TRUE(book.deleteOrder(kOrder1));
+    EXPECT_TRUE(book.deleteOrder(kOrder1, kTs2));
 
     EXPECT_EQ(observer->order_update_count, 1);
     EXPECT_EQ(observer->last_order_update.quantity, 0);  // Quantity=0 means delete
@@ -853,8 +853,8 @@ TEST_F(OrderBookL3Test, BatchFlagDeleteOrder) {
     observer->reset();
 
     // Delete in batch
-    EXPECT_TRUE(book.deleteOrder(kOrder1, 0, false));  // seq_num=0, not last
-    EXPECT_TRUE(book.deleteOrder(kOrder2, 0, true));   // seq_num=0, last
+    EXPECT_TRUE(book.deleteOrder(kOrder1, kTs2, 0, false));  // seq_num=0, not last
+    EXPECT_TRUE(book.deleteOrder(kOrder2, kTs2, 0, true));   // seq_num=0, last
 
     // Should receive 2 order updates, 2 level updates, 1 ToB
     ASSERT_EQ(observer->order_updates.size(), 2);
@@ -1011,7 +1011,7 @@ TEST_F(OrderBookL3Test, SequenceNumberTrackingDeleteOrder) {
     OrderBookL3 book(kSymbol);
 
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 100));
-    EXPECT_TRUE(book.deleteOrder(kOrder1, 101));
+    EXPECT_TRUE(book.deleteOrder(kOrder1, kTs2, 101));
     EXPECT_EQ(book.getLastSeqNum(), 101);
 }
 
@@ -1066,7 +1066,7 @@ TEST_F(OrderBookL3Test, SequenceNumberRejectOutOfOrderDeleteOrder) {
     EXPECT_EQ(book.getLastSeqNum(), 100);
 
     // Try out-of-order delete (should fail)
-    EXPECT_FALSE(book.deleteOrder(kOrder1, 99));
+    EXPECT_FALSE(book.deleteOrder(kOrder1, kTs2, 99));
     EXPECT_EQ(book.getLastSeqNum(), 100);
 
     // Verify order was NOT deleted
@@ -1125,7 +1125,7 @@ TEST_F(OrderBookL3Test, SequenceNumberNoTracking) {
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
     EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice101, kQty20, kTs2));
     EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty30, kTs3));
-    EXPECT_TRUE(book.deleteOrder(kOrder2));
+    EXPECT_TRUE(book.deleteOrder(kOrder2, kTs4));
 
     // Sequence number should remain 0
     EXPECT_EQ(book.getLastSeqNum(), 0);

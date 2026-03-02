@@ -282,7 +282,7 @@ SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price,
     return true;
 }
 
-SLICK_OB_INLINE bool OrderBookL3::deleteOrder(OrderId order_id, uint64_t seq_num, bool is_last_in_batch) noexcept {
+SLICK_OB_INLINE bool OrderBookL3::deleteOrder(OrderId order_id, Timestamp timestamp, uint64_t seq_num, bool is_last_in_batch) noexcept {
     // Validate sequence number - reject out-of-order (seq_num < last_seq_num)
     if (seq_num > 0) {
         if (seq_num < last_seq_num_) {
@@ -298,7 +298,7 @@ SLICK_OB_INLINE bool OrderBookL3::deleteOrder(OrderId order_id, uint64_t seq_num
         return false;
     }
 
-    const Timestamp timestamp = order->timestamp;
+    order->timestamp = timestamp;  // Update timestamp for deletion event
     const Price price = order->price;
     const Side side = order->side;
 
