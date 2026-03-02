@@ -1,7 +1,7 @@
 var searchData=
 [
-  ['abstractions_0',['Zero-Cost Abstractions',['../index.html#autotoc_md13',1,'']]],
-  ['acknowledgments_1',['🙏 Acknowledgments',['../index.html#autotoc_md21',1,'']]],
+  ['abstractions_0',['Zero-Cost Abstractions',['../index.html#autotoc_md14',1,'']]],
+  ['acknowledgments_1',['🙏 Acknowledgments',['../index.html#autotoc_md22',1,'']]],
   ['addobserver_2',['addobserver',['../classslick_1_1orderbook_1_1ObserverManager.html#a21dca3bf476ca7aa70bac0d400813815',1,'slick::orderbook::ObserverManager::addObserver()'],['../classslick_1_1orderbook_1_1OrderBookL2.html#ad0f5af7f001d1969f0a3758043ea2e8a',1,'slick::orderbook::OrderBookL2::addObserver()'],['../classslick_1_1orderbook_1_1OrderBookL3.html#a423aced09917adba52ead266c74baa6f',1,'slick::orderbook::OrderBookL3::addObserver(std::shared_ptr&lt; IOrderBookObserver &gt; observer)']]],
   ['addorder_3',['addOrder',['../classslick_1_1orderbook_1_1OrderBookL3.html#a661967109dd7370a8982855c7c9d10c0',1,'slick::orderbook::OrderBookL3']]],
   ['addormodifyorder_4',['addOrModifyOrder',['../classslick_1_1orderbook_1_1OrderBookL3.html#a399cff2a902348934cf52e1af319dffe',1,'slick::orderbook::OrderBookL3']]],
@@ -15,7 +15,7 @@ var searchData=
   ['allocated_20memory_12',['ObjectPool - Pre-Allocated Memory',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md38',1,'']]],
   ['allocation_20order_20queue_13',['IntrusiveList - Zero-Allocation Order Queue',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md37',1,'']]],
   ['architecture_20guide_14',['Slick OrderBook - Architecture Guide',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html',1,'']]],
-  ['architecture_20highlights_15',['🏗️ Architecture Highlights',['../index.html#autotoc_md11',1,'']]],
+  ['architecture_20highlights_15',['🏗️ Architecture Highlights',['../index.html#autotoc_md12',1,'']]],
   ['architecture_20principles_16',['Architecture Principles',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md28',1,'']]],
   ['architecture_2emd_17',['ARCHITECTURE.md',['../ARCHITECTURE_8md.html',1,'']]],
   ['arithmetic_18',['8. Use Fixed-Point Arithmetic',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md95',1,'']]],

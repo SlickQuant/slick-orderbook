@@ -13,7 +13,7 @@ var classslick_1_1orderbook_1_1OrderBookL3 =
     [ "clear", "classslick_1_1orderbook_1_1OrderBookL3.html#a5a072bccd45586994f0c448ae0ce751a", null ],
     [ "clearObservers", "classslick_1_1orderbook_1_1OrderBookL3.html#aa5a8b8ffbb57f7af2e6a603b71d66116", null ],
     [ "clearSide", "classslick_1_1orderbook_1_1OrderBookL3.html#a26caa78988bb1a3950e905ff12e2dea4", null ],
-    [ "deleteOrder", "classslick_1_1orderbook_1_1OrderBookL3.html#a36e6971be4c1b8a84c9e8574180fdd43", null ],
+    [ "deleteOrder", "classslick_1_1orderbook_1_1OrderBookL3.html#a77fb106c823107179b903f56165ace86", null ],
     [ "emitSnapshot", "classslick_1_1orderbook_1_1OrderBookL3.html#a716189c2480de8adecec25681ca60031", null ],
     [ "executeOrder", "classslick_1_1orderbook_1_1OrderBookL3.html#a7ebc08169c83644aef738ff7c3b20156", null ],
     [ "findOrder", "classslick_1_1orderbook_1_1OrderBookL3.html#adbad0016a8395568bf736a7cb28c42d5", null ],
