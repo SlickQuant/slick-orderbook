@@ -25,7 +25,7 @@
 var NAVTREE =
 [
   [ "Slick OrderBook", "index.html", [
-    [ "✨ Features", "index.html#autotoc_md1", null ],
+    [ "✨ Features", "index.html#autotoc_md2", null ],
     [ "📈 Performance", "index.html#autotoc_md3", null ],
     [ "🚀 Quick Start", "index.html#autotoc_md4", [
       [ "Prerequisites", "index.html#autotoc_md5", null ],

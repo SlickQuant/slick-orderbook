@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['features_0',['✨ Features',['../index.html#autotoc_md1',1,'']]],
+  ['features_0',['✨ Features',['../index.html#autotoc_md2',1,'']]],
   ['fetchcontent_1',['CMake FetchContent',['../index.html#autotoc_md17',1,'']]],
   ['filter_20events_20at_20the_20observer_2',['4. Filter Events at the Observer',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md91',1,'']]],
   ['find_3',['find',['../classslick_1_1orderbook_1_1detail_1_1LevelContainer.html#a5deb62ddb7a14f63e5634eaba4f39d1f',1,'slick::orderbook::detail::LevelContainer::find(Price price) noexcept'],['../classslick_1_1orderbook_1_1detail_1_1LevelContainer.html#ad3f2ba16850d7ffe0abffba138ca7662',1,'slick::orderbook::detail::LevelContainer::find(Price price) const noexcept'],['../classslick_1_1orderbook_1_1detail_1_1OrderMap.html#ab508f53916f145e8138da286c5c27393',1,'slick::orderbook::detail::OrderMap::find(OrderId order_id) noexcept'],['../classslick_1_1orderbook_1_1detail_1_1OrderMap.html#a42961873a3e07fb921cf8a827d313664',1,'slick::orderbook::detail::OrderMap::find(OrderId order_id) const noexcept']]],
