@@ -18,7 +18,7 @@ SLICK_NAMESPACE_BEGIN
 using Price = int64_t;
 
 /// Quantity type - volume or size
-using Quantity = int64_t;
+using Quantity = uint64_t;
 
 /// Unique order identifier
 using OrderId = uint64_t;

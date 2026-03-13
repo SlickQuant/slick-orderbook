@@ -16,6 +16,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `new_priority` defaults to 0, meaning "use timestamp as priority" for FIFO ordering (matches `addOrder` behavior)
   - Priority changes at same price level now trigger re-insertion to maintain correct queue position
   - Order timestamp and priority are properly updated on modification
+- Changed Quantity from int64_t to uint64_t
 
 ## [1.0.1] - 2026-02-06
 
