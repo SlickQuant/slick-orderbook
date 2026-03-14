@@ -25,31 +25,31 @@
 var NAVTREE =
 [
   [ "Slick OrderBook", "index.html", [
-    [ "✨ Features", "index.html#autotoc_md2", null ],
-    [ "📈 Performance", "index.html#autotoc_md3", null ],
-    [ "🚀 Quick Start", "index.html#autotoc_md4", [
-      [ "Prerequisites", "index.html#autotoc_md5", null ],
-      [ "Installation", "index.html#autotoc_md6", null ],
-      [ "Basic Usage - Level 2 OrderBook", "index.html#autotoc_md7", null ],
-      [ "Basic Usage - Level 3 OrderBook", "index.html#autotoc_md8", null ],
-      [ "Multi-Symbol Management", "index.html#autotoc_md9", null ],
-      [ "Observer Pattern - Real-Time Notifications", "index.html#autotoc_md10", null ]
+    [ "✨ Features", "index.html#autotoc_md1", null ],
+    [ "📈 Performance", "index.html#autotoc_md2", null ],
+    [ "🚀 Quick Start", "index.html#autotoc_md3", [
+      [ "Prerequisites", "index.html#autotoc_md4", null ],
+      [ "Installation", "index.html#autotoc_md5", null ],
+      [ "Basic Usage - Level 2 OrderBook", "index.html#autotoc_md6", null ],
+      [ "Basic Usage - Level 3 OrderBook", "index.html#autotoc_md7", null ],
+      [ "Multi-Symbol Management", "index.html#autotoc_md8", null ],
+      [ "Observer Pattern - Real-Time Notifications", "index.html#autotoc_md9", null ]
     ] ],
-    [ "📚 Documentation", "index.html#autotoc_md11", null ],
-    [ "🏗️ Architecture Highlights", "index.html#autotoc_md12", [
-      [ "Cache-Optimized Data Structures", "index.html#autotoc_md13", null ],
-      [ "Zero-Cost Abstractions", "index.html#autotoc_md14", null ]
+    [ "📚 Documentation", "index.html#autotoc_md10", null ],
+    [ "🏗️ Architecture Highlights", "index.html#autotoc_md11", [
+      [ "Cache-Optimized Data Structures", "index.html#autotoc_md12", null ],
+      [ "Zero-Cost Abstractions", "index.html#autotoc_md13", null ]
     ] ],
-    [ "🔧 CMake Options", "index.html#autotoc_md15", null ],
-    [ "📦 Integration", "index.html#autotoc_md16", [
-      [ "CMake FetchContent", "index.html#autotoc_md17", null ],
-      [ "Header-Only Mode", "index.html#autotoc_md18", null ]
+    [ "🔧 CMake Options", "index.html#autotoc_md14", null ],
+    [ "📦 Integration", "index.html#autotoc_md15", [
+      [ "CMake FetchContent", "index.html#autotoc_md16", null ],
+      [ "Header-Only Mode", "index.html#autotoc_md17", null ]
     ] ],
-    [ "🧪 Testing", "index.html#autotoc_md19", null ],
-    [ "📊 Benchmarking", "index.html#autotoc_md20", null ],
-    [ "📄 License", "index.html#autotoc_md21", null ],
-    [ "🙏 Acknowledgments", "index.html#autotoc_md22", null ],
-    [ "📧 Contact", "index.html#autotoc_md23", null ],
+    [ "🧪 Testing", "index.html#autotoc_md18", null ],
+    [ "📊 Benchmarking", "index.html#autotoc_md19", null ],
+    [ "📄 License", "index.html#autotoc_md20", null ],
+    [ "🙏 Acknowledgments", "index.html#autotoc_md21", null ],
+    [ "📧 Contact", "index.html#autotoc_md22", null ],
     [ "Slick OrderBook - Architecture Guide", "md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html", [
       [ "Table of Contents", "md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md25", null ],
       [ "Overview", "md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md27", [
@@ -189,10 +189,10 @@ var NAVTREE =
 var NAVTREEINDEX =
 [
 "annotated.html",
-"classslick_1_1orderbook_1_1OrderBookManager.html#ab3d57aa7b801e717fb479a22aac6d821",
-"classslick_1_1orderbook_1_1detail_1_1LevelContainer.html#a59a88ae73919b0e6e337287ebd930bde",
-"md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md25",
-"structslick_1_1orderbook_1_1TopOfBook.html#a811de8d7cd5c359af99536a9843c9f02"
+"classslick_1_1orderbook_1_1OrderBookManager.html#a92a06af3d664ae4720b469c9b93ee3e2",
+"classslick_1_1orderbook_1_1detail_1_1LevelContainer.html#a520699325a89f7a49bd5b66a362326eb",
+"level__container_8hpp_source.html",
+"structslick_1_1orderbook_1_1TopOfBook.html#a69ea97e9d8877f67fe4110879d889cf6"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';

@@ -2,7 +2,7 @@ var classslick_1_1orderbook_1_1OrderBookL3 =
 [
     [ "PriceComparator", "structslick_1_1orderbook_1_1OrderBookL3_1_1PriceComparator.html", "structslick_1_1orderbook_1_1OrderBookL3_1_1PriceComparator" ],
     [ "PriceLevelMap", "classslick_1_1orderbook_1_1OrderBookL3.html#a2c51e1ef936d11ada68d769adf0f85a5", null ],
-    [ "OrderBookL3", "classslick_1_1orderbook_1_1OrderBookL3.html#ab75442dd083ddb3453b5c295fedf09be", null ],
+    [ "OrderBookL3", "classslick_1_1orderbook_1_1OrderBookL3.html#a2f4248fd4a84dd3748db9e370c667bad", null ],
     [ "~OrderBookL3", "classslick_1_1orderbook_1_1OrderBookL3.html#af36be127f12c835ecb1bfc9d86cf1d0e", null ],
     [ "OrderBookL3", "classslick_1_1orderbook_1_1OrderBookL3.html#a09a4edf4cfe3de3bf9715d72bedee5aa", null ],
     [ "OrderBookL3", "classslick_1_1orderbook_1_1OrderBookL3.html#a541902c3a22b585afabcae119b9c42d1", null ],
@@ -46,6 +46,7 @@ var classslick_1_1orderbook_1_1OrderBookL3 =
     [ "symbol", "classslick_1_1orderbook_1_1OrderBookL3.html#a0d3132db28ec32fae7eea853f073d356", null ],
     [ "cached_tob_", "classslick_1_1orderbook_1_1OrderBookL3.html#aeb986c0dbd03b7993b66f8a010debb88", null ],
     [ "change_starting_index_", "classslick_1_1orderbook_1_1OrderBookL3.html#abf0a6d21494ce21d6bd94881e848cc18", null ],
+    [ "interested_num_levels_", "classslick_1_1orderbook_1_1OrderBookL3.html#a440bc654e09137d77d0699ef71efe3ee", null ],
     [ "last_seq_num_", "classslick_1_1orderbook_1_1OrderBookL3.html#a0bf1b75d51d545d24af3f9f3e7ea0a82", null ],
     [ "levels_", "classslick_1_1orderbook_1_1OrderBookL3.html#ab11202bf24067cde77dc75c25563f6b6", null ],
     [ "observers_", "classslick_1_1orderbook_1_1OrderBookL3.html#ab765edb4323d6cf005f56c3d9ce42cad", null ],
