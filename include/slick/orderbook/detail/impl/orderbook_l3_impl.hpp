@@ -12,12 +12,14 @@
 SLICK_NAMESPACE_BEGIN
 
 SLICK_OB_INLINE OrderBookL3::OrderBookL3(SymbolId symbol,
+                         std::size_t interested_num_levels,
                          std::size_t initial_order_capacity,
                          std::size_t initial_level_capacity)
     : symbol_(symbol),
       order_map_(initial_order_capacity),
       order_pool_(initial_order_capacity),
-      last_seq_num_(0) {
+      last_seq_num_(0),
+      interested_num_levels_(interested_num_levels) {
     // Initialize level maps with comparators
     // Note: Clang-17 with GCC-14 libstdc++ has issues with aggregate initialization
     // Use constructor syntax instead of brace initialization to avoid C++23 tuple conversion issues
@@ -654,6 +656,10 @@ SLICK_OB_INLINE void OrderBookL3::notifyTrade(OrderId passive_order_id, OrderId 
 SLICK_OB_INLINE void OrderBookL3::notifyPriceLevelUpdate(Side side, Price price, Quantity total_quantity,
                                          Timestamp timestamp, uint16_t level_index,
                                          uint8_t change_flags, uint64_t seq_num) const {
+    if (interested_num_levels_ > 0 && level_index >= interested_num_levels_) {
+        // Skip notifications for levels beyond the interested range
+        return;
+    }
     PriceLevelUpdate update{
         symbol_,
         side,

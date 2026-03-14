@@ -81,9 +81,11 @@ public:
 
     /// Constructor
     /// @param symbol Symbol identifier
+    /// @param interested_num_levels The top N levels to track for observer notifications (0 = all levels)
     /// @param initial_order_capacity Initial capacity for order pool
     /// @param initial_level_capacity Initial capacity for price levels per side
     explicit OrderBookL3(SymbolId symbol,
+                        std::size_t interested_num_levels = 10,
                         std::size_t initial_order_capacity = 1024,
                         std::size_t initial_level_capacity = 32);
 
@@ -314,6 +316,7 @@ protected:
     TopOfBook cached_tob_;                                      // Cached top-of-book for efficient change detection
     uint64_t last_seq_num_;                                     // Last processed sequence number (0 = not tracking)
     uint16_t change_starting_index_ = INVALID_INDEX;            // The lowerest level had changed in a batch. The value reset to INVALID_INDEX after TopOfBook change notified
+    std::size_t interested_num_levels_;                         // The top N levels to track for observer notifications (0 = all levels)
 };
 
 SLICK_NAMESPACE_END

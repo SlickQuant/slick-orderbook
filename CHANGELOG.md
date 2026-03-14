@@ -7,6 +7,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Added
+
+- **OrderBookL3**: Add `interested_num_levels` parameter to constructor for efficient top-N level tracking
+  - New constructor signature includes optional `interested_num_levels` parameter (defaults to 10)
+  - When set to a non-zero value, only top-N level changes trigger observer notifications
+  - Setting to 0 maintains backward compatibility (all levels trigger notifications)
+  - Reduces observer overhead for use cases that only care about top of book
+
 ### Changed
 
 - **BREAKING CHANGE**: `OrderBookL3::modifyOrder()` signature updated to include timestamp and priority parameters
@@ -16,7 +24,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `new_priority` defaults to 0, meaning "use timestamp as priority" for FIFO ordering (matches `addOrder` behavior)
   - Priority changes at same price level now trigger re-insertion to maintain correct queue position
   - Order timestamp and priority are properly updated on modification
-- Changed Quantity from int64_t to uint64_t
+- **BREAKING CHANGE**: `OrderBookL3::deleteOrder()` signature updated to include timestamp parameter
+  - Old signature: `deleteOrder(OrderId, seq_num=0, is_last_in_batch=true)`
+  - New signature: `deleteOrder(OrderId, Timestamp timestamp, seq_num=0, is_last_in_batch=true)`
+  - `timestamp` is now required (no default value)
+- Changed Quantity type from int64_t to uint64_t in types.hpp
+  - Negative quantities are now invalid at the type system level
+  - Prevents semantic errors and improves type safety
 
 ## [1.0.1] - 2026-02-06
 
