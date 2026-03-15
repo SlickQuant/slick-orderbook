@@ -326,12 +326,12 @@ protected:
 };
 
 template<>
-inline [[nodiscard]] const detail::PriceLevelL3* OrderBookL3::getBestLevel<Side::Buy>() const noexcept {
+inline const detail::PriceLevelL3* OrderBookL3::getBestLevel<Side::Buy>() const noexcept {
     return getBestBid();
 }
 
 template<>
-inline [[nodiscard]] const detail::PriceLevelL3* OrderBookL3::getBestLevel<Side::Sell>() const noexcept {
+inline const detail::PriceLevelL3* OrderBookL3::getBestLevel<Side::Sell>() const noexcept {
     return getBestAsk();
 }   
 
