@@ -19,6 +19,7 @@ var classslick_1_1orderbook_1_1OrderBookL3 =
     [ "findOrder", "classslick_1_1orderbook_1_1OrderBookL3.html#adbad0016a8395568bf736a7cb28c42d5", null ],
     [ "getBestAsk", "classslick_1_1orderbook_1_1OrderBookL3.html#aff5e973c0d7e4ff3282320ea06297861", null ],
     [ "getBestBid", "classslick_1_1orderbook_1_1OrderBookL3.html#a96f0870cbf550ec30387c66b91a8b70c", null ],
+    [ "getBestLevel", "classslick_1_1orderbook_1_1OrderBookL3.html#ab9dee3d0c6d44603d05b8a83c547a4d5", null ],
     [ "getLastSeqNum", "classslick_1_1orderbook_1_1OrderBookL3.html#a1d3d8f87e2a1c278a481908c5cf9114d", null ],
     [ "getLevel", "classslick_1_1orderbook_1_1OrderBookL3.html#a15b36dc4bb9c2bddddd2021e003d0ea5", null ],
     [ "getLevel", "classslick_1_1orderbook_1_1OrderBookL3.html#a4a6833de9578fa1b3822f20022243e59", null ],

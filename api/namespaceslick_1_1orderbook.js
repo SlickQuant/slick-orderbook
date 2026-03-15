@@ -39,6 +39,8 @@ var namespaceslick_1_1orderbook =
       [ "SideCount", "namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa56a009067e9371321220db3326eddc61", null ]
     ] ],
     [ "opposite", "namespaceslick_1_1orderbook.html#a76596b90680db7a80290903cd8c0c075", null ],
+    [ "OrderBookL3::getBestLevel< Side::Buy >", "namespaceslick_1_1orderbook.html#a85d3d5d42a607d0f609903a82d6ab004", null ],
+    [ "OrderBookL3::getBestLevel< Side::Sell >", "namespaceslick_1_1orderbook.html#a6ed34b5fa5d3600ec0aacc9513b921af", null ],
     [ "toString", "namespaceslick_1_1orderbook.html#aa03bb53f742a2199fd77a62a8e31fa46", null ],
     [ "toString", "namespaceslick_1_1orderbook.html#a6d54fe8535b890b1a7b67d207764d45f", null ],
     [ "INVALID_INDEX", "namespaceslick_1_1orderbook.html#a8f35c17374c9cdb79082dbc6576f0587", null ]
