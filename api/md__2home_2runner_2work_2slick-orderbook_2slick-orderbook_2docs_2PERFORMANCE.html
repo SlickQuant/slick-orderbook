@@ -93,8 +93,8 @@ $(document).ready(function(){initNavTree('md__2home_2runner_2work_2slick-orderbo
   <div class="headertitle"><div class="title">Performance Guide</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md25"></a> This guide provides best practices and recommendations for achieving optimal performance with Slick OrderBook.</p>
-<h1><a class="anchor" id="autotoc_md53"></a>
+<div class="textblock"><p><a class="anchor" id="autotoc_md80"></a> This guide provides best practices and recommendations for achieving optimal performance with Slick OrderBook.</p>
+<h1><a class="anchor" id="autotoc_md81"></a>
 Table of Contents</h1>
 <ol type="1">
 <li>Performance Characteristics</li>
@@ -105,9 +105,9 @@ Table of Contents</h1>
 <li>Profiling</li>
 </ol>
 <hr  />
-<h1><a class="anchor" id="autotoc_md56"></a>
+<h1><a class="anchor" id="autotoc_md83"></a>
 Performance Characteristics</h1>
-<h2><a class="anchor" id="autotoc_md58"></a>
+<h2><a class="anchor" id="autotoc_md84"></a>
 Measured Performance (p99 Latency)</h2>
 <p>All measurements on modern x86-64 CPU (3.0+ GHz):</p>
 <table class="markdownTable">
@@ -146,7 +146,7 @@ Measured Performance (p99 Latency)</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">1000 symbols   </td><td class="markdownTableBodyNone">2.7M items/s   </td><td class="markdownTableBodyNone">-   </td><td class="markdownTableBodyNone">-   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md72"></a>
+<h2><a class="anchor" id="autotoc_md85"></a>
 Memory Footprint</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -163,9 +163,9 @@ Memory Footprint</h2>
 <td class="markdownTableBodyNone">1000 L2 symbols   </td><td class="markdownTableBodyNone">~320 KB base + level data   </td></tr>
 </table>
 <hr  />
-<h1><a class="anchor" id="autotoc_md78"></a>
+<h1><a class="anchor" id="autotoc_md87"></a>
 Best Practices</h1>
-<h2><a class="anchor" id="autotoc_md79"></a>
+<h2><a class="anchor" id="autotoc_md88"></a>
 1. Choose the Right Orderbook Type</h2>
 <p><b>Use OrderBookL2 when:</b></p>
 <ul>
@@ -186,14 +186,14 @@ Best Practices</h1>
 <li>L2 is ~2-3x faster than L3 for updates</li>
 <li>L2 uses ~30x less memory than L3 (for 1000 orders)</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md80"></a>
+<h2><a class="anchor" id="autotoc_md89"></a>
 2. Pre-Allocate When Possible</h2>
 <p><b>ObjectPool Pre-Allocation:</b></p>
 <div class="fragment"><div class="line">OrderBookL3 book(symbol_id);</div>
 <div class="line"><span class="comment">// Pre-allocate space for expected order count</span></div>
 <div class="line">book.reserve(1000);  <span class="comment">// Avoids pool growth during trading hours</span></div>
 </div><!-- fragment --><p><b>Benefit</b>: Eliminates allocation overhead during hot path.</p>
-<h2><a class="anchor" id="autotoc_md82"></a>
+<h2><a class="anchor" id="autotoc_md90"></a>
 3. Use Batch Updates for Snapshots</h2>
 <p><b>Don't:</b></p>
 <div class="fragment"><div class="line"><span class="keywordflow">for</span> (<span class="keyword">const</span> <span class="keyword">auto</span>&amp; level : snapshot) {</div>
@@ -204,7 +204,7 @@ Best Practices</h1>
 <div class="fragment"><div class="line"><span class="comment">// Notify observers once for the entire snapshot</span></div>
 <div class="line">book.emitSnapshot(seq_num, timestamp);</div>
 </div><!-- fragment --><p><b>Benefit</b>: Reduces observer overhead from O(n) notifications to O(1).</p>
-<h2><a class="anchor" id="autotoc_md84"></a>
+<h2><a class="anchor" id="autotoc_md91"></a>
 4. Filter Events at the Observer</h2>
 <p><b>Efficient Top-N Filtering:</b></p>
 <div class="fragment"><div class="line"><span class="keyword">class </span>TopNObserver : <span class="keyword">public</span> IOrderBookObserver {</div>
@@ -216,7 +216,7 @@ Best Practices</h1>
 <div class="line">    }</div>
 <div class="line">};</div>
 </div><!-- fragment --><p><b>Benefit</b>: Reduces processing overhead for deep orderbooks.</p>
-<h2><a class="anchor" id="autotoc_md85"></a>
+<h2><a class="anchor" id="autotoc_md92"></a>
 5. Minimize Observer Count</h2>
 <p><b>Each observer adds ~2-3ns per event:</b></p>
 <ul>
@@ -225,7 +225,7 @@ Best Practices</h1>
 <li>100 observers: ~200ns overhead</li>
 </ul>
 <p><b>Recommendation</b>: Aggregate multiple consumers into a single observer when possible.</p>
-<h2><a class="anchor" id="autotoc_md87"></a>
+<h2><a class="anchor" id="autotoc_md93"></a>
 6. Use Const References</h2>
 <p><b>Don't:</b></p>
 <div class="fragment"><div class="line">std::vector&lt;PriceLevelL2&gt; levels = book.getLevelsL2(Side::Buy);  <span class="comment">// COPY!</span></div>
@@ -235,7 +235,7 @@ Best Practices</h1>
 <div class="line">    <span class="comment">// Process level</span></div>
 <div class="line">}</div>
 </div><!-- fragment --><p><b>Benefit</b>: Eliminates unnecessary copies.</p>
-<h2><a class="anchor" id="autotoc_md90"></a>
+<h2><a class="anchor" id="autotoc_md94"></a>
 7. Cache TopOfBook Queries</h2>
 <p><b>If querying multiple times per update:</b></p>
 <div class="fragment"><div class="line"><span class="comment">// Cache the result</span></div>
@@ -243,7 +243,7 @@ Best Practices</h1>
 <div class="line">Price spread = tob.getSpread();</div>
 <div class="line">Price mid = tob.getMidPrice();</div>
 </div><!-- fragment --><p><b>Note</b>: <code>getTopOfBook()</code> is already O(1) (0.25ns), but avoiding multiple calls helps.</p>
-<h2><a class="anchor" id="autotoc_md92"></a>
+<h2><a class="anchor" id="autotoc_md95"></a>
 8. Use Fixed-Point Arithmetic</h2>
 <p><b>Prices are stored as <code>int64_t</code>:</b></p>
 <div class="fragment"><div class="line"><span class="comment">// For 4 decimal places: multiply by 10000</span></div>
@@ -253,7 +253,7 @@ Best Practices</h1>
 <div class="line"><span class="comment">// To display:</span></div>
 <div class="line"><span class="keywordtype">double</span> display_price = <span class="keyword">static_cast&lt;</span><span class="keywordtype">double</span><span class="keyword">&gt;</span>(price) / 10000.0;</div>
 </div><!-- fragment --><p><b>Benefit</b>: Avoids floating-point precision issues and is faster.</p>
-<h2><a class="anchor" id="autotoc_md95"></a>
+<h2><a class="anchor" id="autotoc_md96"></a>
 9. Thread Affinity for Critical Paths</h2>
 <p><b>Pin orderbook update thread to dedicated CPU core:</b></p>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;pthread.h&gt;</span></div>
