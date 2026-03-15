@@ -14,6 +14,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - When set to a non-zero value, only top-N level changes trigger observer notifications
   - Setting to 0 maintains backward compatibility (all levels trigger notifications)
   - Reduces observer overhead for use cases that only care about top of book
+- **OrderBookL3**: Add template method `getBestLevel<Side>()` for compile-time side selection
+  - Returns pointer to best price level for the specified side (Buy or Sell)
+  - Template specializations for `Side::Buy` and `Side::Sell`
+  - More efficient than runtime branching for side-agnostic algorithms
+  - Returns `nullptr` if no orders exist on that side
 
 ### Changed
 

@@ -176,6 +176,12 @@ public:
     /// @return Pointer to order, or nullptr if not found
     [[nodiscard]] const detail::Order* findOrder(OrderId order_id) const noexcept;
 
+    /// Get the best price level for a given side
+    /// @tparam SIDE 
+    /// @return Pointer to the best price level, or nullptr if no orders exist on that side
+    template<Side SIDE>
+    [[nodiscard]] const detail::PriceLevelL3* getBestLevel() const noexcept;
+
     /// Get best bid (highest buy price)
     /// @return Pointer to best bid level, or nullptr if no bids
     [[nodiscard]] const detail::PriceLevelL3* getBestBid() const noexcept;
@@ -318,6 +324,16 @@ protected:
     uint16_t change_starting_index_ = INVALID_INDEX;            // The lowerest level had changed in a batch. The value reset to INVALID_INDEX after TopOfBook change notified
     std::size_t interested_num_levels_;                         // The top N levels to track for observer notifications (0 = all levels)
 };
+
+template<>
+inline [[nodiscard]] const detail::PriceLevelL3* OrderBookL3::getBestLevel<Side::Buy>() const noexcept {
+    return getBestBid();
+}
+
+template<>
+inline [[nodiscard]] const detail::PriceLevelL3* OrderBookL3::getBestLevel<Side::Sell>() const noexcept {
+    return getBestAsk();
+}   
 
 SLICK_NAMESPACE_END
 
