@@ -355,7 +355,7 @@ TEST_F(OrderBookL3Test, ExecuteOrderPartially) {
     OrderBookL3 book(kSymbol);
 
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty30, kTs1));
-    EXPECT_TRUE(book.executeOrder(kOrder1, kQty10));  // Execute 10 out of 30
+    EXPECT_TRUE(book.executeOrder(kOrder1, kQty10, kTs2));  // Execute 10 out of 30
 
     const auto* order = book.findOrder(kOrder1);
     ASSERT_NE(order, nullptr);
@@ -370,7 +370,7 @@ TEST_F(OrderBookL3Test, ExecuteOrderFully) {
     OrderBookL3 book(kSymbol);
 
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
-    EXPECT_TRUE(book.executeOrder(kOrder1, kQty10));  // Execute fully
+    EXPECT_TRUE(book.executeOrder(kOrder1, kQty10, kTs2));  // Execute fully
 
     EXPECT_EQ(book.orderCount(), 0);
     EXPECT_TRUE(book.isEmpty());
@@ -380,7 +380,7 @@ TEST_F(OrderBookL3Test, ExecuteOrderFully) {
 TEST_F(OrderBookL3Test, ExecuteNonExistentOrder) {
     OrderBookL3 book(kSymbol);
 
-    EXPECT_FALSE(book.executeOrder(kOrder1, kQty10));
+    EXPECT_FALSE(book.executeOrder(kOrder1, kQty10, kTs1));
 }
 
 // ============================================================================
@@ -882,8 +882,8 @@ TEST_F(OrderBookL3Test, BatchFlagExecuteOrder) {
     observer->reset();
 
     // Execute in batch (partial fills)
-    EXPECT_TRUE(book.executeOrder(kOrder1, kQty10, 0, false));  // seq_num=0, partial, not last
-    EXPECT_TRUE(book.executeOrder(kOrder1, kQty10, 0, true));   // seq_num=0, partial, last
+    EXPECT_TRUE(book.executeOrder(kOrder1, kQty10, kTs2, 0, false));  // seq_num=0, partial, not last
+    EXPECT_TRUE(book.executeOrder(kOrder1, kQty10, kTs2, 0, true));   // seq_num=0, partial, last
 
     // Should receive 2 order updates (modify qty), 2 level updates, 1 ToB
     ASSERT_EQ(observer->order_updates.size(), 2);
@@ -925,7 +925,7 @@ TEST_F(OrderBookL3Test, BatchFlagMixedOperations) {
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty40, kTs1, 0, 0, false));
     EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice101, kQty30, kTs1, 0, 0, false));
     EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty50, kTs2, 0, 0, false));  // timestamp, priority=0, seq_num=0, increase qty
-    EXPECT_TRUE(book.executeOrder(kOrder2, kQty10, 0, false));             // seq_num=0, partial fill
+    EXPECT_TRUE(book.executeOrder(kOrder2, kQty10, kTs3, 0, false));             // seq_num=0, partial fill
     EXPECT_TRUE(book.deleteOrder(kOrder1, 0, true));                       // seq_num=0, delete, last
 
     // Should receive multiple order/level updates but only 1 ToB
@@ -1019,7 +1019,7 @@ TEST_F(OrderBookL3Test, SequenceNumberTrackingExecuteOrder) {
     OrderBookL3 book(kSymbol);
 
     EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty20, kTs1, 0, 100));
-    EXPECT_TRUE(book.executeOrder(kOrder1, kQty10, 101));
+    EXPECT_TRUE(book.executeOrder(kOrder1, kQty10, kTs2, 101));
     EXPECT_EQ(book.getLastSeqNum(), 101);
 
     // Verify partial execution
@@ -1081,7 +1081,7 @@ TEST_F(OrderBookL3Test, SequenceNumberRejectOutOfOrderExecuteOrder) {
     EXPECT_EQ(book.getLastSeqNum(), 100);
 
     // Try out-of-order execute (should fail)
-    EXPECT_FALSE(book.executeOrder(kOrder1, kQty10, 99));
+    EXPECT_FALSE(book.executeOrder(kOrder1, kQty10, kTs2, 99));
     EXPECT_EQ(book.getLastSeqNum(), 100);
 
     // Verify order was NOT executed

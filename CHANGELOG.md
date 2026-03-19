@@ -36,6 +36,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Changed Quantity type from int64_t to uint64_t in types.hpp
   - Negative quantities are now invalid at the type system level
   - Prevents semantic errors and improves type safety
+- Update executeOrder method to include timestamp parameter; adjust related tests
+- Changed executeOrder to virtual function
 
 ## [1.0.1] - 2026-02-06
 

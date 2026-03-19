@@ -259,7 +259,7 @@ static void BM_L3_MarketReplay_LowFreq(benchmark::State& state) {
                     book.deleteOrder(event.order_id, 0);
                     break;
                 case MarketEventType::ExecuteOrder:
-                    book.executeOrder(event.order_id, event.quantity, 0);
+                    book.executeOrder(event.order_id, event.quantity, event.timestamp, 0);
                     break;
                 default:
                     break;
@@ -296,7 +296,7 @@ static void BM_L3_MarketReplay_HighFreq(benchmark::State& state) {
                     book.deleteOrder(event.order_id, 0);
                     break;
                 case MarketEventType::ExecuteOrder:
-                    book.executeOrder(event.order_id, event.quantity, 0);
+                    book.executeOrder(event.order_id, event.quantity, event.timestamp, 0);
                     break;
                 default:
                     break;

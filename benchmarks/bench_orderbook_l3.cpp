@@ -200,7 +200,7 @@ static void BM_L3_ExecuteOrderPartial(benchmark::State& state) {
         Quantity exec_qty = order.quantity / 2;
 
         benchmark::DoNotOptimize(
-            book.executeOrder(order.order_id, exec_qty, 0)
+            book.executeOrder(order.order_id, exec_qty, 0, 0)
         );
 
         ++idx;
@@ -249,12 +249,12 @@ static void BM_L3_ExecuteOrderComplete(benchmark::State& state) {
         // Execute complete fills on all orders
         for (const auto& order : bid_orders) {
             benchmark::DoNotOptimize(
-                book.executeOrder(order.order_id, order.quantity, 0)
+                book.executeOrder(order.order_id, order.quantity, 0, 0)
             );
         }
         for (const auto& order : ask_orders) {
             benchmark::DoNotOptimize(
-                book.executeOrder(order.order_id, order.quantity, 0)
+                book.executeOrder(order.order_id, order.quantity, 0, 0)
             );
         }
     }
@@ -400,7 +400,7 @@ static void BM_L3_MixedWorkload(benchmark::State& state) {
             if (!orders.empty()) {
                 const auto& order = orders[order_dist(rng)];
                 Quantity exec_qty = std::min<Quantity>(order.quantity / 2, 100);
-                book.executeOrder(order.order_id, exec_qty, 0);
+                book.executeOrder(order.order_id, exec_qty, 0, 0);
             }
         } else {
             // 10% query top of book

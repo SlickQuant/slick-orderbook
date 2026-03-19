@@ -117,7 +117,7 @@ int main() {
     book.addOrModifyOrder(1001, Side::Buy, 10000, 150, 0, 0, 0);  // Increase qty to 150
 
     // Execute partial order
-    book.executeOrder(2001, 25, 0);  // Execute 25 of order #2001
+    book.executeOrder(2001, 25, 0, 0);  // Execute 25 of order #2001
 
     // Delete order
     book.deleteOrder(1002, 0);  // Cancel order #1002

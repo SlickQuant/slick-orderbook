@@ -146,7 +146,7 @@ int main() {
 
     // Execute an order partially
     std::cout << "--- Partially executing order 2001: 120 -> 70 (executed 50) ---\n";
-    book.executeOrder(2001, 50);
+    book.executeOrder(2001, 250, 50, 10000);  // New timestamp
     printOrderBook(book);
 
     // Delete an order

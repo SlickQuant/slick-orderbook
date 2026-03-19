@@ -284,7 +284,7 @@ SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price,
     return true;
 }
 
-SLICK_OB_INLINE bool OrderBookL3::deleteOrder(OrderId order_id, Timestamp timestamp, uint64_t seq_num, bool is_last_in_batch) noexcept {
+SLICK_OB_INLINE bool OrderBookL3::deleteOrder(OrderId order_id, Timestamp timestamp, uint64_t seq_num, bool is_last_in_batch) {
     // Validate sequence number - reject out-of-order (seq_num < last_seq_num)
     if (seq_num > 0) {
         if (seq_num < last_seq_num_) {
@@ -357,7 +357,7 @@ SLICK_OB_INLINE bool OrderBookL3::deleteOrder(OrderId order_id, Timestamp timest
     return true;
 }
 
-SLICK_OB_INLINE bool OrderBookL3::executeOrder(OrderId order_id, Quantity executed_quantity, uint64_t seq_num, bool is_last_in_batch) {
+SLICK_OB_INLINE bool OrderBookL3::executeOrder(OrderId order_id, Quantity executed_quantity, Timestamp timestamp, uint64_t seq_num, bool is_last_in_batch) {
     // Validate sequence number - reject out-of-order (seq_num < last_seq_num)
     if (seq_num > 0) {
         if (seq_num < last_seq_num_) {
@@ -378,7 +378,6 @@ SLICK_OB_INLINE bool OrderBookL3::executeOrder(OrderId order_id, Quantity execut
     }
 
     const Quantity remaining = order->quantity - executed_quantity;
-    const Timestamp timestamp = order->timestamp;  // Preserve original timestamp
     const Price price = order->price;              // Preserve price
     const uint64_t priority = order->priority;     // Preserve priority
 
