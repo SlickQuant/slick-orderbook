@@ -203,7 +203,7 @@ Basic Usage - Level 3 OrderBook</h2>
 <div class="line">    book.addOrModifyOrder(1001, Side::Buy, 10000, 150, 0, 0, 0);  <span class="comment">// Increase qty to 150</span></div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// Execute partial order</span></div>
-<div class="line">    book.executeOrder(2001, 25, 0);  <span class="comment">// Execute 25 of order #2001</span></div>
+<div class="line">    book.executeOrder(2001, 25, 0, 0);  <span class="comment">// Execute 25 of order #2001</span></div>
 <div class="line"> </div>
 <div class="line">    <span class="comment">// Delete order</span></div>
 <div class="line">    book.deleteOrder(1002, 0);  <span class="comment">// Cancel order #1002</span></div>
