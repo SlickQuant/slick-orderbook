@@ -18,14 +18,14 @@ enum PriceLevelChangeFlag : uint8_t {
 /// Level 2 price level update event
 /// Note: quantity = 0 implies the price level should be deleted
 struct PriceLevelUpdate {
-    SymbolId symbol;        // Symbol identifier
-    Side side;              // Buy or Sell
+    uint64_t seq_num;       // Exchange sequence number (0 = not tracked)
+    Timestamp timestamp;    // Update timestamp
     Price price;            // Price level
     Quantity quantity;      // New total quantity at this level (0 = delete)
-    Timestamp timestamp;    // Update timestamp
+    SymbolId symbol;        // Symbol identifier
     uint16_t level_index;   // 0-based index in sorted order (0 = best, 1 = second best, etc.)
     uint8_t change_flags;   // Bitset of PriceLevelChangeFlag
-    uint64_t seq_num;       // Exchange sequence number (0 = not tracked)
+    Side side;              // Buy or Sell
 
     PriceLevelUpdate() noexcept = default;
 
@@ -63,16 +63,16 @@ struct PriceLevelUpdate {
 /// Level 3 order update event
 /// Note: quantity = 0 implies the order should be deleted
 struct OrderUpdate {
-    SymbolId symbol;            // Symbol identifier
+    uint64_t seq_num;           // Exchange sequence number (0 = not tracked)
+    Timestamp timestamp;        // Update timestamp
     OrderId order_id;           // Unique order identifier
-    Side side;                  // Buy or Sell
     Price price;                // Order price
     Quantity quantity;          // Order quantity (0 = delete)
-    Timestamp timestamp;        // Update timestamp
+    SymbolId symbol;            // Symbol identifier
     uint16_t price_level_index; // Index of the price level this order belongs to
     uint64_t priority;          // Order priority (typically timestamp or sequence number)
+    Side side;                  // Buy or Sell
     uint8_t change_flags;       // Bitset of PriceLevelChangeFlag
-    uint64_t seq_num;           // Exchange sequence number (0 = not tracked)
 
     OrderUpdate() noexcept = default;
 
