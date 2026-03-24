@@ -382,10 +382,10 @@ SLICK_OB_INLINE bool OrderBookL3::executeOrder(OrderId order_id, Quantity execut
     const uint64_t priority = order->priority;     // Preserve priority
 
     if (remaining == 0) {
-        // Fully executed - delete order (pass through seq_num and is_last_in_batch)
-        return deleteOrder(order_id, seq_num, is_last_in_batch);
+        // Fully executed - delete order (pass through timestamp, seq_num and is_last_in_batch)
+        return deleteOrder(order_id, timestamp, seq_num, is_last_in_batch);
     } else {
-        // Partial execution - reduce quantity (pass through seq_num and is_last_in_batch)
+        // Partial execution - reduce quantity (pass through timestamp, priority, seq_num and is_last_in_batch)
         return modifyOrder(order_id, price, remaining, timestamp, priority, seq_num, is_last_in_batch);
     }
 }
