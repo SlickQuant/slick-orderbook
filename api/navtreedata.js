@@ -192,7 +192,7 @@ var NAVTREEINDEX =
 "classslick_1_1orderbook_1_1OrderBookManager.html#a884d6001116b799c9b86184a8af2f67e",
 "classslick_1_1orderbook_1_1detail_1_1LevelContainer.html#a3f88d14414b883c887d7d2a6a383301f",
 "intrusive__list_8hpp_source.html",
-"structslick_1_1orderbook_1_1TopOfBook.html#a1279416ece077c4f0f49e972a4dde44c"
+"structslick_1_1orderbook_1_1TopOfBook.html#a01244820ab496655a3b27c402ed53ecc"
 ];
 
 var SYNCONMSG = 'click to disable panel synchronisation';
