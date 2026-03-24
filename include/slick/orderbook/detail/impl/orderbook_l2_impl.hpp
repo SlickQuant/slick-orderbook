@@ -81,7 +81,7 @@ SLICK_OB_INLINE void OrderBookL2::updateLevel(Side side, Price price, Quantity q
             }
 
             // Notify with level_index, flags, and seq_num
-            PriceLevelUpdate update{symbol_, side, price, 0, timestamp, level_idx, change_flags, seq_num};
+            PriceLevelUpdate update{timestamp, symbol_, side, price, 0, 0, level_idx, change_flags, seq_num};
             observers_.notifyPriceLevelUpdate(update);
             if (change_starting_index_ == 0 && is_last_in_batch) {
                 notifyTopOfBookIfChanged(timestamp);
@@ -114,7 +114,7 @@ SLICK_OB_INLINE void OrderBookL2::updateLevel(Side side, Price price, Quantity q
         }
 
         // Notify observers
-        PriceLevelUpdate update{symbol_, side, price, quantity, timestamp, level_idx, change_flags, seq_num};
+        PriceLevelUpdate update{timestamp, symbol_, side, price, quantity, 0, level_idx, change_flags, seq_num};
         observers_.notifyPriceLevelUpdate(update);
         if (change_starting_index_ == 0 && is_last_in_batch) {
             notifyTopOfBookIfChanged(timestamp);
@@ -288,11 +288,12 @@ SLICK_OB_INLINE void OrderBookL2::emitSnapshot(Timestamp timestamp) {
     uint16_t level_idx = 0;
     for (const auto& level : sides_[Side::Buy]) {
         PriceLevelUpdate update{
+            timestamp,
             symbol_,
             Side::Buy,
             level.price,
             level.quantity,
-            timestamp,
+            0,
             level_idx++,
             static_cast<uint8_t>(PriceChanged | QuantityChanged)
         };
@@ -303,11 +304,12 @@ SLICK_OB_INLINE void OrderBookL2::emitSnapshot(Timestamp timestamp) {
     level_idx = 0;
     for (const auto& level : sides_[Side::Sell]) {
         PriceLevelUpdate update{
+            timestamp,
             symbol_,
             Side::Sell,
             level.price,
             level.quantity,
-            timestamp,
+            0,
             level_idx++,
             static_cast<uint8_t>(PriceChanged | QuantityChanged)
         };

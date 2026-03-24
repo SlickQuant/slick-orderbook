@@ -18,21 +18,22 @@ enum PriceLevelChangeFlag : uint8_t {
 /// Level 2 price level update event
 /// Note: quantity = 0 implies the price level should be deleted
 struct PriceLevelUpdate {
-    uint64_t seq_num;       // Exchange sequence number (0 = not tracked)
     Timestamp timestamp;    // Update timestamp
+    uint64_t seq_num;       // Exchange sequence number (0 = not tracked)
     Price price;            // Price level
     Quantity quantity;      // New total quantity at this level (0 = delete)
     SymbolId symbol;        // Symbol identifier
     uint16_t level_index;   // 0-based index in sorted order (0 = best, 1 = second best, etc.)
+    uint16_t num_orders;    // number of orders on the level
     uint8_t change_flags;   // Bitset of PriceLevelChangeFlag
     Side side;              // Buy or Sell
 
     PriceLevelUpdate() noexcept = default;
 
-    PriceLevelUpdate(SymbolId sym, Side s, Price p, Quantity q, Timestamp ts,
+    PriceLevelUpdate(Timestamp ts, SymbolId sym, Side s, Price p, Quantity q, uint16_t order_count = 0,
                      uint16_t idx = 0, uint8_t flags = 0, uint64_t seq = 0) noexcept
-        : symbol(sym), side(s), price(p), quantity(q), timestamp(ts),
-          level_index(idx), change_flags(flags), seq_num(seq) {}
+        : timestamp(ts), seq_num(seq), price(p), quantity(q), symbol(sym),
+          level_index(idx), num_orders(order_count), change_flags(flags), side(s) {}
 
     /// Check if this is a delete action
     [[nodiscard]] constexpr bool isDelete() const noexcept {
@@ -63,8 +64,8 @@ struct PriceLevelUpdate {
 /// Level 3 order update event
 /// Note: quantity = 0 implies the order should be deleted
 struct OrderUpdate {
-    uint64_t seq_num;           // Exchange sequence number (0 = not tracked)
     Timestamp timestamp;        // Update timestamp
+    uint64_t seq_num;           // Exchange sequence number (0 = not tracked)
     OrderId order_id;           // Unique order identifier
     Price price;                // Order price
     Quantity quantity;          // Order quantity (0 = delete)

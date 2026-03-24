@@ -19,6 +19,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Template specializations for `Side::Buy` and `Side::Sell`
   - More efficient than runtime branching for side-agnostic algorithms
   - Returns `nullptr` if no orders exist on that side
+- **PriceLevelUpdate**: Add num_orders in PriceLevelUpdate; update related notifyPriceLevelUpdate methods
 
 ### Changed
 

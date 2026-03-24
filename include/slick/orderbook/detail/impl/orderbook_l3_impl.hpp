@@ -110,7 +110,7 @@ SLICK_OB_INLINE bool OrderBookL3::addOrModifyOrder(OrderId order_id, Side side, 
 
     // Notify observers
     notifyOrderUpdate(order, 0, 0, timestamp, level_idx, order_flags, seq_num);
-    notifyPriceLevelUpdate(side, price, level->getTotalQuantity(), timestamp, level_idx, level_change_flag, seq_num);
+    notifyPriceLevelUpdate(timestamp, side, price, level->getTotalQuantity(), order_map_.size(), level_idx, level_change_flag, seq_num);
     if (change_starting_index_ == 0 && is_last_in_batch) {
         notifyTopOfBookIfChanged(timestamp);
         change_starting_index_ = INVALID_INDEX;
@@ -202,7 +202,7 @@ SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price,
                 old_level_change_flags |= PriceChanged;
             }
             // Don't add LastInBatch to intermediate old level update
-            notifyPriceLevelUpdate(side, old_price, old_level_total, new_timestamp, old_level_idx, old_level_change_flags, seq_num);
+            notifyPriceLevelUpdate(new_timestamp, side, old_price, old_level_total, order_map_.size(), old_level_idx, old_level_change_flags, seq_num);
         }
 
         // Update order fields
@@ -235,7 +235,7 @@ SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price,
         }
 
         notifyOrderUpdate(order, old_quantity, old_price, new_timestamp, new_level_idx, order_flags, seq_num);
-        notifyPriceLevelUpdate(side, new_price, new_level->getTotalQuantity(), new_timestamp, new_level_idx, new_level_change_flags, seq_num);
+        notifyPriceLevelUpdate(new_timestamp, side, new_price, new_level->getTotalQuantity(), order_map_.size(), new_level_idx, new_level_change_flags, seq_num);
         if (change_starting_index_ == 0 && is_last_in_batch) {
             notifyTopOfBookIfChanged(new_timestamp);
             change_starting_index_ = INVALID_INDEX;
@@ -274,7 +274,7 @@ SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price,
         }
 
         notifyOrderUpdate(order, old_quantity, old_price, new_timestamp, level_index, order_flags, seq_num);
-        notifyPriceLevelUpdate(side, old_price, level->getTotalQuantity(), new_timestamp, level_index, level_change_flags, seq_num);
+        notifyPriceLevelUpdate(new_timestamp, side, old_price, level->getTotalQuantity(), order_map_.size(), level_index, level_change_flags, seq_num);
         if (change_starting_index_ == 0 && is_last_in_batch) {
             notifyTopOfBookIfChanged(new_timestamp);
             change_starting_index_ = INVALID_INDEX;
@@ -343,7 +343,7 @@ SLICK_OB_INLINE bool OrderBookL3::deleteOrder(OrderId order_id, Timestamp timest
 
     // Notify observers (before destroying order)
     notifyOrderDelete(order, timestamp, level_idx, order_flags, seq_num);
-    notifyPriceLevelUpdate(side, price, level_total, timestamp, level_idx, level_change_flags, seq_num);
+    notifyPriceLevelUpdate(timestamp, side, price, level_total, order_map_.size(), level_idx, level_change_flags, seq_num);
 
     // Destroy order
     order_pool_.destroy(order);
@@ -652,19 +652,19 @@ SLICK_OB_INLINE void OrderBookL3::notifyTrade(OrderId passive_order_id, OrderId 
     observers_.notifyTrade(trade);
 }
 
-SLICK_OB_INLINE void OrderBookL3::notifyPriceLevelUpdate(Side side, Price price, Quantity total_quantity,
-                                         Timestamp timestamp, uint16_t level_index,
-                                         uint8_t change_flags, uint64_t seq_num) const {
+SLICK_OB_INLINE void OrderBookL3::notifyPriceLevelUpdate(Timestamp timestamp, Side side, Price price, Quantity total_quantity,
+                                         uint16_t order_count, uint16_t level_index, uint8_t change_flags, uint64_t seq_num) const {
     if (interested_num_levels_ > 0 && level_index >= interested_num_levels_) {
         // Skip notifications for levels beyond the interested range
         return;
     }
     PriceLevelUpdate update{
+        timestamp,
         symbol_,
         side,
         price,
         total_quantity,
-        timestamp,
+        order_count,
         level_index,
         change_flags,
         seq_num
