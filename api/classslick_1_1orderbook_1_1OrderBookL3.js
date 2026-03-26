@@ -34,7 +34,7 @@ var classslick_1_1orderbook_1_1OrderBookL3 =
     [ "modifyOrder", "classslick_1_1orderbook_1_1OrderBookL3.html#ac59a3f1031642c44750e51a06e7c1287", null ],
     [ "notifyOrderDelete", "classslick_1_1orderbook_1_1OrderBookL3.html#a009da24c8245a6b99d0a32b47df13ee8", null ],
     [ "notifyOrderUpdate", "classslick_1_1orderbook_1_1OrderBookL3.html#a7d9ea107c6d6234ffdba2523da063132", null ],
-    [ "notifyPriceLevelUpdate", "classslick_1_1orderbook_1_1OrderBookL3.html#a7f8217c4208d709cb5c5d8694ed89fcd", null ],
+    [ "notifyPriceLevelUpdate", "classslick_1_1orderbook_1_1OrderBookL3.html#a542527eedf4eae954e578e98f688db11", null ],
     [ "notifyTopOfBookIfChanged", "classslick_1_1orderbook_1_1OrderBookL3.html#aa2a9b4c885ec2ffe4813ad382bf42b31", null ],
     [ "notifyTrade", "classslick_1_1orderbook_1_1OrderBookL3.html#af20f74a43a0298853a387a9e4054bc0e", null ],
     [ "observerCount", "classslick_1_1orderbook_1_1OrderBookL3.html#a409ea596bda2f92debf243cb2ebb9ca2", null ],
