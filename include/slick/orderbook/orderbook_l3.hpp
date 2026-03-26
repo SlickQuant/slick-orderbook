@@ -307,7 +307,7 @@ protected:
                      Side aggressor_side, Price price, Quantity quantity, Timestamp timestamp) const;
 
     /// Notify observers of price level update (L2 aggregated view)
-    void notifyPriceLevelUpdate(Timestamp timestamp, Side side, Price price, Quantity total_quantity, uint16_t order_count, uint16_t level_index, uint8_t change_flags, uint64_t seq_num) const;
+    void notifyPriceLevelUpdate(Timestamp timestamp, Side side, Price price, Quantity total_quantity, size_t order_count, uint16_t level_index, uint8_t change_flags, uint64_t seq_num) const;
 
     /// Notify observers of top-of-book update if best changed
     /// Updates cached_tob_ after notification

@@ -69,6 +69,8 @@ struct OrderUpdate {
     OrderId order_id;           // Unique order identifier
     Price price;                // Order price
     Quantity quantity;          // Order quantity (0 = delete)
+    Price old_price;            // Old order price
+    Quantity old_qty;           // Old order quantity
     SymbolId symbol;            // Symbol identifier
     uint16_t price_level_index; // Index of the price level this order belongs to
     uint64_t priority;          // Order priority (typically timestamp or sequence number)
@@ -77,9 +79,9 @@ struct OrderUpdate {
 
     OrderUpdate() noexcept = default;
 
-    OrderUpdate(SymbolId sym, OrderId id, Side s, Price p, Quantity q, Timestamp ts,
+    OrderUpdate(SymbolId sym, OrderId id, Side s, Price p, Quantity q, Price op, Quantity oq, Timestamp ts,
                 uint16_t idx = 0, uint64_t prio = 0, uint8_t flags = 0, uint64_t seq = 0) noexcept
-        : symbol(sym), order_id(id), side(s), price(p), quantity(q), timestamp(ts),
+        : symbol(sym), order_id(id), side(s), price(p), quantity(q), old_price(op), old_qty(oq), timestamp(ts),
           price_level_index(idx), priority(prio), change_flags(flags), seq_num(seq) {}
 
     /// Check if this is a delete action

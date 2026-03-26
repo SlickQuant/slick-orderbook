@@ -110,7 +110,8 @@ SLICK_OB_INLINE bool OrderBookL3::addOrModifyOrder(OrderId order_id, Side side, 
 
     // Notify observers
     notifyOrderUpdate(order, 0, 0, timestamp, level_idx, order_flags, seq_num);
-    notifyPriceLevelUpdate(timestamp, side, price, level->getTotalQuantity(), order_map_.size(), level_idx, level_change_flag, seq_num);
+    notifyPriceLevelUpdate(timestamp, side, price, level->getTotalQuantity(), order_map_.size(),
+        level_idx, level_change_flag, seq_num);
     if (change_starting_index_ == 0 && is_last_in_batch) {
         notifyTopOfBookIfChanged(timestamp);
         change_starting_index_ = INVALID_INDEX;
@@ -202,7 +203,8 @@ SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price,
                 old_level_change_flags |= PriceChanged;
             }
             // Don't add LastInBatch to intermediate old level update
-            notifyPriceLevelUpdate(new_timestamp, side, old_price, old_level_total, order_map_.size(), old_level_idx, old_level_change_flags, seq_num);
+            notifyPriceLevelUpdate(new_timestamp, side, old_price, old_level_total, order_map_.size(),
+                old_level_idx, old_level_change_flags, seq_num);
         }
 
         // Update order fields
@@ -235,7 +237,8 @@ SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price,
         }
 
         notifyOrderUpdate(order, old_quantity, old_price, new_timestamp, new_level_idx, order_flags, seq_num);
-        notifyPriceLevelUpdate(new_timestamp, side, new_price, new_level->getTotalQuantity(), order_map_.size(), new_level_idx, new_level_change_flags, seq_num);
+        notifyPriceLevelUpdate(new_timestamp, side, new_price, new_level->getTotalQuantity(),
+            order_map_.size(), new_level_idx, new_level_change_flags, seq_num);
         if (change_starting_index_ == 0 && is_last_in_batch) {
             notifyTopOfBookIfChanged(new_timestamp);
             change_starting_index_ = INVALID_INDEX;
@@ -603,13 +606,43 @@ SLICK_OB_INLINE uint16_t OrderBookL3::calculateLevelIndex(Side side, Price price
     return static_cast<uint16_t>(std::distance(level_map.begin(), it));
 }
 
-SLICK_OB_INLINE void OrderBookL3::notifyOrderUpdate(const detail::Order* order, [[maybe_unused]] Quantity old_quantity,
-                                    [[maybe_unused]] Price old_price, Timestamp timestamp,
-                                    uint16_t level_index, uint8_t change_flags, uint64_t seq_num) const {
+SLICK_OB_INLINE void OrderBookL3::notifyOrderUpdate(
+    const detail::Order* order,
+    Quantity old_quantity,
+    Price old_price,
+    Timestamp timestamp,
+    uint16_t level_index,
+    uint8_t change_flags,
+    uint64_t seq_num) const {
     OrderUpdate update{
         symbol_,
         order->order_id,
         order->side,
+        order->price,
+        order->quantity,
+        old_price,
+        old_quantity,
+        timestamp,
+        level_index,
+        order->priority,
+        change_flags,
+        seq_num
+    };
+    observers_.notifyOrderUpdate(update);
+}
+
+SLICK_OB_INLINE void OrderBookL3::notifyOrderDelete(
+    const detail::Order* order,
+    Timestamp timestamp,
+    uint16_t level_index,
+    uint8_t change_flags,
+    uint64_t seq_num) const {
+    OrderUpdate update{
+        symbol_,
+        order->order_id,
+        order->side,
+        order->price,
+        0,  // quantity = 0 means delete
         order->price,
         order->quantity,
         timestamp,
@@ -621,25 +654,13 @@ SLICK_OB_INLINE void OrderBookL3::notifyOrderUpdate(const detail::Order* order, 
     observers_.notifyOrderUpdate(update);
 }
 
-SLICK_OB_INLINE void OrderBookL3::notifyOrderDelete(const detail::Order* order, Timestamp timestamp, uint16_t level_index, uint8_t change_flags, uint64_t seq_num) const {
-    OrderUpdate update{
-        symbol_,
-        order->order_id,
-        order->side,
-        order->price,
-        0,  // quantity = 0 means delete
-        timestamp,
-        level_index,
-        order->priority,
-        change_flags,
-        seq_num
-    };
-    observers_.notifyOrderUpdate(update);
-}
-
-SLICK_OB_INLINE void OrderBookL3::notifyTrade(OrderId passive_order_id, OrderId aggressive_order_id,
-                              Side aggressor_side, Price price, Quantity quantity,
-                              Timestamp timestamp) const {
+SLICK_OB_INLINE void OrderBookL3::notifyTrade(
+    OrderId passive_order_id,
+    OrderId aggressive_order_id,
+    Side aggressor_side,
+    Price price,
+    Quantity quantity,
+    Timestamp timestamp) const {
     Trade trade{
         symbol_,
         price,
@@ -652,8 +673,15 @@ SLICK_OB_INLINE void OrderBookL3::notifyTrade(OrderId passive_order_id, OrderId 
     observers_.notifyTrade(trade);
 }
 
-SLICK_OB_INLINE void OrderBookL3::notifyPriceLevelUpdate(Timestamp timestamp, Side side, Price price, Quantity total_quantity,
-                                         uint16_t order_count, uint16_t level_index, uint8_t change_flags, uint64_t seq_num) const {
+SLICK_OB_INLINE void OrderBookL3::notifyPriceLevelUpdate(
+    Timestamp timestamp,
+    Side side,
+    Price price,
+    Quantity total_quantity,
+    size_t order_count,
+    uint16_t level_index,
+    uint8_t change_flags,
+    uint64_t seq_num) const {
     if (interested_num_levels_ > 0 && level_index >= interested_num_levels_) {
         // Skip notifications for levels beyond the interested range
         return;
@@ -664,7 +692,7 @@ SLICK_OB_INLINE void OrderBookL3::notifyPriceLevelUpdate(Timestamp timestamp, Si
         side,
         price,
         total_quantity,
-        order_count,
+        static_cast<uint16_t>(order_count),
         level_index,
         change_flags,
         seq_num
@@ -715,6 +743,8 @@ SLICK_OB_INLINE void OrderBookL3::emitSnapshot(Timestamp timestamp) {
                 order.side,
                 order.price,
                 order.quantity,
+                order.price,
+                order.quantity,
                 timestamp,
                 level_idx,
                 order.priority,
@@ -733,6 +763,8 @@ SLICK_OB_INLINE void OrderBookL3::emitSnapshot(Timestamp timestamp) {
                 symbol_,
                 order.order_id,
                 order.side,
+                order.price,
+                order.quantity,
                 order.price,
                 order.quantity,
                 timestamp,
