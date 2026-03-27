@@ -3,7 +3,7 @@ var types_8hpp =
     [ "slick::orderbook::Symbol", "structslick_1_1orderbook_1_1Symbol.html", "structslick_1_1orderbook_1_1Symbol" ],
     [ "OrderId", "types_8hpp.html#a352500d7c4e12d1c74542415eff78db5", null ],
     [ "Price", "types_8hpp.html#a25935d410087baa88ea8ec548e2a91ea", null ],
-    [ "Quantity", "types_8hpp.html#acea18028a577e1ba390b3c26c1dbb21f", null ],
+    [ "Quantity", "types_8hpp.html#a21187169371b8cf74060371e141b8f3a", null ],
     [ "SymbolId", "types_8hpp.html#aa9f5216180c724765d97ba90dd859f53", null ],
     [ "Timestamp", "types_8hpp.html#aebb98158ca08961f915a92ef30c5a856", null ],
     [ "OrderType", "types_8hpp.html#a1b1ef727a7178b4c6fe7c2bc704a6c6d", [

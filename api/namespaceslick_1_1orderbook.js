@@ -19,7 +19,7 @@ var namespaceslick_1_1orderbook =
     [ "AllocatorLike", "conceptslick_1_1orderbook_1_1AllocatorLike.html", null ],
     [ "OrderId", "namespaceslick_1_1orderbook.html#a352500d7c4e12d1c74542415eff78db5", null ],
     [ "Price", "namespaceslick_1_1orderbook.html#a25935d410087baa88ea8ec548e2a91ea", null ],
-    [ "Quantity", "namespaceslick_1_1orderbook.html#acea18028a577e1ba390b3c26c1dbb21f", null ],
+    [ "Quantity", "namespaceslick_1_1orderbook.html#a21187169371b8cf74060371e141b8f3a", null ],
     [ "SymbolId", "namespaceslick_1_1orderbook.html#aa9f5216180c724765d97ba90dd859f53", null ],
     [ "Timestamp", "namespaceslick_1_1orderbook.html#aebb98158ca08961f915a92ef30c5a856", null ],
     [ "OrderType", "namespaceslick_1_1orderbook.html#a1b1ef727a7178b4c6fe7c2bc704a6c6d", [
