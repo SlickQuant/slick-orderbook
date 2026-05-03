@@ -22,16 +22,16 @@ var namespaceslick_1_1orderbook =
     [ "Quantity", "namespaceslick_1_1orderbook.html#a21187169371b8cf74060371e141b8f3a", null ],
     [ "SymbolId", "namespaceslick_1_1orderbook.html#aa9f5216180c724765d97ba90dd859f53", null ],
     [ "Timestamp", "namespaceslick_1_1orderbook.html#aebb98158ca08961f915a92ef30c5a856", null ],
+    [ "ChangeFlag", "namespaceslick_1_1orderbook.html#a558cb9e311f7c290cd0cdc3d374389ed", [
+      [ "PriceChanged", "namespaceslick_1_1orderbook.html#a558cb9e311f7c290cd0cdc3d374389eda7712a96130334dbffa8dbbde8638a68b", null ],
+      [ "QuantityChanged", "namespaceslick_1_1orderbook.html#a558cb9e311f7c290cd0cdc3d374389edaf310399218b95d363b483eb082c7f18a", null ],
+      [ "LastInBatch", "namespaceslick_1_1orderbook.html#a558cb9e311f7c290cd0cdc3d374389eda12500b015380b3a5f6d4fee5853a7121", null ]
+    ] ],
     [ "OrderType", "namespaceslick_1_1orderbook.html#a1b1ef727a7178b4c6fe7c2bc704a6c6d", [
       [ "Limit", "namespaceslick_1_1orderbook.html#a1b1ef727a7178b4c6fe7c2bc704a6c6da80d2677cf518f4d04320042f4ea6c146", null ],
       [ "Market", "namespaceslick_1_1orderbook.html#a1b1ef727a7178b4c6fe7c2bc704a6c6da31840a66a8d6d223e5b0540138768838", null ],
       [ "Stop", "namespaceslick_1_1orderbook.html#a1b1ef727a7178b4c6fe7c2bc704a6c6da11a755d598c0c417f9a36758c3da7481", null ],
       [ "StopLimit", "namespaceslick_1_1orderbook.html#a1b1ef727a7178b4c6fe7c2bc704a6c6da9c28718cc2dea0e9e76cddfbe7e79151", null ]
-    ] ],
-    [ "PriceLevelChangeFlag", "namespaceslick_1_1orderbook.html#a9cd1513fcc4da9f1b357148038fd3895", [
-      [ "PriceChanged", "namespaceslick_1_1orderbook.html#a9cd1513fcc4da9f1b357148038fd3895a7712a96130334dbffa8dbbde8638a68b", null ],
-      [ "QuantityChanged", "namespaceslick_1_1orderbook.html#a9cd1513fcc4da9f1b357148038fd3895af310399218b95d363b483eb082c7f18a", null ],
-      [ "LastInBatch", "namespaceslick_1_1orderbook.html#a9cd1513fcc4da9f1b357148038fd3895a12500b015380b3a5f6d4fee5853a7121", null ]
     ] ],
     [ "Side", "namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03f", [
       [ "Buy", "namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa0fdce9f0ade221c1e1341e11f6029a00", null ],

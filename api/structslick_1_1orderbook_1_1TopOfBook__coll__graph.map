@@ -1,3 +1,9 @@
 <map id="slick::orderbook::TopOfBook" name="slick::orderbook::TopOfBook">
-<area shape="rect" id="Node000001" title="Top&#45;of&#45;book snapshot &#45; best bid and ask." alt="" coords="5,5,201,311"/>
+<area shape="rect" id="Node000001" title="Top&#45;of&#45;book snapshot &#45; best bid and ask." alt="" coords="5,389,201,695"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="20,261,187,327"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="106,327,106,373,101,373,101,327"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="46,133,161,199"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="106,213,106,261,101,261,101,213"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="92,5,115,71"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="106,71,106,117,101,117,101,71"/>
 </map>

@@ -1,24 +1,27 @@
 <map id="slick::orderbook::OrderBookL3" name="slick::orderbook::OrderBookL3">
-<area shape="rect" id="Node000001" title="Level 3 OrderBook &#45; Individual order tracking with price&#45;time priority." alt="" coords="465,859,677,1344"/>
-<area shape="rect" id="Node000002" title=" " alt="" coords="64,603,255,683"/>
-<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="187,682,225,737,269,794,362,896,455,989,452,993,358,900,265,798,220,740,183,685"/>
-<area shape="rect" id="Node000003" title=" " alt="" coords="5,241,132,306"/>
-<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="76,306,89,379,107,466,143,587,138,588,102,467,83,380,71,307"/>
-<area shape="rect" id="Node000004" title=" " alt="" coords="19,5,41,71"/>
-<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="32,71,34,109,44,169,58,224,53,225,39,170,29,110,27,71"/>
-<area shape="rect" id="Node000005" title=" " alt="" coords="148,5,171,71"/>
-<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="149,49,126,69,104,96,91,128,81,161,72,225,67,224,76,160,86,126,100,93,122,65,146,45"/>
-<area shape="rect" id="Node000006" title=" " alt="" coords="157,241,271,306"/>
-<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="173,60,187,94,203,161,212,224,207,224,198,162,182,95,168,62"/>
-<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="210,321,168,604,162,603,205,320"/>
-<area shape="rect" id="Node000007" href="$classslick_1_1orderbook_1_1detail_1_1OrderMap.html" title="Hash table for fast OrderId &#45;&gt; Order* lookup Uses std::unordered_map for simplicity and performance P..." alt="" coords="279,503,442,783"/>
-<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="427,783,461,855,456,857,423,785"/>
-<area shape="rect" id="Node000008" href="$classslick_1_1orderbook_1_1detail_1_1ObjectPool.html" title=" " alt="" coords="466,496,677,791"/>
-<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="574,791,574,842,569,842,569,791"/>
-<area shape="rect" id="Node000009" href="$classslick_1_1orderbook_1_1detail_1_1ObjectPool.html" title="Object pool for zero&#45;allocation management of frequently created/destroyed objects." alt="" coords="490,133,653,413"/>
-<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="574,427,574,496,569,496,569,427"/>
-<area shape="rect" id="Node000010" href="$classslick_1_1orderbook_1_1ObserverManager.html" title="Observer manager for notifying multiple observers Uses type erasure to support both concept&#45;based and..." alt="" coords="701,503,887,783"/>
-<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="728,785,687,869,682,867,724,783"/>
-<area shape="rect" id="Node000011" href="$structslick_1_1orderbook_1_1TopOfBook.html" title="Top&#45;of&#45;book snapshot &#45; best bid and ask." alt="" coords="911,491,1107,796"/>
-<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="913,785,901,798,797,906,692,1002,688,998,793,902,897,794,909,781"/>
+<area shape="rect" id="Node000001" title="Level 3 OrderBook &#45; Individual order tracking with price&#45;time priority." alt="" coords="491,987,703,1472"/>
+<area shape="rect" id="Node000002" title=" " alt="" coords="81,361,272,441"/>
+<area shape="poly" id="edge1_Node000001_Node000002" title=" " alt="" coords="173,442,163,533,161,656,166,724,177,793,196,860,223,923,247,961,274,998,339,1063,409,1119,478,1163,475,1168,406,1123,335,1067,270,1001,242,964,218,925,191,861,172,794,161,724,156,656,158,532,167,441"/>
+<area shape="rect" id="Node000003" title=" " alt="" coords="5,133,132,199"/>
+<area shape="poly" id="edge2_Node000002_Node000003" title=" " alt="" coords="80,198,94,236,148,346,143,348,89,238,75,200"/>
+<area shape="rect" id="Node000004" title=" " alt="" coords="37,5,60,71"/>
+<area shape="poly" id="edge3_Node000003_Node000004" title=" " alt="" coords="50,71,53,109,54,117,49,118,47,110,45,71"/>
+<area shape="rect" id="Node000005" title=" " alt="" coords="167,5,189,71"/>
+<area shape="poly" id="edge4_Node000003_Node000005" title=" " alt="" coords="168,51,123,96,102,122,98,118,119,93,165,48"/>
+<area shape="rect" id="Node000006" title=" " alt="" coords="175,133,290,199"/>
+<area shape="poly" id="edge6_Node000006_Node000005" title=" " alt="" coords="192,63,206,94,216,117,211,119,201,96,187,65"/>
+<area shape="poly" id="edge5_Node000002_Node000006" title=" " alt="" coords="188,211,180,224,171,258,167,295,171,361,166,361,162,295,165,257,176,222,183,208"/>
+<area shape="rect" id="Node000012" title=" " alt="" coords="316,369,483,434"/>
+<area shape="poly" id="edge13_Node000012_Node000006" title=" " alt="" coords="304,174,347,191,367,204,384,221,403,257,411,297,411,335,408,369,403,368,406,335,405,297,398,259,380,224,364,208,345,196,302,179"/>
+<area shape="rect" id="Node000007" href="$classslick_1_1orderbook_1_1detail_1_1OrderMap.html" title="Hash table for fast OrderId &#45;&gt; Order* lookup Uses std::unordered_map for simplicity and performance P..." alt="" coords="515,631,678,911"/>
+<area shape="poly" id="edge7_Node000001_Node000007" title=" " alt="" coords="599,912,599,970,594,970,594,912"/>
+<area shape="rect" id="Node000008" href="$classslick_1_1orderbook_1_1detail_1_1ObjectPool.html" title=" " alt="" coords="702,624,913,919"/>
+<area shape="poly" id="edge8_Node000001_Node000008" title=" " alt="" coords="742,920,712,985,707,983,737,918"/>
+<area shape="rect" id="Node000009" href="$classslick_1_1orderbook_1_1detail_1_1ObjectPool.html" title="Object pool for zero&#45;allocation management of frequently created/destroyed objects." alt="" coords="726,261,889,541"/>
+<area shape="poly" id="edge9_Node000008_Node000009" title=" " alt="" coords="810,555,810,624,805,624,805,555"/>
+<area shape="rect" id="Node000010" href="$classslick_1_1orderbook_1_1ObserverManager.html" title="Observer manager for notifying multiple observers Uses type erasure to support both concept&#45;based and..." alt="" coords="937,631,1123,911"/>
+<area shape="poly" id="edge10_Node000001_Node000010" title=" " alt="" coords="939,911,927,926,822,1035,717,1131,714,1127,819,1031,923,922,935,907"/>
+<area shape="rect" id="Node000011" href="$structslick_1_1orderbook_1_1TopOfBook.html" title="Top&#45;of&#45;book snapshot &#45; best bid and ask." alt="" coords="295,619,491,924"/>
+<area shape="poly" id="edge11_Node000001_Node000011" title=" " alt="" coords="463,923,486,975,481,977,458,925"/>
+<area shape="poly" id="edge12_Node000011_Node000012" title=" " alt="" coords="401,435,398,603,393,602,396,435"/>
 </map>

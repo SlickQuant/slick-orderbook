@@ -12,8 +12,8 @@
 <g id="Node000001" class="node">
 <title>Node1</title>
 <g id="a_Node000001"><a xlink:title=" ">
-<polygon fill="#999999" stroke="#666666" points="205,-184 56,-184 56,-165 205,-165 205,-184"/>
-<text text-anchor="middle" x="130.5" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">slick/orderbook/events.hpp</text>
+<polygon fill="#999999" stroke="#666666" points="263,-184 114,-184 114,-165 263,-165 263,-184"/>
+<text text-anchor="middle" x="188.5" y="-172" font-family="Helvetica,sans-Serif" font-size="10.00">slick/orderbook/events.hpp</text>
 </a>
 </g>
 </g>
@@ -30,8 +30,8 @@
 <g id="edge1_Node000001_Node000002" class="edge">
 <title>Node1&#45;&gt;Node2</title>
 <g id="a_edge1_Node000001_Node000002"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M125.75,-164.66C116.19,-146.85 94.45,-106.37 81.9,-83.01"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="84.96,-81.31 77.15,-74.16 78.8,-84.62 84.96,-81.31"/>
+<path fill="none" stroke="#63b8ff" d="M165.31,-164.93C147.76,-157.53 123.96,-145.44 107.5,-129 94.58,-116.1 85.07,-97.44 79.25,-83.68"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="82.46,-82.29 75.52,-74.29 75.96,-84.88 82.46,-82.29"/>
 </a>
 </g>
 </g>
@@ -48,8 +48,26 @@
 <g id="edge3_Node000001_Node000004" class="edge">
 <title>Node1&#45;&gt;Node4</title>
 <g id="a_edge3_Node000001_Node000004"><a xlink:title=" ">
-<path fill="none" stroke="#63b8ff" d="M139.82,-164.98C148.31,-157.23 161.06,-145.58 171.38,-136.14"/>
-<polygon fill="#63b8ff" stroke="#63b8ff" points="173.99,-138.5 179.01,-129.17 169.27,-133.33 173.99,-138.5"/>
+<path fill="none" stroke="#63b8ff" d="M188.5,-164.75C188.5,-157.8 188.5,-147.85 188.5,-139.13"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="192,-139.09 188.5,-129.09 185,-139.09 192,-139.09"/>
+</a>
+</g>
+</g>
+<!-- Node8 -->
+<g id="Node000008" class="node">
+<title>Node8</title>
+<g id="a_Node000008"><a xlink:title=" ">
+<polygon fill="#e0e0e0" stroke="#999999" points="320.5,-129 278.5,-129 278.5,-110 320.5,-110 320.5,-129"/>
+<text text-anchor="middle" x="299.5" y="-117" font-family="Helvetica,sans-Serif" font-size="10.00">array</text>
+</a>
+</g>
+</g>
+<!-- Node1&#45;&gt;Node8 -->
+<g id="edge8_Node000001_Node000008" class="edge">
+<title>Node1&#45;&gt;Node8</title>
+<g id="a_edge8_Node000001_Node000008"><a xlink:title=" ">
+<path fill="none" stroke="#63b8ff" d="M206.33,-164.98C224.11,-156.5 251.65,-143.35 272.18,-133.54"/>
+<polygon fill="#63b8ff" stroke="#63b8ff" points="273.83,-136.64 281.34,-129.17 270.81,-130.32 273.83,-136.64"/>
 </a>
 </g>
 </g>

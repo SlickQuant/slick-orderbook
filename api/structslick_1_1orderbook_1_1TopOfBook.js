@@ -12,6 +12,7 @@ var structslick_1_1orderbook_1_1TopOfBook =
     [ "best_ask", "structslick_1_1orderbook_1_1TopOfBook.html#ac78b713a9d33563965ef95458202c8f7", null ],
     [ "best_bid", "structslick_1_1orderbook_1_1TopOfBook.html#aeb372c4d1e04cc29fe4990b3306b2f48", null ],
     [ "bid_quantity", "structslick_1_1orderbook_1_1TopOfBook.html#af27452fc7ff7bc5fa470175a1d1425e0", null ],
+    [ "change_flags", "structslick_1_1orderbook_1_1TopOfBook.html#ac119511e1a45e94a1af7535422b135e9", null ],
     [ "symbol", "structslick_1_1orderbook_1_1TopOfBook.html#ac83386d1471990be72566ddaeadcd0b5", null ],
     [ "timestamp", "structslick_1_1orderbook_1_1TopOfBook.html#aef849b33fd8b8bd120b0a78d4e8fcf79", null ]
 ];

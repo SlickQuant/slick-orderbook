@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['ordertype_0',['OrderType',['../namespaceslick_1_1orderbook.html#a1b1ef727a7178b4c6fe7c2bc704a6c6d',1,'slick::orderbook']]]
+  ['changeflag_0',['ChangeFlag',['../namespaceslick_1_1orderbook.html#a558cb9e311f7c290cd0cdc3d374389ed',1,'slick::orderbook']]]
 ];
