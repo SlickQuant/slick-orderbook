@@ -40,6 +40,11 @@ jobs:
         sudo apt-get install -y cmake ninja-build ${{ matrix.compiler }} g++-14
 
     - name: Install vcpkg Dependencies
+      env:
+        VCPKG_BINARY_SOURCES: 'clear;x-gha,readwrite'
+        # These are automatically provided by the GitHub runner
+        ACTIONS_CACHE_URL: ${{ env.ACTIONS_CACHE_URL }}
+        ACTIONS_RUNTIME_TOKEN: ${{ env.ACTIONS_RUNTIME_TOKEN }}
       run: |
         vcpkg install nlohmann-json openssl boost-beast jwt-cpp
 
@@ -107,6 +112,11 @@ jobs:
         sudo apt-get install -y cmake ninja-build clang-${{ matrix.clang_version }}
 
     - name: Install vcpkg Dependencies
+      env:
+        VCPKG_BINARY_SOURCES: 'clear;x-gha,readwrite'
+        # These are automatically provided by the GitHub runner
+        ACTIONS_CACHE_URL: ${{ env.ACTIONS_CACHE_URL }}
+        ACTIONS_RUNTIME_TOKEN: ${{ env.ACTIONS_RUNTIME_TOKEN }}
       run: |
         vcpkg install nlohmann-json openssl boost-beast jwt-cpp
 
@@ -150,6 +160,11 @@ jobs:
       uses: microsoft/setup-msbuild@v2
 
     - name: Install vcpkg dependencies
+      env:
+        VCPKG_BINARY_SOURCES: 'clear;x-gha,readwrite'
+        # These are automatically provided by the GitHub runner
+        ACTIONS_CACHE_URL: ${{ env.ACTIONS_CACHE_URL }}
+        ACTIONS_RUNTIME_TOKEN: ${{ env.ACTIONS_RUNTIME_TOKEN }}
       run: |
         vcpkg install nlohmann-json:x64-windows openssl:x64-windows boost-beast:x64-windows jwt-cpp:x64-windows
 
@@ -202,6 +217,11 @@ jobs:
         brew install cmake ninja
 
     - name: Install vcpkg Dependencies
+      env:
+        VCPKG_BINARY_SOURCES: 'clear;x-gha,readwrite'
+        # These are automatically provided by the GitHub runner
+        ACTIONS_CACHE_URL: ${{ env.ACTIONS_CACHE_URL }}
+        ACTIONS_RUNTIME_TOKEN: ${{ env.ACTIONS_RUNTIME_TOKEN }}
       run: |
         vcpkg install nlohmann-json openssl boost-beast jwt-cpp
 
