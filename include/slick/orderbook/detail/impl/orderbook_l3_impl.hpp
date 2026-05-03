@@ -417,32 +417,7 @@ SLICK_OB_INLINE const detail::PriceLevelL3* OrderBookL3::getBestAsk() const noex
 }
 
 SLICK_OB_INLINE TopOfBook OrderBookL3::getTopOfBook() const noexcept {
-    const auto* bid = getBestBid();
-    const auto* ask = getBestAsk();
-
-    TopOfBook tob;
-    tob.symbol = symbol_;
-
-    if (bid) {
-        tob.best_bid = bid->price;
-        tob.bid_quantity = bid->getTotalQuantity();
-        if (!bid->orders.empty()) {
-            tob.timestamp = bid->orders.front()->timestamp;
-        }
-    }
-
-    if (ask) {
-        tob.best_ask = ask->price;
-        tob.ask_quantity = ask->getTotalQuantity();
-        if (!ask->orders.empty()) {
-            const Timestamp ask_time = ask->orders.front()->timestamp;
-            if (ask_time > tob.timestamp) {
-                tob.timestamp = ask_time;
-            }
-        }
-    }
-
-    return tob;
+    return cached_tob_;
 }
 
 SLICK_OB_INLINE std::vector<detail::PriceLevelL2> OrderBookL3::getLevelsL2(Side side, std::size_t depth) const {
@@ -711,18 +686,22 @@ SLICK_OB_INLINE void OrderBookL3::notifyTopOfBookIfChanged(Timestamp timestamp) 
     Quantity new_ask_qty = ask ? ask->getTotalQuantity() : 0;
 
     // Check if best bid or ask changed
-    const bool bid_changed = (cached_tob_.best_bid != new_best_bid) ||
-                            (cached_tob_.bid_quantity != new_bid_qty);
-    const bool ask_changed = (cached_tob_.best_ask != new_best_ask) ||
-                            (cached_tob_.ask_quantity != new_ask_qty);
+    uint8_t bid_change_flags = 0;
+    uint8_t ask_change_flags = 0;
+    bid_change_flags += cached_tob_.best_bid != new_best_bid ? ChangeFlag::PriceChanged : 0;
+    bid_change_flags += cached_tob_.bid_quantity != new_bid_qty ? ChangeFlag::QuantityChanged : 0;
+    ask_change_flags += cached_tob_.best_ask != new_best_ask ? ChangeFlag::PriceChanged : 0;
+    ask_change_flags += cached_tob_.ask_quantity != new_ask_qty ? ChangeFlag::QuantityChanged : 0;
 
-    if (bid_changed || ask_changed) {
+    if (bid_change_flags || ask_change_flags) {
         // Update cached values
         cached_tob_.best_bid = new_best_bid;
         cached_tob_.bid_quantity = new_bid_qty;
         cached_tob_.best_ask = new_best_ask;
         cached_tob_.ask_quantity = new_ask_qty;
         cached_tob_.timestamp = timestamp;
+        cached_tob_.change_flags[0] = bid_change_flags;
+        cached_tob_.change_flags[1] = ask_change_flags;
 
         // Notify observers
         observers_.notifyTopOfBookUpdate(cached_tob_);

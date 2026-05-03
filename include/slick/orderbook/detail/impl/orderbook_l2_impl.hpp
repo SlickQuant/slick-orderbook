@@ -244,12 +244,14 @@ SLICK_OB_INLINE void OrderBookL2::notifyTopOfBookIfChanged(Timestamp timestamp) 
     Quantity new_ask_qty = ask ? ask->quantity : 0;
 
     // Check if best bid or ask changed
-    const bool bid_changed = (cached_tob_.best_bid != new_best_bid) ||
-                            (cached_tob_.bid_quantity != new_bid_qty);
-    const bool ask_changed = (cached_tob_.best_ask != new_best_ask) ||
-                            (cached_tob_.ask_quantity != new_ask_qty);
+    uint8_t bid_change_flags = 0;
+    uint8_t ask_change_flags = 0;
+    bid_change_flags += cached_tob_.best_bid != new_best_bid ? ChangeFlag::PriceChanged : 0;
+    bid_change_flags += cached_tob_.bid_quantity != new_bid_qty ? ChangeFlag::QuantityChanged : 0;
+    ask_change_flags += cached_tob_.best_ask != new_best_ask ? ChangeFlag::PriceChanged : 0;
+    ask_change_flags += cached_tob_.ask_quantity != new_ask_qty ? ChangeFlag::QuantityChanged : 0;
 
-    if (bid_changed || ask_changed) {
+    if (bid_change_flags || ask_change_flags) {
         // Update cached values using sequence lock (odd = writing, even = readable)
         uint64_t seq = tob_seq_.load(std::memory_order_relaxed);
         tob_seq_.store(seq + 1, std::memory_order_release);  // Mark as writing (odd)
@@ -260,6 +262,8 @@ SLICK_OB_INLINE void OrderBookL2::notifyTopOfBookIfChanged(Timestamp timestamp) 
         cached_tob_.best_ask = new_best_ask;
         cached_tob_.ask_quantity = new_ask_qty;
         cached_tob_.timestamp = timestamp;
+        cached_tob_.change_flags[0] = bid_change_flags;
+        cached_tob_.change_flags[1] = ask_change_flags;
 
         // Update cached best bid/ask levels for thread-safe access
         if (bid) {

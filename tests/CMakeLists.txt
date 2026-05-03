@@ -50,7 +50,7 @@ set_target_properties(slick_orderbook_tests
 
 # Discover tests for CTest
 include(GoogleTest)
-gtest_discover_tests(slick_orderbook_tests)
+gtest_discover_tests(slick_orderbook_tests DISCOVERY_TIMEOUT 30)
 
 # Add test target
 add_custom_target(run_tests

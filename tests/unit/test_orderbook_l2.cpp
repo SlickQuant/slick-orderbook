@@ -164,10 +164,15 @@ TEST_F(OrderBookL2Test, GetTopOfBook) {
 
     book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1);
     book.updateLevel(Side::Buy, kPrice99, kQty20, kTs1);
+    
+    auto tob = book.getTopOfBook();
+    EXPECT_TRUE(tob.change_flags[Side::Buy] & ChangeFlag::PriceChanged);
+    EXPECT_TRUE(tob.change_flags[Side::Buy] & ChangeFlag::QuantityChanged);
+
     book.updateLevel(Side::Sell, kPrice101, kQty30, kTs2);
     book.updateLevel(Side::Sell, kPrice102, kQty40, kTs2);
 
-    auto tob = book.getTopOfBook();
+    tob = book.getTopOfBook();
 
     EXPECT_EQ(tob.symbol, kSymbol);
     EXPECT_EQ(tob.best_bid, kPrice100);
@@ -177,6 +182,10 @@ TEST_F(OrderBookL2Test, GetTopOfBook) {
     EXPECT_EQ(tob.spread(), kPrice101 - kPrice100);
     EXPECT_TRUE(tob.isValid());
     EXPECT_FALSE(tob.isCrossed());
+    EXPECT_FALSE(tob.change_flags[Side::Buy] & ChangeFlag::PriceChanged);
+    EXPECT_FALSE(tob.change_flags[Side::Buy] & ChangeFlag::QuantityChanged);
+    EXPECT_TRUE(tob.change_flags[Side::Sell] & ChangeFlag::PriceChanged);
+    EXPECT_TRUE(tob.change_flags[Side::Sell] & ChangeFlag::QuantityChanged);
 }
 
 TEST_F(OrderBookL2Test, GetLevelsWithDepth) {

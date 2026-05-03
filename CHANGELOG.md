@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2026-05-02
+
 ### Added
 
 - **OrderBookL3**: Add `interested_num_levels` parameter to constructor for efficient top-N level tracking
@@ -20,6 +22,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - More efficient than runtime branching for side-agnostic algorithms
   - Returns `nullptr` if no orders exist on that side
 - **PriceLevelUpdate**: Add num_orders in PriceLevelUpdate; update related notifyPriceLevelUpdate methods
+- **TopOfBookUpdate**: Add change_flags in TopOfBook event; update related notifyTopOfBookUpdate methods
 
 ### Changed
 
@@ -34,6 +37,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Old signature: `deleteOrder(OrderId, seq_num=0, is_last_in_batch=true)`
   - New signature: `deleteOrder(OrderId, Timestamp timestamp, seq_num=0, is_last_in_batch=true)`
   - `timestamp` is now required (no default value)
+  - Rename PriceLevelChangeFlag to ChangeFlag
 - Changed Quantity type from int64_t to uint64_t in types.hpp
   - Negative quantities are now invalid at the type system level
   - Prevents semantic errors and improves type safety

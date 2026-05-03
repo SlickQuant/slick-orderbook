@@ -408,6 +408,10 @@ TEST_F(OrderBookL3Test, TopOfBookBidOnly) {
     EXPECT_EQ(tob.bid_quantity, kQty10);
     EXPECT_EQ(tob.best_ask, 0);
     EXPECT_EQ(tob.ask_quantity, 0);
+    EXPECT_TRUE(tob.change_flags[Side::Buy] & ChangeFlag::PriceChanged);
+    EXPECT_TRUE(tob.change_flags[Side::Buy] & ChangeFlag::QuantityChanged);
+    EXPECT_FALSE(tob.change_flags[Side::Sell] & ChangeFlag::PriceChanged);
+    EXPECT_FALSE(tob.change_flags[Side::Sell] & ChangeFlag::QuantityChanged);
 }
 
 TEST_F(OrderBookL3Test, TopOfBookAskOnly) {
@@ -420,6 +424,10 @@ TEST_F(OrderBookL3Test, TopOfBookAskOnly) {
     EXPECT_EQ(tob.bid_quantity, 0);
     EXPECT_EQ(tob.best_ask, kPrice100);
     EXPECT_EQ(tob.ask_quantity, kQty10);
+    EXPECT_FALSE(tob.change_flags[Side::Buy] & ChangeFlag::PriceChanged);
+    EXPECT_FALSE(tob.change_flags[Side::Buy] & ChangeFlag::QuantityChanged);
+    EXPECT_TRUE(tob.change_flags[Side::Sell] & ChangeFlag::PriceChanged);
+    EXPECT_TRUE(tob.change_flags[Side::Sell] & ChangeFlag::QuantityChanged);
 }
 
 TEST_F(OrderBookL3Test, TopOfBookBidAndAsk) {
@@ -433,6 +441,10 @@ TEST_F(OrderBookL3Test, TopOfBookBidAndAsk) {
     EXPECT_EQ(tob.bid_quantity, kQty10);
     EXPECT_EQ(tob.best_ask, kPrice101);
     EXPECT_EQ(tob.ask_quantity, kQty20);
+    EXPECT_FALSE(tob.change_flags[Side::Buy] & ChangeFlag::PriceChanged);
+    EXPECT_FALSE(tob.change_flags[Side::Buy] & ChangeFlag::QuantityChanged);
+    EXPECT_TRUE(tob.change_flags[Side::Sell] & ChangeFlag::PriceChanged);
+    EXPECT_TRUE(tob.change_flags[Side::Sell] & ChangeFlag::QuantityChanged);
 }
 
 // ============================================================================

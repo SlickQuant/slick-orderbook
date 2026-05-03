@@ -5,11 +5,12 @@
 
 #include <slick/orderbook/config.hpp>
 #include <slick/orderbook/types.hpp>
+#include <array>
 
 SLICK_NAMESPACE_BEGIN
 
 /// Change flags for price level and order updates (regular enum for bitwise operations)
-enum PriceLevelChangeFlag : uint8_t {
+enum ChangeFlag : uint8_t {
     PriceChanged = 0x01,    // Price level was added/moved
     QuantityChanged = 0x02, // Quantity at level changed
     LastInBatch = 0x04,     // Last update in external batch
@@ -25,7 +26,7 @@ struct PriceLevelUpdate {
     SymbolId symbol;        // Symbol identifier
     uint16_t level_index;   // 0-based index in sorted order (0 = best, 1 = second best, etc.)
     uint16_t num_orders;    // number of orders on the level
-    uint8_t change_flags;   // Bitset of PriceLevelChangeFlag
+    uint8_t change_flags;   // Bitset of ChangeFlag
     Side side;              // Buy or Sell
 
     PriceLevelUpdate() noexcept = default;
@@ -75,7 +76,7 @@ struct OrderUpdate {
     uint16_t price_level_index; // Index of the price level this order belongs to
     uint64_t priority;          // Order priority (typically timestamp or sequence number)
     Side side;                  // Buy or Sell
-    uint8_t change_flags;       // Bitset of PriceLevelChangeFlag
+    uint8_t change_flags;       // Bitset of ChangeFlag
 
     OrderUpdate() noexcept = default;
 
@@ -119,7 +120,7 @@ struct Trade {
     OrderId aggressive_order_id;    // OrderId of the aggressive (incoming) order
     OrderId passive_order_id;       // OrderId of the passive (resting) order
     Side aggressor_side;            // Side that initiated the trade (Buy = uptick, Sell = downtick)
-    uint8_t change_flags;           // Bitset of PriceLevelChangeFlag
+    uint8_t change_flags;           // Bitset of ChangeFlag
 
     Trade() noexcept : symbol(0), price(0), quantity(0), timestamp(0),
                        aggressive_order_id(0), passive_order_id(0),
@@ -139,12 +140,13 @@ struct Trade {
 
 /// Top-of-book snapshot - best bid and ask
 struct TopOfBook {
-    SymbolId symbol;        // Symbol identifier
-    Price best_bid;         // Best bid price (highest buy price)
-    Quantity bid_quantity;  // Total quantity at best bid
-    Price best_ask;         // Best ask price (lowest sell price)
-    Quantity ask_quantity;  // Total quantity at best ask
-    Timestamp timestamp;    // Snapshot timestamp
+    SymbolId symbol;                              // Symbol identifier
+    Price best_bid;                               // Best bid price (highest buy price)
+    Quantity bid_quantity;                        // Total quantity at best bid
+    Price best_ask;                               // Best ask price (lowest sell price)
+    Quantity ask_quantity;                        // Total quantity at best ask
+    Timestamp timestamp;                          // Snapshot timestamp
+    std::array<uint8_t, 2> change_flags {0, 0};   // Bitset of ChangeFlag
 
     TopOfBook() noexcept
         : symbol(0), best_bid(0), bid_quantity(0), best_ask(0), ask_quantity(0), timestamp(0) {}
