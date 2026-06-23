@@ -10,6 +10,9 @@
       "pattern": "^https://www.intel.com"
     },
     {
+      "pattern": "^https://en.cppreference.com"
+    },
+    {
       "pattern": "^\\.\\./"
     },
     {

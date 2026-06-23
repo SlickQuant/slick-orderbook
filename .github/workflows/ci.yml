@@ -12,6 +12,7 @@ permissions:
 
 env:
   BUILD_TYPE: Release
+  VCPKG_BINARY_CACHE: ${{ github.workspace }}/.vcpkg-cache
 
 jobs:
   # ============================================================================
@@ -34,6 +35,14 @@ jobs:
       with:
         vcpkgGitCommitId: '66c0373dc7fca549e5803087b9487edfe3aca0a1'
 
+    - name: Cache vcpkg binary packages
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.VCPKG_BINARY_CACHE }}
+        key: ${{ runner.os }}-vcpkg-${{ hashFiles('.github/workflows/ci.yml', 'CMakeLists.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-vcpkg-
+
     - name: Install System Dependencies
       run: |
         sudo apt-get update
@@ -41,11 +50,9 @@ jobs:
 
     - name: Install vcpkg Dependencies
       env:
-        VCPKG_BINARY_SOURCES: 'clear;x-gha,readwrite'
-        # These are automatically provided by the GitHub runner
-        ACTIONS_CACHE_URL: ${{ env.ACTIONS_CACHE_URL }}
-        ACTIONS_RUNTIME_TOKEN: ${{ env.ACTIONS_RUNTIME_TOKEN }}
+        VCPKG_BINARY_SOURCES: 'clear;files,${{ env.VCPKG_BINARY_CACHE }},readwrite'
       run: |
+        mkdir -p "${VCPKG_BINARY_CACHE}"
         vcpkg install nlohmann-json openssl boost-beast jwt-cpp
 
     - name: Configure CMake (Compiled)
@@ -106,6 +113,14 @@ jobs:
       with:
         vcpkgGitCommitId: '66c0373dc7fca549e5803087b9487edfe3aca0a1'
 
+    - name: Cache vcpkg binary packages
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.VCPKG_BINARY_CACHE }}
+        key: ${{ runner.os }}-vcpkg-${{ hashFiles('.github/workflows/ci.yml', 'CMakeLists.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-vcpkg-
+
     - name: Install System Dependencies
       run: |
         sudo apt-get update
@@ -113,11 +128,9 @@ jobs:
 
     - name: Install vcpkg Dependencies
       env:
-        VCPKG_BINARY_SOURCES: 'clear;x-gha,readwrite'
-        # These are automatically provided by the GitHub runner
-        ACTIONS_CACHE_URL: ${{ env.ACTIONS_CACHE_URL }}
-        ACTIONS_RUNTIME_TOKEN: ${{ env.ACTIONS_RUNTIME_TOKEN }}
+        VCPKG_BINARY_SOURCES: 'clear;files,${{ env.VCPKG_BINARY_CACHE }},readwrite'
       run: |
+        mkdir -p "${VCPKG_BINARY_CACHE}"
         vcpkg install nlohmann-json openssl boost-beast jwt-cpp
 
     - name: Clean build dir
@@ -159,13 +172,19 @@ jobs:
     - name: Setup MSVC
       uses: microsoft/setup-msbuild@v2
 
+    - name: Cache vcpkg binary packages
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.VCPKG_BINARY_CACHE }}
+        key: ${{ runner.os }}-vcpkg-${{ hashFiles('.github/workflows/ci.yml', 'CMakeLists.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-vcpkg-
+
     - name: Install vcpkg dependencies
       env:
-        VCPKG_BINARY_SOURCES: 'clear;x-gha,readwrite'
-        # These are automatically provided by the GitHub runner
-        ACTIONS_CACHE_URL: ${{ env.ACTIONS_CACHE_URL }}
-        ACTIONS_RUNTIME_TOKEN: ${{ env.ACTIONS_RUNTIME_TOKEN }}
+        VCPKG_BINARY_SOURCES: 'clear;files,${{ env.VCPKG_BINARY_CACHE }},readwrite'
       run: |
+        New-Item -ItemType Directory -Force -Path $env:VCPKG_BINARY_CACHE | Out-Null
         vcpkg install nlohmann-json:x64-windows openssl:x64-windows boost-beast:x64-windows jwt-cpp:x64-windows
 
     - name: Configure CMake (Compiled)
@@ -212,17 +231,23 @@ jobs:
       with:
         vcpkgGitCommitId: '66c0373dc7fca549e5803087b9487edfe3aca0a1'
 
+    - name: Cache vcpkg binary packages
+      uses: actions/cache@v4
+      with:
+        path: ${{ env.VCPKG_BINARY_CACHE }}
+        key: ${{ runner.os }}-vcpkg-${{ hashFiles('.github/workflows/ci.yml', 'CMakeLists.txt') }}
+        restore-keys: |
+          ${{ runner.os }}-vcpkg-
+
     - name: Install System Dependencies
       run: |
         brew install cmake ninja
 
     - name: Install vcpkg Dependencies
       env:
-        VCPKG_BINARY_SOURCES: 'clear;x-gha,readwrite'
-        # These are automatically provided by the GitHub runner
-        ACTIONS_CACHE_URL: ${{ env.ACTIONS_CACHE_URL }}
-        ACTIONS_RUNTIME_TOKEN: ${{ env.ACTIONS_RUNTIME_TOKEN }}
+        VCPKG_BINARY_SOURCES: 'clear;files,${{ env.VCPKG_BINARY_CACHE }},readwrite'
       run: |
+        mkdir -p "${VCPKG_BINARY_CACHE}"
         vcpkg install nlohmann-json openssl boost-beast jwt-cpp
 
     - name: Configure CMake
