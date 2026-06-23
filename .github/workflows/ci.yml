@@ -11,7 +11,6 @@ permissions:
   contents: read
 
 env:
-  BUILD_TYPE: Release
   VCPKG_BINARY_CACHE: ${{ github.workspace }}/.vcpkg-cache
 
 jobs:
@@ -24,6 +23,7 @@ jobs:
       matrix:
         compiler: [gcc-14]
         build_mode: [compiled, header-only]
+        build_type: [Debug, Release]
 
     steps:
     - uses: actions/checkout@v4
@@ -60,7 +60,7 @@ jobs:
       run: |
         cmake -B build -G Ninja \
           -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" \
-          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
           -DCMAKE_CXX_COMPILER=g++-14 \
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
@@ -72,7 +72,7 @@ jobs:
       run: |
         cmake -B build -G Ninja \
           -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" \
-          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
           -DCMAKE_CXX_COMPILER=g++-14 \
           -DSLICK_ORDERBOOK_HEADER_ONLY=ON \
@@ -91,7 +91,7 @@ jobs:
       if: always()
       uses: actions/upload-artifact@v4
       with:
-        name: test-results-linux-${{ matrix.compiler }}-${{ matrix.build_mode }}
+        name: test-results-linux-${{ matrix.compiler }}-${{ matrix.build_mode }}-${{ matrix.build_type }}
         path: build/Testing/Temporary/LastTest.log
 
   # ============================================================================
@@ -102,6 +102,7 @@ jobs:
     strategy:
       matrix:
         clang_version: [18]
+        build_type: [Debug, Release]
 
     steps:
     - uses: actions/checkout@v4
@@ -140,7 +141,7 @@ jobs:
       run: |
         cmake -B build -G Ninja \
           -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" \
-          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
           -DCMAKE_C_COMPILER=clang-${{ matrix.clang_version }} \
           -DCMAKE_CXX_COMPILER=clang++-${{ matrix.clang_version }} \
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
@@ -163,6 +164,7 @@ jobs:
     strategy:
       matrix:
         build_mode: [compiled, header-only]
+        build_type: [Debug, Release]
 
     steps:
     - uses: actions/checkout@v4
@@ -192,7 +194,7 @@ jobs:
       run: |
         cmake -B build -G "Visual Studio 17 2022" -A x64 `
           -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake" `
-          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} `
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} `
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON `
           -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON `
           -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
@@ -202,24 +204,27 @@ jobs:
       run: |
         cmake -B build -G "Visual Studio 17 2022" -A x64 `
           -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake" `
-          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} `
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} `
           -DSLICK_ORDERBOOK_HEADER_ONLY=ON `
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON `
           -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON `
           -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
 
     - name: Build
-      run: cmake --build build --config ${{ env.BUILD_TYPE }} -j
+      run: cmake --build build --config ${{ matrix.build_type }} -j
 
     - name: Test
       working-directory: ${{ github.workspace }}/build
-      run: ctest --output-on-failure -C ${{ env.BUILD_TYPE }} -j
+      run: ctest --output-on-failure -C ${{ matrix.build_type }} -j
 
   # ============================================================================
   # macOS Build & Test
   # ============================================================================
   macos:
     runs-on: macos-14
+    strategy:
+      matrix:
+        build_type: [Debug, Release]
 
     steps:
     - uses: actions/checkout@v4
@@ -254,7 +259,7 @@ jobs:
       run: |
         cmake -B build -G Ninja \
           -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" \
-          -DCMAKE_BUILD_TYPE=${{ env.BUILD_TYPE }} \
+          -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
           -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON \
           -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
