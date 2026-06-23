@@ -167,7 +167,7 @@ $(document).ready(function(){initNavTree('orderbook__l3__impl_8hpp_source.html',
 <div class="line"><a id="l00062" name="l00062"></a><span class="lineno">   62</span>        }</div>
 <div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span> </div>
 <div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>        <span class="keywordflow">if</span> (<a class="code hl_define" href="config_8hpp.html#aad160a56cf286985be2902ab10612dc6">SLICK_UNLIKELY</a>(quantity &lt;= 0)) {</div>
-<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>            <span class="keywordflow">return</span> (quantity == 0) ? <a class="code hl_function" href="classslick_1_1orderbook_1_1OrderBookL3.html#aa7e92bb522c9b957dd792be62cc17d9a">deleteOrder</a>(order_id, seq_num, is_last_in_batch) : <span class="keyword">false</span>;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>            <span class="keywordflow">return</span> (quantity == 0) ? <a class="code hl_function" href="classslick_1_1orderbook_1_1OrderBookL3.html#aa7e92bb522c9b957dd792be62cc17d9a">deleteOrder</a>(order_id, timestamp, seq_num, is_last_in_batch) : <span class="keyword">false</span>;</div>
 <div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>        }</div>
 <div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span> </div>
 <div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        <span class="comment">// Idempotent update - nothing to do.</span></div>
@@ -273,7 +273,7 @@ $(document).ready(function(){initNavTree('orderbook__l3__impl_8hpp_source.html',
 <div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span> </div>
 <div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span>    <span class="comment">// Check if this is a delete (quantity = 0)</span></div>
 <div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>    <span class="keywordflow">if</span> (new_quantity == 0) {</div>
-<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>        <span class="keywordflow">return</span> <a class="code hl_function" href="classslick_1_1orderbook_1_1OrderBookL3.html#aa7e92bb522c9b957dd792be62cc17d9a">deleteOrder</a>(order_id, seq_num, is_last_in_batch);</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span>        <span class="keywordflow">return</span> <a class="code hl_function" href="classslick_1_1orderbook_1_1OrderBookL3.html#aa7e92bb522c9b957dd792be62cc17d9a">deleteOrder</a>(order_id, new_timestamp, seq_num, is_last_in_batch);</div>
 <div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span>    }</div>
 <div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span> </div>
 <div class="line"><a id="l00170" name="l00170"></a><span class="lineno">  170</span>    <span class="keyword">const</span> <a class="code hl_typedef" href="namespaceslick_1_1orderbook.html#a25935d410087baa88ea8ec548e2a91ea">Price</a> old_price = order-&gt;<a class="code hl_variable" href="structslick_1_1orderbook_1_1detail_1_1Order.html#ac6f3f92107e8adeec15db31cca3e9167">price</a>;</div>
