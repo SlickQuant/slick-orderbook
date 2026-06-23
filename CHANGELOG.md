@@ -7,6 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.3] - 2026-06-22
+
+### Fixed
+
+- **OrderBookL3**: Bug fix in `addOrModifyOrder` and `modifyOrder` where `timestamp` was not forwarded to the internal
+  `deleteOrder` call for fully-executed orders — `seq_num` was incorrectly passed in the timestamp
+  position, corrupting the delete event's timestamp and seq_num fields in observer notifications.
+
+### Tests
+
+- Added 38 `WithSeqNum` test variants for all `OrderBookL3` functional test sections (initial
+  `seq_num = 2`), covering Add, Find, Modify, Delete, Execute, TopOfBook, L2 aggregation, L3 level
+  access, Clear, and Observer operations.
+- `ExecuteOrderFullyWithSeqNum` directly validates the bug fix by asserting that the delete
+  notification carries `timestamp = kTs2` (not the `seq_num` value) and `seq_num = 3`.
+
+### CI
+
+- Use action cache in GitHub Actions workflows to reduce CI build times.
+
 ## [1.0.2] - 2026-05-02
 
 ### Added
@@ -215,5 +235,8 @@ All performance targets exceeded:
 
 This project is licensed under the MIT License.
 
-[Unreleased]: https://github.com/SlickQuant/slick-orderbook/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/SlickQuant/slick-orderbook/compare/v1.0.3...HEAD
+[1.0.3]: https://github.com/SlickQuant/slick-orderbook/compare/v1.0.2...v1.0.3
+[1.0.2]: https://github.com/SlickQuant/slick-orderbook/compare/v1.0.1...v1.0.2
+[1.0.1]: https://github.com/SlickQuant/slick-orderbook/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/SlickQuant/slick-orderbook/releases/tag/v1.0.0

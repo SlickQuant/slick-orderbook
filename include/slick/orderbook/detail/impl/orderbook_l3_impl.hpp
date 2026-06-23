@@ -62,7 +62,7 @@ SLICK_OB_INLINE bool OrderBookL3::addOrModifyOrder(OrderId order_id, Side side, 
         }
 
         if (SLICK_UNLIKELY(quantity <= 0)) {
-            return (quantity == 0) ? deleteOrder(order_id, seq_num, is_last_in_batch) : false;
+            return (quantity == 0) ? deleteOrder(order_id, timestamp, seq_num, is_last_in_batch) : false;
         }
 
         // Idempotent update - nothing to do.
@@ -164,7 +164,7 @@ SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price,
 
     // Check if this is a delete (quantity = 0)
     if (new_quantity == 0) {
-        return deleteOrder(order_id, seq_num, is_last_in_batch);
+        return deleteOrder(order_id, new_timestamp, seq_num, is_last_in_batch);
     }
 
     const Price old_price = order->price;

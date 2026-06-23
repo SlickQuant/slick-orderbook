@@ -262,6 +262,17 @@ TEST_F(OrderBookL3Test, ModifyOrderToZeroQuantityDeletes) {
     EXPECT_EQ(book.findOrder(kOrder1), nullptr);
 }
 
+TEST_F(OrderBookL3Test, ModifyOrderToZeroQuantityDeletesWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 1, 2));
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, 0, kTs2, 0, 3));  // Delete via quantity=0
+
+    EXPECT_EQ(book.orderCount(), 0);
+    EXPECT_TRUE(book.isEmpty());
+    EXPECT_EQ(book.findOrder(kOrder1), nullptr);
+}
+
 TEST_F(OrderBookL3Test, AddOrModifyZeroQuantityDeletes) {
     OrderBookL3 book(kSymbol);
 
@@ -1205,4 +1216,610 @@ TEST_F(OrderBookL3Test, SequenceNumberMultipleSides) {
     // Verify rejected order was not added
     EXPECT_EQ(book.orderCount(Side::Buy), 1);  // Only first bid exists
     EXPECT_EQ(book.findOrder(kOrder3), nullptr);
+}
+
+// ============================================================================
+// Corresponding Tests With Sequence Number (seq_num starting at 2)
+// ============================================================================
+
+// --- Add Order With SeqNum ---
+
+TEST_F(OrderBookL3Test, AddSingleBidWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+
+    EXPECT_EQ(book.getLastSeqNum(), 2);
+    EXPECT_FALSE(book.isEmpty());
+    EXPECT_FALSE(book.isEmpty(Side::Buy));
+    EXPECT_TRUE(book.isEmpty(Side::Sell));
+    EXPECT_EQ(book.orderCount(), 1);
+    EXPECT_EQ(book.orderCount(Side::Buy), 1);
+    EXPECT_EQ(book.levelCount(Side::Buy), 1);
+    const auto* best_bid = book.getBestBid();
+    ASSERT_NE(best_bid, nullptr);
+    EXPECT_EQ(best_bid->price, kPrice100);
+    EXPECT_EQ(best_bid->getTotalQuantity(), kQty10);
+}
+
+TEST_F(OrderBookL3Test, AddSingleAskWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Sell, kPrice100, kQty10, kTs1, 0, 2));
+
+    EXPECT_EQ(book.getLastSeqNum(), 2);
+    EXPECT_FALSE(book.isEmpty());
+    EXPECT_TRUE(book.isEmpty(Side::Buy));
+    EXPECT_FALSE(book.isEmpty(Side::Sell));
+    EXPECT_EQ(book.orderCount(), 1);
+    EXPECT_EQ(book.orderCount(Side::Sell), 1);
+    EXPECT_EQ(book.levelCount(Side::Sell), 1);
+    const auto* best_ask = book.getBestAsk();
+    ASSERT_NE(best_ask, nullptr);
+    EXPECT_EQ(best_ask->price, kPrice100);
+    EXPECT_EQ(best_ask->getTotalQuantity(), kQty10);
+}
+
+TEST_F(OrderBookL3Test, AddDuplicateOrderIdWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    EXPECT_EQ(book.getLastSeqNum(), 2);
+    // Duplicate add fails; seq_num still advances because it is validated before the duplicate check
+    EXPECT_FALSE(book.addOrder(kOrder1, Side::Buy, kPrice101, kQty20, kTs2, 0, 3));
+    EXPECT_EQ(book.getLastSeqNum(), 3);
+    EXPECT_EQ(book.orderCount(), 1);
+
+    const auto* order = book.findOrder(kOrder1);
+    ASSERT_NE(order, nullptr);
+    EXPECT_EQ(order->price, kPrice100);
+    EXPECT_EQ(order->quantity, kQty10);
+}
+
+TEST_F(OrderBookL3Test, AddOrModifyOrderIdempotentWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, kTs1, 2));
+    EXPECT_EQ(book.getLastSeqNum(), 2);
+    EXPECT_TRUE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice101, kQty20, kTs2, kTs2, 3));
+    EXPECT_EQ(book.getLastSeqNum(), 3);
+    EXPECT_EQ(book.orderCount(), 1);
+
+    const auto* order = book.findOrder(kOrder1);
+    ASSERT_NE(order, nullptr);
+    EXPECT_EQ(order->price, kPrice101);
+    EXPECT_EQ(order->quantity, kQty20);
+}
+
+TEST_F(OrderBookL3Test, AddMultipleOrdersAtSamePriceWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, kPriority2, 2));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice100, kQty20, kTs2, kPriority1, 3));
+    EXPECT_TRUE(book.addOrder(kOrder3, Side::Buy, kPrice100, kQty30, kTs3, kPriority3, 4));
+    EXPECT_EQ(book.getLastSeqNum(), 4);
+
+    EXPECT_EQ(book.orderCount(), 3);
+    EXPECT_EQ(book.levelCount(Side::Buy), 1);
+    const auto* level = book.getBestBid();
+    ASSERT_NE(level, nullptr);
+    EXPECT_EQ(level->getTotalQuantity(), kQty10 + kQty20 + kQty30);
+    EXPECT_EQ(level->orderCount(), 3);
+    const auto* best_order = level->getBestOrder();
+    ASSERT_NE(best_order, nullptr);
+    EXPECT_EQ(best_order->order_id, kOrder2);
+}
+
+TEST_F(OrderBookL3Test, AddMultiplePriceLevelsWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice101, kQty20, kTs2, 0, 3));
+    EXPECT_TRUE(book.addOrder(kOrder3, Side::Buy, kPrice99, kQty30, kTs3, 0, 4));
+    EXPECT_EQ(book.getLastSeqNum(), 4);
+
+    EXPECT_EQ(book.orderCount(), 3);
+    EXPECT_EQ(book.levelCount(Side::Buy), 3);
+    const auto* best_bid = book.getBestBid();
+    ASSERT_NE(best_bid, nullptr);
+    EXPECT_EQ(best_bid->price, kPrice101);
+    EXPECT_EQ(best_bid->getTotalQuantity(), kQty20);
+}
+
+// --- Find Order With SeqNum ---
+
+TEST_F(OrderBookL3Test, FindOrderWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    EXPECT_EQ(book.getLastSeqNum(), 2);
+
+    const auto* order = book.findOrder(kOrder1);
+    ASSERT_NE(order, nullptr);
+    EXPECT_EQ(order->order_id, kOrder1);
+    EXPECT_EQ(order->price, kPrice100);
+    EXPECT_EQ(order->quantity, kQty10);
+    EXPECT_EQ(order->side, Side::Buy);
+    EXPECT_EQ(order->timestamp, kTs1);
+}
+
+TEST_F(OrderBookL3Test, FindNonExistentOrderWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    EXPECT_EQ(book.findOrder(kOrder2), nullptr);
+}
+
+// --- Modify Order With SeqNum ---
+
+TEST_F(OrderBookL3Test, ModifyOrderQuantityWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty20, kTs2, 0, 3));
+    EXPECT_EQ(book.getLastSeqNum(), 3);
+
+    const auto* order = book.findOrder(kOrder1);
+    ASSERT_NE(order, nullptr);
+    EXPECT_EQ(order->quantity, kQty20);
+    EXPECT_EQ(order->timestamp, kTs2);
+    const auto* level = book.getBestBid();
+    ASSERT_NE(level, nullptr);
+    EXPECT_EQ(level->getTotalQuantity(), kQty20);
+}
+
+TEST_F(OrderBookL3Test, ModifyOrderPriceWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice101, kQty10, kTs2, 0, 3));
+    EXPECT_EQ(book.getLastSeqNum(), 3);
+
+    const auto* order = book.findOrder(kOrder1);
+    ASSERT_NE(order, nullptr);
+    EXPECT_EQ(order->price, kPrice101);
+    EXPECT_EQ(order->timestamp, kTs2);
+    EXPECT_EQ(book.getLevel(Side::Buy, kPrice100).first, nullptr);
+    const auto* new_level = book.getLevel(Side::Buy, kPrice101).first;
+    ASSERT_NE(new_level, nullptr);
+    EXPECT_EQ(new_level->getTotalQuantity(), kQty10);
+}
+
+TEST_F(OrderBookL3Test, ModifyOrderPriceAndQuantityWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice101, kQty20, kTs2, 0, 3));
+    EXPECT_EQ(book.getLastSeqNum(), 3);
+
+    const auto* order = book.findOrder(kOrder1);
+    ASSERT_NE(order, nullptr);
+    EXPECT_EQ(order->price, kPrice101);
+    EXPECT_EQ(order->quantity, kQty20);
+    EXPECT_EQ(order->timestamp, kTs2);
+    const auto* new_level = book.getLevel(Side::Buy, kPrice101).first;
+    ASSERT_NE(new_level, nullptr);
+    EXPECT_EQ(new_level->getTotalQuantity(), kQty20);
+}
+
+TEST_F(OrderBookL3Test, AddOrModifyZeroQuantityDeletesWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    EXPECT_TRUE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice100, 0, kTs2, kTs2, 3));
+    EXPECT_EQ(book.getLastSeqNum(), 3);
+
+    EXPECT_EQ(book.orderCount(), 0);
+    EXPECT_TRUE(book.isEmpty());
+    EXPECT_EQ(book.findOrder(kOrder1), nullptr);
+}
+
+TEST_F(OrderBookL3Test, AddOrModifyZeroQuantityNonExistentReturnsFalseWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    // seq_num still advances even though the call returns false (order not found, qty=0)
+    EXPECT_FALSE(book.addOrModifyOrder(kOrder1, Side::Buy, kPrice100, 0, kTs1, kTs1, 2));
+    EXPECT_EQ(book.getLastSeqNum(), 2);
+    EXPECT_EQ(book.orderCount(), 0);
+    EXPECT_TRUE(book.isEmpty());
+}
+
+TEST_F(OrderBookL3Test, ModifyNonExistentOrderWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    // seq_num still advances even when the order is not found
+    EXPECT_FALSE(book.modifyOrder(kOrder1, kPrice100, kQty10, kTs1, 0, 2));
+    EXPECT_EQ(book.getLastSeqNum(), 2);
+}
+
+TEST_F(OrderBookL3Test, ModifyOrderNoChangeWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty10, kTs1, 0, 3));
+    EXPECT_EQ(book.getLastSeqNum(), 3);
+
+    const auto* order = book.findOrder(kOrder1);
+    ASSERT_NE(order, nullptr);
+    EXPECT_EQ(order->price, kPrice100);
+    EXPECT_EQ(order->quantity, kQty10);
+    EXPECT_EQ(order->timestamp, kTs1);
+}
+
+// --- Delete Order With SeqNum ---
+
+TEST_F(OrderBookL3Test, DeleteOrderWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    EXPECT_TRUE(book.deleteOrder(kOrder1, kTs2, 3));
+    EXPECT_EQ(book.getLastSeqNum(), 3);
+
+    EXPECT_EQ(book.orderCount(), 0);
+    EXPECT_TRUE(book.isEmpty());
+    EXPECT_EQ(book.findOrder(kOrder1), nullptr);
+    EXPECT_EQ(book.getBestBid(), nullptr);
+}
+
+TEST_F(OrderBookL3Test, DeleteNonExistentOrderWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    // seq_num still advances even when the order is not found
+    EXPECT_FALSE(book.deleteOrder(kOrder1, kTs1, 2));
+    EXPECT_EQ(book.getLastSeqNum(), 2);
+}
+
+TEST_F(OrderBookL3Test, DeleteOrderLeavesOthersIntactWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice100, kQty20, kTs2, 0, 3));
+    EXPECT_TRUE(book.deleteOrder(kOrder1, kTs3, 4));
+    EXPECT_EQ(book.getLastSeqNum(), 4);
+
+    EXPECT_EQ(book.orderCount(), 1);
+    EXPECT_NE(book.findOrder(kOrder2), nullptr);
+    const auto* level = book.getBestBid();
+    ASSERT_NE(level, nullptr);
+    EXPECT_EQ(level->getTotalQuantity(), kQty20);
+}
+
+TEST_F(OrderBookL3Test, DeleteLastOrderRemovesLevelWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    EXPECT_TRUE(book.deleteOrder(kOrder1, kTs2, 3));
+    EXPECT_EQ(book.getLastSeqNum(), 3);
+
+    EXPECT_EQ(book.levelCount(Side::Buy), 0);
+    EXPECT_EQ(book.getLevel(Side::Buy, kPrice100).first, nullptr);
+}
+
+// --- Execute Order With SeqNum ---
+
+TEST_F(OrderBookL3Test, ExecuteOrderPartiallyWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+    auto observer = std::make_shared<BatchObserverL3>();
+    book.addObserver(observer);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty30, kTs1, 0, 2));
+    observer->reset();
+
+    EXPECT_TRUE(book.executeOrder(kOrder1, kQty10, kTs2, 3));
+    EXPECT_EQ(book.getLastSeqNum(), 3);
+
+    const auto* order = book.findOrder(kOrder1);
+    ASSERT_NE(order, nullptr);
+    EXPECT_EQ(order->quantity, kQty20);  // 30 - 10 = 20
+
+    ASSERT_EQ(observer->order_updates.size(), 1);
+    EXPECT_EQ(observer->order_updates[0].quantity, kQty20);
+    EXPECT_EQ(observer->order_updates[0].timestamp, kTs2);
+    EXPECT_EQ(observer->order_updates[0].seq_num, 3);
+}
+
+TEST_F(OrderBookL3Test, ExecuteOrderFullyWithSeqNum) {
+    // Verifies the bug fix: timestamp must be forwarded (not seq_num) when
+    // executeOrder internally calls deleteOrder for a fully-executed order.
+    OrderBookL3 book(kSymbol);
+    auto observer = std::make_shared<BatchObserverL3>();
+    book.addObserver(observer);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    observer->reset();
+
+    EXPECT_TRUE(book.executeOrder(kOrder1, kQty10, kTs2, 3));
+    EXPECT_EQ(book.getLastSeqNum(), 3);
+
+    EXPECT_EQ(book.orderCount(), 0);
+    EXPECT_TRUE(book.isEmpty());
+    EXPECT_EQ(book.findOrder(kOrder1), nullptr);
+
+    // Delete notification must carry kTs2, not the seq_num value (3)
+    ASSERT_EQ(observer->order_updates.size(), 1);
+    EXPECT_EQ(observer->order_updates[0].quantity, 0);       // Delete notification
+    EXPECT_EQ(observer->order_updates[0].timestamp, kTs2);   // Must be kTs2, not seq_num=3
+    EXPECT_EQ(observer->order_updates[0].seq_num, 3);        // seq_num correctly forwarded
+}
+
+TEST_F(OrderBookL3Test, ExecuteNonExistentOrderWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    // seq_num still advances even when the order is not found
+    EXPECT_FALSE(book.executeOrder(kOrder1, kQty10, kTs1, 2));
+    EXPECT_EQ(book.getLastSeqNum(), 2);
+}
+
+// --- Top of Book With SeqNum ---
+
+TEST_F(OrderBookL3Test, TopOfBookBidOnlyWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+
+    TopOfBook tob = book.getTopOfBook();
+    EXPECT_EQ(tob.best_bid, kPrice100);
+    EXPECT_EQ(tob.bid_quantity, kQty10);
+    EXPECT_EQ(tob.best_ask, 0);
+    EXPECT_EQ(tob.ask_quantity, 0);
+    EXPECT_TRUE(tob.change_flags[Side::Buy] & ChangeFlag::PriceChanged);
+    EXPECT_TRUE(tob.change_flags[Side::Buy] & ChangeFlag::QuantityChanged);
+    EXPECT_FALSE(tob.change_flags[Side::Sell] & ChangeFlag::PriceChanged);
+    EXPECT_FALSE(tob.change_flags[Side::Sell] & ChangeFlag::QuantityChanged);
+}
+
+TEST_F(OrderBookL3Test, TopOfBookAskOnlyWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Sell, kPrice100, kQty10, kTs1, 0, 2));
+
+    TopOfBook tob = book.getTopOfBook();
+    EXPECT_EQ(tob.best_bid, 0);
+    EXPECT_EQ(tob.bid_quantity, 0);
+    EXPECT_EQ(tob.best_ask, kPrice100);
+    EXPECT_EQ(tob.ask_quantity, kQty10);
+    EXPECT_FALSE(tob.change_flags[Side::Buy] & ChangeFlag::PriceChanged);
+    EXPECT_FALSE(tob.change_flags[Side::Buy] & ChangeFlag::QuantityChanged);
+    EXPECT_TRUE(tob.change_flags[Side::Sell] & ChangeFlag::PriceChanged);
+    EXPECT_TRUE(tob.change_flags[Side::Sell] & ChangeFlag::QuantityChanged);
+}
+
+TEST_F(OrderBookL3Test, TopOfBookBidAndAskWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice99, kQty10, kTs1, 0, 2));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Sell, kPrice101, kQty20, kTs2, 0, 3));
+    EXPECT_EQ(book.getLastSeqNum(), 3);
+
+    TopOfBook tob = book.getTopOfBook();
+    EXPECT_EQ(tob.best_bid, kPrice99);
+    EXPECT_EQ(tob.bid_quantity, kQty10);
+    EXPECT_EQ(tob.best_ask, kPrice101);
+    EXPECT_EQ(tob.ask_quantity, kQty20);
+    EXPECT_FALSE(tob.change_flags[Side::Buy] & ChangeFlag::PriceChanged);
+    EXPECT_FALSE(tob.change_flags[Side::Buy] & ChangeFlag::QuantityChanged);
+    EXPECT_TRUE(tob.change_flags[Side::Sell] & ChangeFlag::PriceChanged);
+    EXPECT_TRUE(tob.change_flags[Side::Sell] & ChangeFlag::QuantityChanged);
+}
+
+// --- L2 Aggregation With SeqNum ---
+
+TEST_F(OrderBookL3Test, GetLevelsL2SingleLevelWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice100, kQty20, kTs2, 0, 3));
+    EXPECT_EQ(book.getLastSeqNum(), 3);
+
+    auto levels = book.getLevelsL2(Side::Buy, 0);
+    ASSERT_EQ(levels.size(), 1);
+    EXPECT_EQ(levels[0].price, kPrice100);
+    EXPECT_EQ(levels[0].quantity, kQty30);  // Aggregated: 10 + 20
+}
+
+TEST_F(OrderBookL3Test, GetLevelsL2MultipleLevelsWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice101, kQty10, kTs1, 0, 2));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice100, kQty20, kTs2, 0, 3));
+    EXPECT_TRUE(book.addOrder(kOrder3, Side::Buy, kPrice99, kQty30, kTs3, 0, 4));
+    EXPECT_EQ(book.getLastSeqNum(), 4);
+
+    auto levels = book.getLevelsL2(Side::Buy, 0);
+    ASSERT_EQ(levels.size(), 3);
+    EXPECT_EQ(levels[0].price, kPrice101);
+    EXPECT_EQ(levels[0].quantity, kQty10);
+    EXPECT_EQ(levels[1].price, kPrice100);
+    EXPECT_EQ(levels[1].quantity, kQty20);
+    EXPECT_EQ(levels[2].price, kPrice99);
+    EXPECT_EQ(levels[2].quantity, kQty30);
+}
+
+TEST_F(OrderBookL3Test, GetLevelsL2WithDepthWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice101, kQty10, kTs1, 0, 2));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice100, kQty20, kTs2, 0, 3));
+    EXPECT_TRUE(book.addOrder(kOrder3, Side::Buy, kPrice99, kQty30, kTs3, 0, 4));
+
+    auto levels = book.getLevelsL2(Side::Buy, 2);  // Top 2 levels only
+    ASSERT_EQ(levels.size(), 2);
+    EXPECT_EQ(levels[0].price, kPrice101);
+    EXPECT_EQ(levels[1].price, kPrice100);
+}
+
+TEST_F(OrderBookL3Test, GetLevelsL2AsksAscendingWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Sell, kPrice100, kQty10, kTs1, 0, 2));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Sell, kPrice101, kQty20, kTs2, 0, 3));
+    EXPECT_TRUE(book.addOrder(kOrder3, Side::Sell, kPrice99, kQty30, kTs3, 0, 4));
+
+    auto levels = book.getLevelsL2(Side::Sell, 0);
+    ASSERT_EQ(levels.size(), 3);
+    EXPECT_EQ(levels[0].price, kPrice99);
+    EXPECT_EQ(levels[0].quantity, kQty30);
+    EXPECT_EQ(levels[1].price, kPrice100);
+    EXPECT_EQ(levels[1].quantity, kQty10);
+    EXPECT_EQ(levels[2].price, kPrice101);
+    EXPECT_EQ(levels[2].quantity, kQty20);
+}
+
+// --- L3 Level Access With SeqNum ---
+
+TEST_F(OrderBookL3Test, GetLevelsL3ZeroCopyWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice101, kQty20, kTs2, 0, 3));
+    EXPECT_EQ(book.getLastSeqNum(), 3);
+
+    const auto& levels = book.getLevelsL3(Side::Buy);
+    EXPECT_EQ(levels.size(), 2);
+
+    std::size_t count = 0;
+    for (const auto& [price, level] : levels) {
+        EXPECT_GT(level.getTotalQuantity(), 0);
+        ++count;
+    }
+    EXPECT_EQ(count, 2);
+}
+
+TEST_F(OrderBookL3Test, GetLevelByPriceWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+
+    const auto* level = book.getLevel(Side::Buy, kPrice100).first;
+    ASSERT_NE(level, nullptr);
+    EXPECT_EQ(level->price, kPrice100);
+    EXPECT_EQ(level->getTotalQuantity(), kQty10);
+}
+
+TEST_F(OrderBookL3Test, IterateOrdersAtLevelWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, kPriority2, 2));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice100, kQty20, kTs2, kPriority1, 3));
+    EXPECT_TRUE(book.addOrder(kOrder3, Side::Buy, kPrice100, kQty30, kTs3, kPriority3, 4));
+    EXPECT_EQ(book.getLastSeqNum(), 4);
+
+    const auto* level = book.getLevel(Side::Buy, kPrice100).first;
+    ASSERT_NE(level, nullptr);
+
+    std::vector<OrderId> order_ids;
+    for (const auto& order : level->orders) {
+        order_ids.push_back(order.order_id);
+    }
+    ASSERT_EQ(order_ids.size(), 3);
+    EXPECT_EQ(order_ids[0], kOrder2);  // Priority 1 (highest)
+    EXPECT_EQ(order_ids[1], kOrder1);  // Priority 2
+    EXPECT_EQ(order_ids[2], kOrder3);  // Priority 3 (lowest)
+}
+
+// --- Clear With SeqNum ---
+
+TEST_F(OrderBookL3Test, ClearSideWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Sell, kPrice101, kQty20, kTs2, 0, 3));
+    EXPECT_EQ(book.getLastSeqNum(), 3);
+
+    book.clearSide(Side::Buy);
+
+    EXPECT_TRUE(book.isEmpty(Side::Buy));
+    EXPECT_FALSE(book.isEmpty(Side::Sell));
+    EXPECT_EQ(book.orderCount(Side::Buy), 0);
+    EXPECT_EQ(book.orderCount(Side::Sell), 1);
+}
+
+TEST_F(OrderBookL3Test, ClearWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Sell, kPrice101, kQty20, kTs2, 0, 3));
+    EXPECT_EQ(book.getLastSeqNum(), 3);
+
+    book.clear();
+
+    EXPECT_TRUE(book.isEmpty());
+    EXPECT_EQ(book.orderCount(), 0);
+    EXPECT_EQ(book.levelCount(Side::Buy), 0);
+    EXPECT_EQ(book.levelCount(Side::Sell), 0);
+}
+
+// --- Observer With SeqNum ---
+
+TEST_F(OrderBookL3Test, ObserverAddOrderWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+    auto observer = std::make_shared<BatchObserverL3>();
+    book.addObserver(observer);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+
+    ASSERT_EQ(observer->order_updates.size(), 1);
+    EXPECT_EQ(observer->order_updates[0].order_id, kOrder1);
+    EXPECT_EQ(observer->order_updates[0].price, kPrice100);
+    EXPECT_EQ(observer->order_updates[0].quantity, kQty10);
+    EXPECT_EQ(observer->order_updates[0].timestamp, kTs1);
+    EXPECT_EQ(observer->order_updates[0].seq_num, 2);
+
+    ASSERT_EQ(observer->level_updates.size(), 1);
+    EXPECT_EQ(observer->level_updates[0].price, kPrice100);
+    EXPECT_EQ(observer->level_updates[0].quantity, kQty10);
+    EXPECT_EQ(observer->level_updates[0].seq_num, 2);
+
+    ASSERT_EQ(observer->tob_updates.size(), 1);
+    EXPECT_EQ(observer->tob_updates[0].best_bid, kPrice100);
+}
+
+TEST_F(OrderBookL3Test, ObserverModifyOrderWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+    auto observer = std::make_shared<BatchObserverL3>();
+    book.addObserver(observer);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    observer->reset();
+
+    EXPECT_TRUE(book.modifyOrder(kOrder1, kPrice100, kQty20, kTs2, 0, 3));
+
+    ASSERT_EQ(observer->order_updates.size(), 1);
+    EXPECT_EQ(observer->order_updates[0].quantity, kQty20);
+    EXPECT_EQ(observer->order_updates[0].timestamp, kTs2);
+    EXPECT_EQ(observer->order_updates[0].seq_num, 3);
+}
+
+TEST_F(OrderBookL3Test, ObserverDeleteOrderWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+    auto observer = std::make_shared<BatchObserverL3>();
+    book.addObserver(observer);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    observer->reset();
+
+    EXPECT_TRUE(book.deleteOrder(kOrder1, kTs2, 3));
+
+    ASSERT_EQ(observer->order_updates.size(), 1);
+    EXPECT_EQ(observer->order_updates[0].quantity, 0);       // Delete notification
+    EXPECT_EQ(observer->order_updates[0].timestamp, kTs2);
+    EXPECT_EQ(observer->order_updates[0].seq_num, 3);
+}
+
+TEST_F(OrderBookL3Test, EmitSnapshotWithSeqNum) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1, 0, 2));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Sell, kPrice101, kQty20, kTs2, 0, 3));
+    EXPECT_TRUE(book.addOrder(kOrder3, Side::Buy, kPrice99, kQty30, kTs3, 0, 4));
+    EXPECT_EQ(book.getLastSeqNum(), 4);
+
+    auto observer = std::make_shared<SnapshotObserver>();
+    book.addObserver(observer);
+
+    book.emitSnapshot(kTs4);
+
+    EXPECT_EQ(observer->snapshot_begin_count, 1);
+    EXPECT_EQ(observer->snapshot_end_count, 1);
+    EXPECT_EQ(observer->order_update_count, 3);
 }
