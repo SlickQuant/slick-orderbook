@@ -654,7 +654,7 @@ $(document).ready(function(){initNavTree('orderbook__l3__impl_8hpp_source.html',
 <div class="line"><a id="l00515" name="l00515"></a><span class="lineno">  515</span> </div>
 <div class="line"><a id="l00516" name="l00516"></a><span class="lineno">  516</span>    <span class="comment">// Delete all orders on this side</span></div>
 <div class="line"><a id="l00517" name="l00517"></a><span class="lineno">  517</span>    <span class="keyword">auto</span>&amp; level_map = levels_[side];</div>
-<div class="line"><a id="l00518" name="l00518"></a><span class="lineno">  518</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp; [price, level] : level_map) {</div>
+<div class="line"><a id="l00518" name="l00518"></a><span class="lineno">  518</span>    <span class="keywordflow">for</span> (<span class="keyword">auto</span>&amp;&amp; [price, level] : level_map) {</div>
 <div class="line"><a id="l00519" name="l00519"></a><span class="lineno">  519</span>        <span class="keywordflow">for</span> (<span class="keyword">auto</span> it = level.orders.begin(); it != level.orders.end(); ) {</div>
 <div class="line"><a id="l00520" name="l00520"></a><span class="lineno">  520</span>            <span class="keyword">auto</span>* order = &amp;(*it);</div>
 <div class="line"><a id="l00521" name="l00521"></a><span class="lineno">  521</span>            ++it;  <span class="comment">// Advance before unlinking/destroying.</span></div>

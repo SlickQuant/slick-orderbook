@@ -12,7 +12,7 @@ var searchData=
   ['levelcount_9',['levelcount',['../classslick_1_1orderbook_1_1OrderBookL3.html#af21ca90c2bf3fb1f3b47d5536b550a2a',1,'slick::orderbook::OrderBookL3::levelCount()'],['../classslick_1_1orderbook_1_1OrderBookL2.html#a2e8a4fa5f7af66ef42677ce780d3cfd8',1,'slick::orderbook::OrderBookL2::levelCount()']]],
   ['levels_10',['OrderBookL2 - Aggregated Price Levels',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md31',1,'']]],
   ['levels_5f_11',['levels_',['../classslick_1_1orderbook_1_1OrderBookL3.html#ab11202bf24067cde77dc75c25563f6b6',1,'slick::orderbook::OrderBookL3']]],
-  ['library_20default_12',['Compiled Library (Default)',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md66',1,'']]],
+  ['library_20default_12',['Compiled Library (Default)',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md67',1,'']]],
   ['license_13',['📄 License',['../index.html#autotoc_md20',1,'']]],
   ['limit_14',['Limit',['../namespaceslick_1_1orderbook.html#a1b1ef727a7178b4c6fe7c2bc704a6c6da80d2677cf518f4d04320042f4ea6c146',1,'slick::orderbook']]],
   ['linux_15',['Technique 3: Huge Pages (Linux)',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md109',1,'']]],

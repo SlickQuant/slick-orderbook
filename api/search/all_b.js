@@ -1,8 +1,8 @@
 var searchData=
 [
   ['back_0',['back',['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#ad019cc04ad71ee58511615fd8316610a',1,'slick::orderbook::detail::IntrusiveList::back() noexcept'],['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#ada30259ff337fa70ab0a5d491b089cfb',1,'slick::orderbook::detail::IntrusiveList::back() const noexcept']]],
-  ['based_20design_1',['2. Policy-Based Design',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md61',1,'']]],
-  ['based_20polymorphism_20crtp_2',['1. Template-Based Polymorphism (CRTP)',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md60',1,'']]],
+  ['based_20design_1',['2. Policy-Based Design',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md62',1,'']]],
+  ['based_20polymorphism_20crtp_2',['1. Template-Based Polymorphism (CRTP)',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md61',1,'']]],
   ['basic_20usage_20level_202_20orderbook_3',['Basic Usage - Level 2 OrderBook',['../index.html#autotoc_md6',1,'']]],
   ['basic_20usage_20level_203_20orderbook_4',['Basic Usage - Level 3 OrderBook',['../index.html#autotoc_md7',1,'']]],
   ['batch_20updates_20for_20snapshots_5',['3. Use Batch Updates for Snapshots',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md90',1,'']]],
@@ -17,9 +17,9 @@ var searchData=
   ['bid_5fquantity_14',['bid_quantity',['../structslick_1_1orderbook_1_1TopOfBook.html#af27452fc7ff7bc5fa470175a1d1425e0',1,'slick::orderbook::TopOfBook']]],
   ['bidcomparator_15',['BidComparator',['../structslick_1_1orderbook_1_1detail_1_1BidComparator.html',1,'slick::orderbook::detail']]],
   ['bidcomparatorl3_16',['BidComparatorL3',['../structslick_1_1orderbook_1_1detail_1_1BidComparatorL3.html',1,'slick::orderbook::detail']]],
-  ['build_20modes_17',['Build Modes',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md65',1,'']]],
+  ['build_20modes_17',['Build Modes',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md66',1,'']]],
   ['builds_18',['10. Use Release Builds',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md97',1,'']]],
   ['buy_19',['Buy',['../namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa0fdce9f0ade221c1e1341e11f6029a00',1,'slick::orderbook']]],
   ['by_20order_20tracking_20',['OrderBookL3 - Order-by-Order Tracking',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md32',1,'']]],
-  ['by_20side_21',['2. Array Indexing by Side',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md50',1,'']]]
+  ['by_20side_21',['2. Array Indexing by Side',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md51',1,'']]]
 ];

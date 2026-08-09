@@ -1,11 +1,11 @@
 var searchData=
 [
-  ['cache_20alignment_20strategy_0',['Cache Alignment Strategy',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md41',1,'']]],
+  ['cache_20alignment_20strategy_0',['Cache Alignment Strategy',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md42',1,'']]],
   ['cache_20behavior_1',['Cache Behavior',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md73',1,'']]],
   ['cache_20friendly_20sorted_20storage_2',['FlatMap - Cache-Friendly Sorted Storage',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md36',1,'']]],
   ['cache_20optimized_20data_20structures_3',['Cache-Optimized Data Structures',['../index.html#autotoc_md12',1,'']]],
   ['cache_20topofbook_20queries_4',['7. Cache TopOfBook Queries',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md94',1,'']]],
-  ['cached_20topofbook_5',['1. Cached TopOfBook',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md49',1,'']]],
+  ['cached_20topofbook_5',['1. Cached TopOfBook',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md50',1,'']]],
   ['cached_5fbest_5fask_5f_6',['cached_best_ask_',['../classslick_1_1orderbook_1_1OrderBookL2.html#a245d11d9401191e80a4090dbd22a2879',1,'slick::orderbook::OrderBookL2']]],
   ['cached_5fbest_5fbid_5f_7',['cached_best_bid_',['../classslick_1_1orderbook_1_1OrderBookL2.html#acf2003a356b9b8a2720991a2d532993f',1,'slick::orderbook::OrderBookL2']]],
   ['cached_5ftob_5f_8',['cached_tob_',['../classslick_1_1orderbook_1_1OrderBookL2.html#a1028b5c797aeb1087b128511adddebb5',1,'slick::orderbook::OrderBookL2::cached_tob_'],['../classslick_1_1orderbook_1_1OrderBookL3.html#aeb986c0dbd03b7993b66f8a010debb88',1,'slick::orderbook::OrderBookL3::cached_tob_']]],
@@ -26,7 +26,7 @@ var searchData=
   ['common_20pitfalls_23',['Common Pitfalls',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md99',1,'']]],
   ['comparator_24',['comparator',['../structslick_1_1orderbook_1_1OrderBookL3_1_1PriceComparator.html#ae5bf7a86254efd00c2c5e9af3fb2da85',1,'slick::orderbook::OrderBookL3::PriceComparator::Comparator'],['../classslick_1_1orderbook_1_1detail_1_1LevelContainer.html#a1464ab4fafca393fb5cd6a3624f6826a',1,'slick::orderbook::detail::LevelContainer::Comparator']]],
   ['compare_5f_25',['compare_',['../structslick_1_1orderbook_1_1OrderBookL3_1_1PriceComparator.html#a33b8a5c9dab207dd1a5cc8dcee77d448',1,'slick::orderbook::OrderBookL3::PriceComparator']]],
-  ['compiled_20library_20default_26',['Compiled Library (Default)',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md66',1,'']]],
+  ['compiled_20library_20default_26',['Compiled Library (Default)',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md67',1,'']]],
   ['compiler_20optimizations_27',['Technique 1: Compiler Optimizations',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md107',1,'']]],
   ['components_28',['Core Components',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md30',1,'']]],
   ['concepts_2ehpp_29',['concepts.hpp',['../concepts_8hpp.html',1,'']]],
@@ -46,7 +46,7 @@ var searchData=
   ['contents_43',['contents',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md81',1,'Table of Contents'],['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md25',1,'Table of Contents']]],
   ['conversions_44',['❌ Pitfall 3: Unnecessary Conversions',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md102',1,'']]],
   ['coordination_45',['OrderBookManager - Multi-Symbol Coordination',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md33',1,'']]],
-  ['copy_20iteration_46',['5. Zero-Copy Iteration',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md53',1,'']]],
+  ['copy_20iteration_46',['5. Zero-Copy Iteration',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md54',1,'']]],
   ['copying_20orderbooks_47',['❌ Pitfall 1: Copying Orderbooks',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md100',1,'']]],
   ['core_20components_48',['Core Components',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md30',1,'']]],
   ['cost_20abstractions_49',['Zero-Cost Abstractions',['../index.html#autotoc_md13',1,'']]],
@@ -54,6 +54,6 @@ var searchData=
   ['crbegin_51',['crbegin',['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a9a7d8d7c7898bff6fef779886cc2359a',1,'slick::orderbook::detail::IntrusiveList']]],
   ['crend_52',['crend',['../classslick_1_1orderbook_1_1detail_1_1IntrusiveList.html#a038bd6b8431c85f5349740726e952325',1,'slick::orderbook::detail::IntrusiveList']]],
   ['critical_20paths_53',['9. Thread Affinity for Critical Paths',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md96',1,'']]],
-  ['crtp_54',['1. Template-Based Polymorphism (CRTP)',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md60',1,'']]],
+  ['crtp_54',['1. Template-Based Polymorphism (CRTP)',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md61',1,'']]],
   ['custom_20benchmarks_55',['Custom Benchmarks',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md115',1,'']]]
 ];
