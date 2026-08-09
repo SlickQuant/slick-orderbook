@@ -30,7 +30,7 @@ var searchData=
   ['compiler_20optimizations_27',['Technique 1: Compiler Optimizations',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md107',1,'']]],
   ['components_28',['Core Components',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md30',1,'']]],
   ['concepts_2ehpp_29',['concepts.hpp',['../concepts_8hpp.html',1,'']]],
-  ['conclusion_30',['conclusion',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md79',1,'Conclusion'],['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md127',1,'Conclusion']]],
+  ['conclusion_30',['conclusion',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md78',1,'Conclusion'],['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md127',1,'Conclusion']]],
   ['config_2ehpp_31',['config.hpp',['../config_8hpp.html',1,'']]],
   ['considerations_32',['Future Considerations',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md74',1,'']]],
   ['const_20references_33',['6. Use Const References',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md93',1,'']]],
