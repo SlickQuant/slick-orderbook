@@ -26,24 +26,15 @@ jobs:
         sudo apt-get update
         sudo apt-get install -y doxygen graphviz
 
-    - name: Generate Doxygen Documentation
+    - name: Configure CMake
       run: |
-        # Create Doxyfile if it doesn't exist
-        if [ ! -f Doxyfile ]; then
-          doxygen -g Doxyfile
+        cmake -S . -B build \
+          -DSLICK_ORDERBOOK_BUILD_TESTS=OFF \
+          -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF \
+          -DSLICK_ORDERBOOK_BUILD_EXAMPLES=OFF
 
-          # Configure Doxygen
-          sed -i 's/PROJECT_NAME           = "My Project"/PROJECT_NAME           = "Slick OrderBook"/' Doxyfile
-          sed -i 's/OUTPUT_DIRECTORY       =/OUTPUT_DIRECTORY       = docs\/api/' Doxyfile
-          sed -i 's/INPUT                  =/INPUT                  = include/' Doxyfile
-          sed -i 's/RECURSIVE              = NO/RECURSIVE              = YES/' Doxyfile
-          sed -i 's/EXTRACT_ALL            = NO/EXTRACT_ALL            = YES/' Doxyfile
-          sed -i 's/GENERATE_LATEX         = YES/GENERATE_LATEX         = NO/' Doxyfile
-          sed -i 's/HAVE_DOT               = NO/HAVE_DOT               = YES/' Doxyfile
-          sed -i 's/UML_LOOK               = NO/UML_LOOK               = YES/' Doxyfile
-        fi
-
-        doxygen Doxyfile
+    - name: Generate Doxygen Documentation
+      run: cmake --build build --target docs
 
     - name: Deploy to GitHub Pages
       if: github.ref == 'refs/heads/main'

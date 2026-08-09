@@ -122,6 +122,22 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
     if(SLICK_ORDERBOOK_BUILD_EXAMPLES)
         add_subdirectory(examples)
     endif()
+
+    # Doxygen API documentation
+    find_package(Doxygen QUIET)
+    if(DOXYGEN_FOUND)
+        configure_file(
+            ${CMAKE_CURRENT_SOURCE_DIR}/Doxyfile.in
+            ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+            @ONLY
+        )
+        add_custom_target(docs
+            COMMAND ${DOXYGEN_EXECUTABLE} ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
+            WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+            COMMENT "Generating API documentation with Doxygen (version ${PROJECT_VERSION})"
+            VERBATIM
+        )
+    endif()
 endif()
 
 # Installation rules

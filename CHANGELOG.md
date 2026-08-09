@@ -9,6 +9,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [1.0.4] - 2026-08-08
 
+### CI
+
+- **Docs**: Fix generated API docs at slickquant.com always showing version `1.0.0` regardless of the
+  actual release — the Doxygen config's `PROJECT_NUMBER` was a hardcoded literal that was never wired
+  to the project version.
+  - Converted `Doxyfile` to a `Doxyfile.in` template with `PROJECT_NUMBER = @PROJECT_VERSION@`.
+  - Added a CMake `docs` target (top-level builds only, requires Doxygen) that `configure_file()`s
+    `Doxyfile.in` using the live `PROJECT_VERSION` from `project()` before invoking doxygen, so the
+    version updates automatically on every reconfigure.
+  - Updated `.github/workflows/documentation.yml` to configure CMake (tests/benchmarks/examples off)
+    and build the `docs` target instead of hand-rolling a Doxyfile via `sed`.
+
 ### Fixed
 
 - **OrderBookL3**: Fix structured-binding reference in `clearSide()` — iterating `level_map` with
