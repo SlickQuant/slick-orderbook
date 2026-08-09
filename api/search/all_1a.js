@@ -44,7 +44,7 @@ var searchData=
   ['slick_5funreachable_41',['SLICK_UNREACHABLE',['../config_8hpp.html#afaf502f66230793657750aa02f53efaf',1,'config.hpp']]],
   ['snapshots_42',['3. Use Batch Updates for Snapshots',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md90',1,'']]],
   ['sorted_20storage_43',['FlatMap - Cache-Friendly Sorted Storage',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md36',1,'']]],
-  ['spots_20from_20profiling_44',['Hot Spots (from profiling)',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md72',1,'']]],
+  ['spots_20from_20profiling_44',['Hot Spots (from profiling)',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md71',1,'']]],
   ['spread_45',['spread',['../structslick_1_1orderbook_1_1TopOfBook.html#a4b2552abfc86f1b2be2f665a6fd06e36',1,'slick::orderbook::TopOfBook']]],
   ['start_46',['🚀 Quick Start',['../index.html#autotoc_md3',1,'']]],
   ['stop_47',['Stop',['../namespaceslick_1_1orderbook.html#a1b1ef727a7178b4c6fe7c2bc704a6c6da11a755d598c0c417f9a36758c3da7481',1,'slick::orderbook']]],

@@ -2,8 +2,8 @@ var searchData=
 [
   ['name_0',['name',['../structslick_1_1orderbook_1_1Symbol.html#a1080be7afc2216b6a1739bdd7f80c49c',1,'slick::orderbook::Symbol']]],
   ['next_1',['next',['../structslick_1_1orderbook_1_1detail_1_1Order.html#a3acb16a8d2531315a9e82b5fa9ed847e',1,'slick::orderbook::detail::Order']]],
-  ['non_20virtual_2',['3. Observer Pattern (Non-Virtual)',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md63',1,'']]],
-  ['not_20planned_20premature_20optimization_3',['Not Planned (Premature Optimization)',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md77',1,'']]],
+  ['non_20virtual_2',['3. Observer Pattern (Non-Virtual)',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md62',1,'']]],
+  ['not_20planned_20premature_20optimization_3',['Not Planned (Premature Optimization)',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md76',1,'']]],
   ['not_20using_20orderbookmanager_4',['❌ Pitfall 4: Not Using OrderBookManager',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md103',1,'']]],
   ['notifications_5',['notifications',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md101',1,'❌ Pitfall 2: Excessive Observer Notifications'],['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md46',1,'Observer Notifications'],['../index.html#autotoc_md9',1,'Observer Pattern - Real-Time Notifications']]],
   ['notifyorderdelete_6',['notifyOrderDelete',['../classslick_1_1orderbook_1_1OrderBookL3.html#a009da24c8245a6b99d0a32b47df13ee8',1,'slick::orderbook::OrderBookL3']]],
