@@ -6,6 +6,7 @@
 #include <slick/orderbook/config.hpp>
 #include <slick/orderbook/events.hpp>
 #include <slick/orderbook/concepts.hpp>
+#include <algorithm>
 #include <vector>
 #include <memory>
 
