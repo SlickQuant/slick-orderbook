@@ -515,7 +515,7 @@ SLICK_OB_INLINE void OrderBookL3::clearSide(Side side) noexcept {
 
     // Delete all orders on this side
     auto& level_map = levels_[side];
-    for (auto& [price, level] : level_map) {
+    for (auto&& [price, level] : level_map) {
         for (auto it = level.orders.begin(); it != level.orders.end(); ) {
             auto* order = &(*it);
             ++it;  // Advance before unlinking/destroying.

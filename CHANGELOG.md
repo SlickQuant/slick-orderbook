@@ -7,6 +7,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.4] - 2026-08-08
+
+### Fixed
+
+- **OrderBookL3**: Fix structured-binding reference in `clearSide()` — iterating `level_map` with
+  `auto& [price, level]` does not correctly bind to `std::flat_map`'s non-reference iterator proxy;
+  changed to `auto&& [price, level]` so all price levels are visited and cleared correctly.
+
+### Tests
+
+- Added `ClearSideMultipleLevelsAndOrders` to exercise `clearSide()` with multiple price levels and
+  multiple orders per level, verifying the other side is left untouched.
+
 ## [1.0.3] - 2026-06-22
 
 ### Fixed

@@ -612,6 +612,41 @@ TEST_F(OrderBookL3Test, ClearSide) {
     EXPECT_EQ(book.orderCount(Side::Sell), 1);
 }
 
+// Regression test for a structured-binding reference-binding bug in clearSide():
+// with a single price level and a single order per level, the loop body only
+// ever runs once, which isn't enough to exercise (or catch a strict-compiler
+// rejection of) iterating level_map with more than one entry. This test uses
+// multiple price levels, each with multiple orders, on the side being cleared.
+TEST_F(OrderBookL3Test, ClearSideMultipleLevelsAndOrders) {
+    OrderBookL3 book(kSymbol);
+
+    // Buy side: two price levels, two orders each.
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice100, kQty20, kTs2));
+    EXPECT_TRUE(book.addOrder(kOrder3, Side::Buy, kPrice99, kQty30, kTs3));
+    EXPECT_TRUE(book.addOrder(kOrder4, Side::Buy, kPrice99, kQty40, kTs4));
+
+    // Sell side: left untouched, should survive clearSide(Buy).
+    EXPECT_TRUE(book.addOrder(kOrder5, Side::Sell, kPrice101, kQty50, kTs1));
+
+    ASSERT_EQ(book.levelCount(Side::Buy), 2);
+    ASSERT_EQ(book.orderCount(Side::Buy), 4);
+
+    book.clearSide(Side::Buy);
+
+    EXPECT_TRUE(book.isEmpty(Side::Buy));
+    EXPECT_FALSE(book.isEmpty(Side::Sell));
+    EXPECT_EQ(book.orderCount(Side::Buy), 0);
+    EXPECT_EQ(book.levelCount(Side::Buy), 0);
+    EXPECT_EQ(book.getBestBid(), nullptr);
+
+    EXPECT_EQ(book.orderCount(Side::Sell), 1);
+    EXPECT_EQ(book.levelCount(Side::Sell), 1);
+    const auto* best_ask = book.getBestAsk();
+    ASSERT_NE(best_ask, nullptr);
+    EXPECT_EQ(best_ask->price, kPrice101);
+}
+
 TEST_F(OrderBookL3Test, Clear) {
     OrderBookL3 book(kSymbol);
 
