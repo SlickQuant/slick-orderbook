@@ -137,4 +137,4 @@ This project is licensed under the MIT License. See [LICENSE](../../LICENSE) for
 
 **Organization**: Slick Quant
 
-**Version**: 1.0.0
+**Version**: 1.0.5

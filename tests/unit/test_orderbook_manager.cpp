@@ -4,6 +4,7 @@
 #include <slick/orderbook/orderbook_manager.hpp>
 #include <gtest/gtest.h>
 #include <thread>
+#include <atomic>
 #include <vector>
 #include <algorithm>
 #include <chrono>
@@ -482,4 +483,56 @@ TEST_F(OrderBookManagerL2Test, ConcurrentRemoveAndAccess) {
 
     // Half the symbols should remain
     EXPECT_EQ(manager.symbolCount(), kNumSymbols / 2);
+}
+
+// Regression: shared handles keep the orderbook alive after concurrent removal
+TEST_F(OrderBookManagerL2Test, SharedOrderBookOutlivesRemoval) {
+    OrderBookManager<OrderBookL2> manager;
+
+    auto book = manager.getOrCreateSharedOrderBook(kSymbol1);
+    ASSERT_NE(book, nullptr);
+    EXPECT_EQ(book.get(), manager.getOrderBook(kSymbol1));
+    EXPECT_EQ(book, manager.getSharedOrderBook(kSymbol1));
+    EXPECT_EQ(manager.getSharedOrderBook(kSymbol2), nullptr);
+
+    EXPECT_TRUE(manager.removeOrderBook(kSymbol1));
+    EXPECT_EQ(manager.getSharedOrderBook(kSymbol1), nullptr);
+
+    // Handle still valid and usable after removal
+    book->updateLevel(Side::Buy, kPrice100, kQty10, kTs1);
+    EXPECT_EQ(book->levelCount(Side::Buy), 1);
+
+    auto other = manager.getOrCreateSharedOrderBook(kSymbol2);
+    manager.clear();
+    EXPECT_EQ(other->symbol(), kSymbol2);
+}
+
+TEST_F(OrderBookManagerL3Test, ConcurrentRemoveWithSharedHandles) {
+    OrderBookManager<OrderBookL3> manager;
+    constexpr SymbolId kNumSymbols = 50;
+    constexpr int kRounds = 200;
+
+    std::atomic<bool> stop{false};
+    std::thread remover([&manager, &stop]() {
+        for (int round = 0; round < kRounds; ++round) {
+            for (SymbolId s = 1; s <= kNumSymbols; ++s) {
+                manager.removeOrderBook(s);
+            }
+        }
+        stop.store(true);
+    });
+
+    std::thread writer([&manager, &stop]() {
+        OrderId next_id = 1;
+        while (!stop.load()) {
+            for (SymbolId s = 1; s <= kNumSymbols; ++s) {
+                auto book = manager.getOrCreateSharedOrderBook(s);
+                // Book may be removed from the manager concurrently; the handle keeps it alive
+                EXPECT_TRUE(book->addOrder(next_id++, Side::Buy, 100, 10, 1000));
+            }
+        }
+    });
+
+    remover.join();
+    writer.join();
 }

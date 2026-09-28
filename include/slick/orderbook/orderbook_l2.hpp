@@ -70,17 +70,24 @@ public:
                      uint64_t seq_num = 0, bool is_last_in_batch = true);
 
     /// Delete a price level
+    /// Does not emit a PriceLevelUpdate, but refreshes the cached top-of-book
+    /// (and notifies onTopOfBookUpdate if it changed)
     /// @param side Buy or Sell
     /// @param price Price level to delete
+    /// @param timestamp Timestamp for the top-of-book update (0 = unknown)
     /// @return true if level was found and deleted
-    bool deleteLevel(Side side, Price price) noexcept;
+    bool deleteLevel(Side side, Price price, Timestamp timestamp = 0);
 
     /// Clear all levels on one side
+    /// Refreshes the cached top-of-book (and notifies onTopOfBookUpdate if it changed)
     /// @param side Buy or Sell
-    void clearSide(Side side) noexcept;
+    /// @param timestamp Timestamp for the top-of-book update (0 = unknown)
+    void clearSide(Side side, Timestamp timestamp = 0);
 
     /// Clear all levels (both sides)
-    void clear() noexcept;
+    /// Refreshes the cached top-of-book (and notifies onTopOfBookUpdate if it changed)
+    /// @param timestamp Timestamp for the top-of-book update (0 = unknown)
+    void clear(Timestamp timestamp = 0);
 
     /// Get best bid (highest buy price)
     /// @return Pointer to best bid level, or nullptr if no bids

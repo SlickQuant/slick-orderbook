@@ -250,11 +250,16 @@ public:
     [[nodiscard]] bool isEmpty() const noexcept;
 
     /// Clear all orders on one side
+    /// Does not emit order/level updates, but refreshes the cached top-of-book
+    /// (and notifies onTopOfBookUpdate if it changed)
     /// @param side Buy or Sell
-    void clearSide(Side side) noexcept;
+    /// @param timestamp Timestamp for the top-of-book update (0 = unknown)
+    void clearSide(Side side, Timestamp timestamp = 0);
 
     /// Clear all orders (both sides)
-    void clear() noexcept;
+    /// Refreshes the cached top-of-book (and notifies onTopOfBookUpdate if it changed)
+    /// @param timestamp Timestamp for the top-of-book update (0 = unknown)
+    void clear(Timestamp timestamp = 0);
 
     /// Observer management
     void addObserver(std::shared_ptr<IOrderBookObserver> observer) {
@@ -291,6 +296,9 @@ protected:
 
     /// Remove price level if empty
     bool removeLevelIfEmpty(Side side, Price price) noexcept;
+
+    /// Free all orders and levels on one side without any notification
+    void releaseSide(Side side) noexcept;
 
     /// Notify observers of order update with level index and change flags
     void notifyOrderUpdate(const detail::Order* order, Quantity old_quantity, Price old_price,

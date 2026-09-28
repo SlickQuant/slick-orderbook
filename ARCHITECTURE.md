@@ -259,16 +259,18 @@ Critical structures are 64-byte aligned to cache line boundaries.
 
 ```cpp
 class OrderBookManager {
-    mutable std::shared_mutex symbol_map_mutex_;
-    std::unordered_map<SymbolId, std::unique_ptr<OrderBook>> orderbooks_;
+    mutable std::shared_mutex mutex_;
+    FlatMap<SymbolId, std::shared_ptr<OrderBook>> symbol_map_;
 };
 ```
 
 **Access Patterns**:
 
-- **Read** (shared lock): `getOrderBook()` - concurrent reads allowed
-- **Write** (exclusive lock): `getOrCreateOrderBook()` - exclusive access for creation
+- **Read** (shared lock): `getOrderBook()` / `getSharedOrderBook()` - concurrent reads allowed
+- **Write** (exclusive lock): `getOrCreateOrderBook()` / `getOrCreateSharedOrderBook()` - exclusive access for creation
 - **Per-Symbol Updates**: No cross-symbol locking (each orderbook independent)
+- **Lifetime**: raw pointers are invalidated by `removeOrderBook()` / `clear()`; the `*Shared*`
+  accessors return a `std::shared_ptr` that keeps the orderbook alive across concurrent removal
 
 ### Observer Notifications
 
@@ -418,7 +420,7 @@ class IOrderBookObserver {
 ```cpp
 template<typename OrderBookType>
 class OrderBookManager {
-    std::unordered_map<SymbolId, std::unique_ptr<OrderBookType>> orderbooks_;
+    FlatMap<SymbolId, std::shared_ptr<OrderBookType>> symbol_map_;
 };
 
 // Usage:

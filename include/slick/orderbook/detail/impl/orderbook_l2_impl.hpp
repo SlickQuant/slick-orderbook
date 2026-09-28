@@ -123,19 +123,26 @@ SLICK_OB_INLINE void OrderBookL2::updateLevel(Side side, Price price, Quantity q
     }
 }
 
-SLICK_OB_INLINE bool OrderBookL2::deleteLevel(Side side, Price price) noexcept {
+SLICK_OB_INLINE bool OrderBookL2::deleteLevel(Side side, Price price, Timestamp timestamp) {
     SLICK_ASSERT(side < SideCount);
-    return sides_[side].erase(price);
+    if (!sides_[side].erase(price)) {
+        return false;
+    }
+    // Keep cached top-of-book / best levels in sync with the live sides
+    notifyTopOfBookIfChanged(timestamp);
+    return true;
 }
 
-SLICK_OB_INLINE void OrderBookL2::clearSide(Side side) noexcept {
+SLICK_OB_INLINE void OrderBookL2::clearSide(Side side, Timestamp timestamp) {
     SLICK_ASSERT(side < SideCount);
     sides_[side].clear();
+    notifyTopOfBookIfChanged(timestamp);
 }
 
-SLICK_OB_INLINE void OrderBookL2::clear() noexcept {
+SLICK_OB_INLINE void OrderBookL2::clear(Timestamp timestamp) {
     sides_[Side::Buy].clear();
     sides_[Side::Sell].clear();
+    notifyTopOfBookIfChanged(timestamp);
 }
 
 SLICK_OB_INLINE const detail::PriceLevelL2* OrderBookL2::getBestBid() const noexcept {

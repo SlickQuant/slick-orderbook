@@ -73,15 +73,20 @@ set(SLICK_ORDERBOOK_DETAIL_HEADERS
     include/slick/orderbook/detail/order_map.hpp
 )
 
+# Generate version header from the project version (single source of truth)
+configure_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/version.hpp.in"
+    "${CMAKE_CURRENT_SOURCE_DIR}/include/slick/orderbook/version.hpp"
+    @ONLY
+    NEWLINE_STYLE LF
+)
+
 # Library target
 if(SLICK_ORDERBOOK_HEADER_ONLY)
     # Header-only library
     add_library(slick-orderbook INTERFACE)
+    set(SLICK_ORDERBOOK_INCLUDE_SCOPE INTERFACE)
     target_compile_definitions(slick-orderbook INTERFACE SLICK_ORDERBOOK_HEADER_ONLY)
-    target_include_directories(slick-orderbook INTERFACE
-        $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-        $<INSTALL_INTERFACE:include>
-    )
 
     # Fix for GCC/Clang with LTO: explicitly link C++ standard library
     # LTO can cause the linker to lose track of C++ stdlib dependency
@@ -96,16 +101,17 @@ else()
     else()
         add_library(slick-orderbook STATIC ${SLICK_ORDERBOOK_SOURCES})
     endif()
-
-    target_include_directories(slick-orderbook
-        PUBLIC
-            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
-            $<INSTALL_INTERFACE:include>
-    )
+    set(SLICK_ORDERBOOK_INCLUDE_SCOPE PUBLIC)
 endif()
 
-# Add alias for consistent usage
+target_include_directories(slick-orderbook ${SLICK_ORDERBOOK_INCLUDE_SCOPE}
+    $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
+    $<INSTALL_INTERFACE:include>
+)
+
+# Add alias for consistent usage; installed/exported target is also slick::orderbook
 add_library(slick::orderbook ALIAS slick-orderbook)
+set_target_properties(slick-orderbook PROPERTIES EXPORT_NAME orderbook)
 
 # Only build tests, benchmarks, and examples if this is the top-level project
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
@@ -141,30 +147,33 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
 endif()
 
 # Installation rules
-if(NOT SLICK_ORDERBOOK_HEADER_ONLY)
-    install(TARGETS slick-orderbook
-        EXPORT slick-orderbook-targets
-        LIBRARY DESTINATION lib
-        ARCHIVE DESTINATION lib
-        RUNTIME DESTINATION bin
-    )
-endif()
+install(TARGETS slick-orderbook
+    EXPORT slick-orderbook-targets
+    LIBRARY DESTINATION lib
+    ARCHIVE DESTINATION lib
+    RUNTIME DESTINATION bin
+)
 
 install(DIRECTORY include/
     DESTINATION include
     FILES_MATCHING PATTERN "*.hpp"
 )
 
-if(NOT SLICK_ORDERBOOK_HEADER_ONLY)
-    install(EXPORT slick-orderbook-targets
-        FILE slick-orderbook-targets.cmake
-        NAMESPACE slick::
-        DESTINATION lib/cmake/slick-orderbook
-    )
-endif()
+set(SLICK_ORDERBOOK_CMAKE_INSTALL_DIR lib/cmake/slick-orderbook)
+
+install(EXPORT slick-orderbook-targets
+    FILE slick-orderbook-targets.cmake
+    NAMESPACE slick::
+    DESTINATION ${SLICK_ORDERBOOK_CMAKE_INSTALL_DIR}
+)
 
 # Package configuration
 include(CMakePackageConfigHelpers)
+configure_package_config_file(
+    "${CMAKE_CURRENT_SOURCE_DIR}/cmake/slick-orderbook-config.cmake.in"
+    "${CMAKE_CURRENT_BINARY_DIR}/slick-orderbook-config.cmake"
+    INSTALL_DESTINATION ${SLICK_ORDERBOOK_CMAKE_INSTALL_DIR}
+)
 write_basic_package_version_file(
     "${CMAKE_CURRENT_BINARY_DIR}/slick-orderbook-config-version.cmake"
     VERSION ${PROJECT_VERSION}
@@ -172,6 +181,7 @@ write_basic_package_version_file(
 )
 
 install(FILES
+    "${CMAKE_CURRENT_BINARY_DIR}/slick-orderbook-config.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/slick-orderbook-config-version.cmake"
-    DESTINATION lib/cmake/slick-orderbook
+    DESTINATION ${SLICK_ORDERBOOK_CMAKE_INSTALL_DIR}
 )

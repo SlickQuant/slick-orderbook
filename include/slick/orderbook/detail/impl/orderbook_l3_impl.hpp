@@ -35,8 +35,9 @@ SLICK_OB_INLINE OrderBookL3::OrderBookL3(SymbolId symbol,
 }
 
 SLICK_OB_INLINE OrderBookL3::~OrderBookL3() {
-    // Clean up all orders
-    clear();
+    // Clean up all orders (no observer notifications during destruction)
+    releaseSide(Side::Buy);
+    releaseSide(Side::Sell);
 }
 
 SLICK_OB_INLINE bool OrderBookL3::addOrModifyOrder(OrderId order_id, Side side, Price price, Quantity quantity,
@@ -110,7 +111,7 @@ SLICK_OB_INLINE bool OrderBookL3::addOrModifyOrder(OrderId order_id, Side side, 
 
     // Notify observers
     notifyOrderUpdate(order, 0, 0, timestamp, level_idx, order_flags, seq_num);
-    notifyPriceLevelUpdate(timestamp, side, price, level->getTotalQuantity(), order_map_.size(),
+    notifyPriceLevelUpdate(timestamp, side, price, level->getTotalQuantity(), level->orderCount(),
         level_idx, level_change_flag, seq_num);
     if (change_starting_index_ == 0 && is_last_in_batch) {
         notifyTopOfBookIfChanged(timestamp);
@@ -197,13 +198,14 @@ SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price,
             // Remove from old level
             old_level->removeOrder(order);
             old_level_total = old_level->getTotalQuantity();
+            const std::size_t old_level_orders = old_level->orderCount();
 
             uint8_t old_level_change_flags = QuantityChanged;
             if (removeLevelIfEmpty(side, old_price)) {
                 old_level_change_flags |= PriceChanged;
             }
             // Don't add LastInBatch to intermediate old level update
-            notifyPriceLevelUpdate(new_timestamp, side, old_price, old_level_total, order_map_.size(),
+            notifyPriceLevelUpdate(new_timestamp, side, old_price, old_level_total, old_level_orders,
                 old_level_idx, old_level_change_flags, seq_num);
         }
 
@@ -238,7 +240,7 @@ SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price,
 
         notifyOrderUpdate(order, old_quantity, old_price, new_timestamp, new_level_idx, order_flags, seq_num);
         notifyPriceLevelUpdate(new_timestamp, side, new_price, new_level->getTotalQuantity(),
-            order_map_.size(), new_level_idx, new_level_change_flags, seq_num);
+            new_level->orderCount(), new_level_idx, new_level_change_flags, seq_num);
         if (change_starting_index_ == 0 && is_last_in_batch) {
             notifyTopOfBookIfChanged(new_timestamp);
             change_starting_index_ = INVALID_INDEX;
@@ -277,7 +279,7 @@ SLICK_OB_INLINE bool OrderBookL3::modifyOrder(OrderId order_id, Price new_price,
         }
 
         notifyOrderUpdate(order, old_quantity, old_price, new_timestamp, level_index, order_flags, seq_num);
-        notifyPriceLevelUpdate(new_timestamp, side, old_price, level->getTotalQuantity(), order_map_.size(), level_index, level_change_flags, seq_num);
+        notifyPriceLevelUpdate(new_timestamp, side, old_price, level->getTotalQuantity(), level->orderCount(), level_index, level_change_flags, seq_num);
         if (change_starting_index_ == 0 && is_last_in_batch) {
             notifyTopOfBookIfChanged(new_timestamp);
             change_starting_index_ = INVALID_INDEX;
@@ -328,6 +330,7 @@ SLICK_OB_INLINE bool OrderBookL3::deleteOrder(OrderId order_id, Timestamp timest
     // Remove from level
     level->removeOrder(order);
     const Quantity level_total = level->getTotalQuantity();
+    const std::size_t level_orders = level->orderCount();
 
     // Remove from order map
     order_map_.erase(order_id);
@@ -346,7 +349,7 @@ SLICK_OB_INLINE bool OrderBookL3::deleteOrder(OrderId order_id, Timestamp timest
 
     // Notify observers (before destroying order)
     notifyOrderDelete(order, timestamp, level_idx, order_flags, seq_num);
-    notifyPriceLevelUpdate(timestamp, side, price, level_total, order_map_.size(), level_idx, level_change_flags, seq_num);
+    notifyPriceLevelUpdate(timestamp, side, price, level_total, level_orders, level_idx, level_change_flags, seq_num);
 
     // Destroy order
     order_pool_.destroy(order);
@@ -510,7 +513,20 @@ SLICK_OB_INLINE bool OrderBookL3::isEmpty() const noexcept {
     return levels_[Side::Buy].empty() && levels_[Side::Sell].empty();
 }
 
-SLICK_OB_INLINE void OrderBookL3::clearSide(Side side) noexcept {
+SLICK_OB_INLINE void OrderBookL3::clearSide(Side side, Timestamp timestamp) {
+    SLICK_ASSERT(side < SideCount);
+    releaseSide(side);
+    // Keep cached top-of-book in sync with the live levels
+    notifyTopOfBookIfChanged(timestamp);
+}
+
+SLICK_OB_INLINE void OrderBookL3::clear(Timestamp timestamp) {
+    releaseSide(Side::Buy);
+    releaseSide(Side::Sell);
+    notifyTopOfBookIfChanged(timestamp);
+}
+
+SLICK_OB_INLINE void OrderBookL3::releaseSide(Side side) noexcept {
     SLICK_ASSERT(side < SideCount);
 
     // Delete all orders on this side
@@ -527,11 +543,6 @@ SLICK_OB_INLINE void OrderBookL3::clearSide(Side side) noexcept {
 
     // Clear level map
     level_map.clear();
-}
-
-SLICK_OB_INLINE void OrderBookL3::clear() noexcept {
-    clearSide(Side::Buy);
-    clearSide(Side::Sell);
 }
 
 SLICK_OB_INLINE std::tuple<detail::PriceLevelL3*, uint16_t, bool> OrderBookL3::getOrCreateLevel(Side side, Price price) {
@@ -667,7 +678,7 @@ SLICK_OB_INLINE void OrderBookL3::notifyPriceLevelUpdate(
         side,
         price,
         total_quantity,
-        static_cast<uint16_t>(order_count),
+        static_cast<uint16_t>(std::min<std::size_t>(order_count, std::numeric_limits<uint16_t>::max())),
         level_index,
         change_flags,
         seq_num

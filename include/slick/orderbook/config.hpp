@@ -3,10 +3,8 @@
 
 #pragma once
 
-// Version information
-#define SLICK_ORDERBOOK_VERSION_MAJOR 1
-#define SLICK_ORDERBOOK_VERSION_MINOR 0
-#define SLICK_ORDERBOOK_VERSION_PATCH 3
+// Version information (generated from CMakeLists.txt project version)
+#include <slick/orderbook/version.hpp>
 
 // API export/import macros
 #ifdef SLICK_ORDERBOOK_HEADER_ONLY

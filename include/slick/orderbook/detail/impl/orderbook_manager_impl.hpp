@@ -17,13 +17,22 @@ OrderBookManager<OrderBookT>::OrderBookManager(std::size_t initial_symbol_capaci
 }
 
 template<typename OrderBookT>
-OrderBookT* OrderBookManager<OrderBookT>::getOrCreateOrderBook(SymbolId symbol) {
+template<typename Projection>
+auto OrderBookManager<OrderBookT>::find(SymbolId symbol, Projection&& proj) const {
+    std::shared_lock lock(mutex_);
+    auto it = symbol_map_.find(symbol);
+    return proj(it != symbol_map_.end() ? &it->second : nullptr);
+}
+
+template<typename OrderBookT>
+template<typename Projection>
+auto OrderBookManager<OrderBookT>::findOrCreate(SymbolId symbol, Projection&& proj) {
     // First, try read-only access (shared lock) - common case
     {
         std::shared_lock lock(mutex_);
         auto it = symbol_map_.find(symbol);
         if (it != symbol_map_.end()) [[likely]] {
-            return it->second.get();
+            return proj(it->second);
         }
     }
 
@@ -32,30 +41,35 @@ OrderBookT* OrderBookManager<OrderBookT>::getOrCreateOrderBook(SymbolId symbol) 
 
     // Double-check pattern: another thread might have inserted while we waited
     auto it = symbol_map_.find(symbol);
-    if (it != symbol_map_.end()) {
-        return it->second.get();
+    if (it == symbol_map_.end()) {
+        it = symbol_map_.emplace(symbol, std::make_shared<OrderBookT>(symbol)).first;
     }
+    return proj(it->second);
+}
 
-    // Create new orderbook
-    auto orderbook = std::make_unique<OrderBookT>(symbol);
-    OrderBookT* ptr = orderbook.get();
-    symbol_map_.emplace(symbol, std::move(orderbook));
+template<typename OrderBookT>
+OrderBookT* OrderBookManager<OrderBookT>::getOrCreateOrderBook(SymbolId symbol) {
+    return findOrCreate(symbol, [](const OrderBookPtr& book) { return book.get(); });
+}
 
-    return ptr;
+template<typename OrderBookT>
+std::shared_ptr<OrderBookT> OrderBookManager<OrderBookT>::getOrCreateSharedOrderBook(SymbolId symbol) {
+    return findOrCreate(symbol, [](const OrderBookPtr& book) { return book; });
 }
 
 template<typename OrderBookT>
 const OrderBookT* OrderBookManager<OrderBookT>::getOrderBook(SymbolId symbol) const {
-    std::shared_lock lock(mutex_);
-    auto it = symbol_map_.find(symbol);
-    return (it != symbol_map_.end()) ? it->second.get() : nullptr;
+    return find(symbol, [](const OrderBookPtr* book) -> const OrderBookT* { return book ? book->get() : nullptr; });
 }
 
 template<typename OrderBookT>
 OrderBookT* OrderBookManager<OrderBookT>::getOrderBook(SymbolId symbol) {
-    std::shared_lock lock(mutex_);
-    auto it = symbol_map_.find(symbol);
-    return (it != symbol_map_.end()) ? it->second.get() : nullptr;
+    return find(symbol, [](const OrderBookPtr* book) -> OrderBookT* { return book ? book->get() : nullptr; });
+}
+
+template<typename OrderBookT>
+std::shared_ptr<OrderBookT> OrderBookManager<OrderBookT>::getSharedOrderBook(SymbolId symbol) const {
+    return find(symbol, [](const OrderBookPtr* book) { return book ? *book : OrderBookPtr{}; });
 }
 
 template<typename OrderBookT>

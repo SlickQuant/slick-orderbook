@@ -23,6 +23,26 @@ protected:
     static constexpr Timestamp kTs2 = 2000;
 };
 
+// Records all level and ToB notifications (used by clear and batch flag tests)
+class BatchObserverL2 : public IOrderBookObserver {
+public:
+    std::vector<PriceLevelUpdate> level_updates;
+    std::vector<TopOfBook> tob_updates;
+
+    void onPriceLevelUpdate(const PriceLevelUpdate& update) override {
+        level_updates.push_back(update);
+    }
+
+    void onTopOfBookUpdate(const TopOfBook& tob) override {
+        tob_updates.push_back(tob);
+    }
+
+    void reset() {
+        level_updates.clear();
+        tob_updates.clear();
+    }
+};
+
 TEST_F(OrderBookL2Test, InitialState) {
     OrderBookL2 book(kSymbol);
 
@@ -234,6 +254,71 @@ TEST_F(OrderBookL2Test, ClearAll) {
     EXPECT_EQ(book.levelCount(Side::Sell), 0);
 }
 
+// Regression: deleteLevel/clearSide/clear must refresh the cached top-of-book and best levels
+TEST_F(OrderBookL2Test, DeleteBestLevelRefreshesTopOfBook) {
+    OrderBookL2 book(kSymbol);
+
+    book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1);
+    book.updateLevel(Side::Buy, kPrice99, kQty20, kTs1);
+    book.updateLevel(Side::Sell, kPrice101, kQty30, kTs1);
+
+    EXPECT_TRUE(book.deleteLevel(Side::Buy, kPrice100, kTs2));
+
+    auto tob = book.getTopOfBook();
+    EXPECT_EQ(tob.best_bid, kPrice99);
+    EXPECT_EQ(tob.bid_quantity, kQty20);
+    EXPECT_EQ(tob.best_ask, kPrice101);
+    EXPECT_EQ(tob.timestamp, kTs2);
+
+    const auto* best_bid = book.getBestBid();
+    ASSERT_NE(best_bid, nullptr);
+    EXPECT_EQ(best_bid->price, kPrice99);
+    EXPECT_EQ(best_bid->quantity, kQty20);
+}
+
+TEST_F(OrderBookL2Test, ClearSideRefreshesTopOfBook) {
+    OrderBookL2 book(kSymbol);
+
+    book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1);
+    book.updateLevel(Side::Sell, kPrice101, kQty30, kTs1);
+
+    book.clearSide(Side::Buy);
+
+    auto tob = book.getTopOfBook();
+    EXPECT_EQ(tob.best_bid, 0);
+    EXPECT_EQ(tob.bid_quantity, 0);
+    EXPECT_EQ(tob.best_ask, kPrice101);
+    EXPECT_EQ(book.getBestBid(), nullptr);
+    ASSERT_NE(book.getBestAsk(), nullptr);
+    EXPECT_EQ(book.getBestAsk()->price, kPrice101);
+}
+
+TEST_F(OrderBookL2Test, ClearRefreshesTopOfBookAndNotifies) {
+    OrderBookL2 book(kSymbol);
+    auto observer = std::make_shared<BatchObserverL2>();
+
+    book.updateLevel(Side::Buy, kPrice100, kQty10, kTs1);
+    book.updateLevel(Side::Sell, kPrice101, kQty30, kTs1);
+    book.addObserver(observer);
+
+    book.clear(kTs2);
+
+    auto tob = book.getTopOfBook();
+    EXPECT_EQ(tob.best_bid, 0);
+    EXPECT_EQ(tob.best_ask, 0);
+    EXPECT_EQ(book.getBestBid(), nullptr);
+    EXPECT_EQ(book.getBestAsk(), nullptr);
+
+    ASSERT_EQ(observer->tob_updates.size(), 1);
+    EXPECT_EQ(observer->tob_updates[0].best_bid, 0);
+    EXPECT_EQ(observer->tob_updates[0].best_ask, 0);
+    EXPECT_EQ(observer->tob_updates[0].timestamp, kTs2);
+
+    // Clearing an already-empty book does not re-notify
+    book.clear(kTs2);
+    EXPECT_EQ(observer->tob_updates.size(), 1);
+}
+
 TEST_F(OrderBookL2Test, ObserverNotifications) {
     class TestObserver : public IOrderBookObserver {
     public:
@@ -296,25 +381,6 @@ TEST_F(OrderBookL2Test, Move) {
     EXPECT_EQ(book3.levelCount(Side::Buy), 1);
 }
 
-// Batch flag tests
-class BatchObserverL2 : public IOrderBookObserver {
-public:
-    std::vector<PriceLevelUpdate> level_updates;
-    std::vector<TopOfBook> tob_updates;
-
-    void onPriceLevelUpdate(const PriceLevelUpdate& update) override {
-        level_updates.push_back(update);
-    }
-
-    void onTopOfBookUpdate(const TopOfBook& tob) override {
-        tob_updates.push_back(tob);
-    }
-
-    void reset() {
-        level_updates.clear();
-        tob_updates.clear();
-    }
-};
 
 TEST_F(OrderBookL2Test, BatchFlagSingleOperation) {
     OrderBookL2 book(kSymbol);

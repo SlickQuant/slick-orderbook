@@ -127,7 +127,7 @@ L3 Order Details (Bid side):
 - `getOrCreateOrderBook()` uses double-checked locking pattern
 - Per-symbol isolation (no cross-symbol locking)
 - Template-based design supports both L2 and L3
-- Efficient memory management with unique_ptr
+- Orderbooks owned by shared_ptr; `getOrCreateSharedOrderBook()` returns a handle that survives concurrent removal
 
 **Output Example**:
 ```

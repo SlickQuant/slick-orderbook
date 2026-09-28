@@ -661,6 +661,38 @@ TEST_F(OrderBookL3Test, Clear) {
     EXPECT_EQ(book.levelCount(Side::Sell), 0);
 }
 
+// Regression: clearSide/clear must refresh the cached top-of-book
+TEST_F(OrderBookL3Test, ClearSideRefreshesTopOfBook) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Sell, kPrice101, kQty20, kTs2));
+
+    book.clearSide(Side::Buy, kTs3);
+
+    auto tob = book.getTopOfBook();
+    EXPECT_EQ(tob.best_bid, 0);
+    EXPECT_EQ(tob.bid_quantity, 0);
+    EXPECT_EQ(tob.best_ask, kPrice101);
+    EXPECT_EQ(tob.ask_quantity, kQty20);
+    EXPECT_EQ(tob.timestamp, kTs3);
+}
+
+TEST_F(OrderBookL3Test, ClearRefreshesTopOfBook) {
+    OrderBookL3 book(kSymbol);
+
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Sell, kPrice101, kQty20, kTs2));
+
+    book.clear();
+
+    auto tob = book.getTopOfBook();
+    EXPECT_EQ(tob.best_bid, 0);
+    EXPECT_EQ(tob.bid_quantity, 0);
+    EXPECT_EQ(tob.best_ask, 0);
+    EXPECT_EQ(tob.ask_quantity, 0);
+}
+
 // ============================================================================
 // Observer Tests
 // ============================================================================
@@ -697,6 +729,39 @@ public:
         last_trade = trade;
     }
 };
+
+// Regression: PriceLevelUpdate::num_orders must be the order count of that level,
+// not the book-wide order count
+TEST_F(OrderBookL3Test, LevelUpdateNumOrdersIsPerLevel) {
+    OrderBookL3 book(kSymbol);
+    auto observer = std::make_shared<TestObserver>();
+    book.addObserver(observer);
+
+    // Orders on other levels/sides must not be counted
+    EXPECT_TRUE(book.addOrder(kOrder1, Side::Sell, kPrice101, kQty10, kTs1));
+    EXPECT_TRUE(book.addOrder(kOrder2, Side::Buy, kPrice99, kQty10, kTs1));
+    EXPECT_EQ(observer->last_level_update.num_orders, 1);
+
+    // Add: second order at the same level
+    EXPECT_TRUE(book.addOrder(kOrder3, Side::Buy, kPrice99, kQty20, kTs2));
+    EXPECT_EQ(observer->last_level_update.price, kPrice99);
+    EXPECT_EQ(observer->last_level_update.num_orders, 2);
+
+    // Modify quantity only
+    EXPECT_TRUE(book.modifyOrder(kOrder3, kPrice99, kQty30, kTs2));
+    EXPECT_EQ(observer->last_level_update.num_orders, 2);
+
+    // Modify price: last level update is for the new level (1 order)
+    EXPECT_TRUE(book.modifyOrder(kOrder3, kPrice98, kQty30, kTs3));
+    EXPECT_EQ(observer->last_level_update.price, kPrice98);
+    EXPECT_EQ(observer->last_level_update.num_orders, 1);
+
+    // Delete: level at 99 has no orders left after deleting its only order
+    EXPECT_TRUE(book.deleteOrder(kOrder2, kTs4));
+    EXPECT_EQ(observer->last_level_update.price, kPrice99);
+    EXPECT_EQ(observer->last_level_update.quantity, 0);
+    EXPECT_EQ(observer->last_level_update.num_orders, 0);
+}
 
 class SnapshotObserver : public IOrderBookObserver {
 public:

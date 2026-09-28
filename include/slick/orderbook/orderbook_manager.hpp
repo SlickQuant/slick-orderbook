@@ -33,6 +33,14 @@ SLICK_NAMESPACE_BEGIN
 /// - Symbol map protected by shared_mutex (read-write lock)
 /// - Each orderbook follows single-writer-per-symbol model
 ///
+/// Orderbook Lifetime:
+/// - Raw pointers returned by getOrCreateOrderBook()/getOrderBook() are NOT retained by the
+///   manager lock. They are invalidated by removeOrderBook()/clear() for that symbol.
+///   Only use them when no thread can remove the symbol while the pointer is in use
+///   (e.g. symbols are removed only after all feed threads have stopped).
+/// - If symbols may be removed concurrently, use getOrCreateSharedOrderBook()/getSharedOrderBook():
+///   the returned shared_ptr keeps the orderbook alive after removal from the manager.
+///
 /// Template Parameter:
 /// @tparam OrderBookT Either OrderBookL2 or OrderBookL3
 ///
@@ -51,7 +59,7 @@ SLICK_NAMESPACE_BEGIN
 template<typename OrderBookT>
 class OrderBookManager {
 public:
-    using OrderBookPtr = std::unique_ptr<OrderBookT>;
+    using OrderBookPtr = std::shared_ptr<OrderBookT>;
     using SymbolMap = detail::FlatMap<SymbolId, OrderBookPtr>;
 
     /// Constructor
@@ -69,21 +77,38 @@ public:
 
     /// Get existing orderbook or create new one if it doesn't exist
     /// Thread-safe: Uses shared_mutex for symbol map access
+    /// Lifetime: pointer is invalidated by removeOrderBook(symbol)/clear() (see class docs)
     /// @param symbol Symbol identifier
     /// @return Pointer to orderbook (never null)
     [[nodiscard]] OrderBookT* getOrCreateOrderBook(SymbolId symbol);
 
     /// Get existing orderbook (read-only access)
     /// Thread-safe: Uses shared lock for read-only access
+    /// Lifetime: pointer is invalidated by removeOrderBook(symbol)/clear() (see class docs)
     /// @param symbol Symbol identifier
     /// @return Pointer to orderbook, or nullptr if symbol doesn't exist
     [[nodiscard]] const OrderBookT* getOrderBook(SymbolId symbol) const;
 
     /// Get existing orderbook (mutable access)
     /// Thread-safe: Uses shared lock for read-only access to map
+    /// Lifetime: pointer is invalidated by removeOrderBook(symbol)/clear() (see class docs)
     /// @param symbol Symbol identifier
     /// @return Pointer to orderbook, or nullptr if symbol doesn't exist
     [[nodiscard]] OrderBookT* getOrderBook(SymbolId symbol);
+
+    /// Get existing orderbook or create new one, as a retaining handle
+    /// Thread-safe; the orderbook stays alive while the handle is held,
+    /// even if removeOrderBook()/clear() runs concurrently
+    /// @param symbol Symbol identifier
+    /// @return Shared pointer to orderbook (never null)
+    [[nodiscard]] std::shared_ptr<OrderBookT> getOrCreateSharedOrderBook(SymbolId symbol);
+
+    /// Get existing orderbook as a retaining handle
+    /// Thread-safe; the orderbook stays alive while the handle is held,
+    /// even if removeOrderBook()/clear() runs concurrently
+    /// @param symbol Symbol identifier
+    /// @return Shared pointer to orderbook, or nullptr if symbol doesn't exist
+    [[nodiscard]] std::shared_ptr<OrderBookT> getSharedOrderBook(SymbolId symbol) const;
 
     /// Check if symbol exists in manager
     /// Thread-safe: Uses shared lock
@@ -117,6 +142,14 @@ public:
     void reserve(std::size_t capacity);
 
 private:
+    /// Look up symbol under shared lock and project the entry while the lock is held
+    template<typename Projection>
+    auto find(SymbolId symbol, Projection&& proj) const;
+
+    /// Look up or create symbol and project the entry while the lock is held
+    template<typename Projection>
+    auto findOrCreate(SymbolId symbol, Projection&& proj);
+
     mutable std::shared_mutex mutex_;  ///< Protects symbol_map_
     SymbolMap symbol_map_;             ///< Map of SymbolId -> OrderBook
 };
