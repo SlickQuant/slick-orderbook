@@ -17,10 +17,11 @@ var searchData=
   ['slick_5fnamespace_5fend_14',['SLICK_NAMESPACE_END',['../config_8hpp.html#a01d5a9b897e1d6e0ea55533e441e1257',1,'config.hpp']]],
   ['slick_5fno_5finline_15',['SLICK_NO_INLINE',['../config_8hpp.html#a8fb01dcee8ea6e18ed3e950a80b4f42d',1,'config.hpp']]],
   ['slick_5fob_5finline_16',['slick_ob_inline',['../orderbook__l2__impl_8hpp.html#a9605fe132c82c26aab3eec1c59e42929',1,'SLICK_OB_INLINE:&#160;orderbook_l2_impl.hpp'],['../orderbook__l3__impl_8hpp.html#a9605fe132c82c26aab3eec1c59e42929',1,'SLICK_OB_INLINE:&#160;orderbook_l3_impl.hpp']]],
-  ['slick_5forderbook_5fversion_5fmajor_17',['SLICK_ORDERBOOK_VERSION_MAJOR',['../config_8hpp.html#a6d608e8241d12652fcfa228e9849f57a',1,'config.hpp']]],
-  ['slick_5forderbook_5fversion_5fminor_18',['SLICK_ORDERBOOK_VERSION_MINOR',['../config_8hpp.html#a1c7f1c2705e8bf21227caebde57a2dae',1,'config.hpp']]],
-  ['slick_5forderbook_5fversion_5fpatch_19',['SLICK_ORDERBOOK_VERSION_PATCH',['../config_8hpp.html#ac418385b2d4e2629c6f5328b9d58ec70',1,'config.hpp']]],
-  ['slick_5ftsan_5fenabled_20',['SLICK_TSAN_ENABLED',['../config_8hpp.html#ab3301cb032ae055ed893c50700d408e9',1,'config.hpp']]],
-  ['slick_5funlikely_21',['SLICK_UNLIKELY',['../config_8hpp.html#aad160a56cf286985be2902ab10612dc6',1,'config.hpp']]],
-  ['slick_5funreachable_22',['SLICK_UNREACHABLE',['../config_8hpp.html#afaf502f66230793657750aa02f53efaf',1,'config.hpp']]]
+  ['slick_5forderbook_5fversion_5fmajor_17',['SLICK_ORDERBOOK_VERSION_MAJOR',['../version_8hpp.html#a6d608e8241d12652fcfa228e9849f57a',1,'version.hpp']]],
+  ['slick_5forderbook_5fversion_5fminor_18',['SLICK_ORDERBOOK_VERSION_MINOR',['../version_8hpp.html#a1c7f1c2705e8bf21227caebde57a2dae',1,'version.hpp']]],
+  ['slick_5forderbook_5fversion_5fpatch_19',['SLICK_ORDERBOOK_VERSION_PATCH',['../version_8hpp.html#ac418385b2d4e2629c6f5328b9d58ec70',1,'version.hpp']]],
+  ['slick_5forderbook_5fversion_5fstring_20',['SLICK_ORDERBOOK_VERSION_STRING',['../version_8hpp.html#a5e5f4169e7623c385cec858803b79bad',1,'version.hpp']]],
+  ['slick_5ftsan_5fenabled_21',['SLICK_TSAN_ENABLED',['../config_8hpp.html#ab3301cb032ae055ed893c50700d408e9',1,'config.hpp']]],
+  ['slick_5funlikely_22',['SLICK_UNLIKELY',['../config_8hpp.html#aad160a56cf286985be2902ab10612dc6',1,'config.hpp']]],
+  ['slick_5funreachable_23',['SLICK_UNREACHABLE',['../config_8hpp.html#afaf502f66230793657750aa02f53efaf',1,'config.hpp']]]
 ];

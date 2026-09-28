@@ -15,9 +15,6 @@ var config_8hpp =
     [ "SLICK_NAMESPACE_BEGIN", "config_8hpp.html#abae3b4d85c1419d32f5546cbb3aa3561", null ],
     [ "SLICK_NAMESPACE_END", "config_8hpp.html#a01d5a9b897e1d6e0ea55533e441e1257", null ],
     [ "SLICK_NO_INLINE", "config_8hpp.html#a8fb01dcee8ea6e18ed3e950a80b4f42d", null ],
-    [ "SLICK_ORDERBOOK_VERSION_MAJOR", "config_8hpp.html#a6d608e8241d12652fcfa228e9849f57a", null ],
-    [ "SLICK_ORDERBOOK_VERSION_MINOR", "config_8hpp.html#a1c7f1c2705e8bf21227caebde57a2dae", null ],
-    [ "SLICK_ORDERBOOK_VERSION_PATCH", "config_8hpp.html#ac418385b2d4e2629c6f5328b9d58ec70", null ],
     [ "SLICK_TSAN_ENABLED", "config_8hpp.html#ab3301cb032ae055ed893c50700d408e9", null ],
     [ "SLICK_UNLIKELY", "config_8hpp.html#aad160a56cf286985be2902ab10612dc6", null ],
     [ "SLICK_UNREACHABLE", "config_8hpp.html#afaf502f66230793657750aa02f53efaf", null ]

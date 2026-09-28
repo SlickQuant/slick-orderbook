@@ -131,15 +131,15 @@ Public Member Functions</h2></td></tr>
 <tr class="memitem:ab09c9eb1fe62d14dff4e415c6fac285b" id="r_ab09c9eb1fe62d14dff4e415c6fac285b"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1OrderBookL2.html#ab09c9eb1fe62d14dff4e415c6fac285b">updateLevel</a> (<a class="el" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03f">Side</a> side, <a class="el" href="namespaceslick_1_1orderbook.html#a25935d410087baa88ea8ec548e2a91ea">Price</a> price, <a class="el" href="namespaceslick_1_1orderbook.html#a21187169371b8cf74060371e141b8f3a">Quantity</a> quantity, <a class="el" href="namespaceslick_1_1orderbook.html#aebb98158ca08961f915a92ef30c5a856">Timestamp</a> timestamp, uint64_t seq_num=0, bool is_last_in_batch=true)</td></tr>
 <tr class="memdesc:ab09c9eb1fe62d14dff4e415c6fac285b"><td class="mdescLeft">&#160;</td><td class="mdescRight">Add or update a price level If quantity is 0, the level is deleted.  <br /></td></tr>
 <tr class="separator:ab09c9eb1fe62d14dff4e415c6fac285b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a92faf069bffc184aca513b6211957563" id="r_a92faf069bffc184aca513b6211957563"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1OrderBookL2.html#a92faf069bffc184aca513b6211957563">deleteLevel</a> (<a class="el" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03f">Side</a> side, <a class="el" href="namespaceslick_1_1orderbook.html#a25935d410087baa88ea8ec548e2a91ea">Price</a> price) noexcept</td></tr>
-<tr class="memdesc:a92faf069bffc184aca513b6211957563"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delete a price level.  <br /></td></tr>
-<tr class="separator:a92faf069bffc184aca513b6211957563"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8e97a67aed78a9c9ee98a43d8baae55d" id="r_a8e97a67aed78a9c9ee98a43d8baae55d"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1OrderBookL2.html#a8e97a67aed78a9c9ee98a43d8baae55d">clearSide</a> (<a class="el" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03f">Side</a> side) noexcept</td></tr>
-<tr class="memdesc:a8e97a67aed78a9c9ee98a43d8baae55d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear all levels on one side.  <br /></td></tr>
-<tr class="separator:a8e97a67aed78a9c9ee98a43d8baae55d"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af23d22bf0e3f29bcf2bf15aadb4001ec" id="r_af23d22bf0e3f29bcf2bf15aadb4001ec"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1OrderBookL2.html#af23d22bf0e3f29bcf2bf15aadb4001ec">clear</a> () noexcept</td></tr>
-<tr class="memdesc:af23d22bf0e3f29bcf2bf15aadb4001ec"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear all levels (both sides)  <br /></td></tr>
-<tr class="separator:af23d22bf0e3f29bcf2bf15aadb4001ec"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab333f475f112a1278d8e475fa244c26f" id="r_ab333f475f112a1278d8e475fa244c26f"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1OrderBookL2.html#ab333f475f112a1278d8e475fa244c26f">deleteLevel</a> (<a class="el" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03f">Side</a> side, <a class="el" href="namespaceslick_1_1orderbook.html#a25935d410087baa88ea8ec548e2a91ea">Price</a> price, <a class="el" href="namespaceslick_1_1orderbook.html#aebb98158ca08961f915a92ef30c5a856">Timestamp</a> timestamp=0)</td></tr>
+<tr class="memdesc:ab333f475f112a1278d8e475fa244c26f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Delete a price level Does not emit a <a class="el" href="structslick_1_1orderbook_1_1PriceLevelUpdate.html" title="Level 2 price level update event Note: quantity = 0 implies the price level should be deleted.">PriceLevelUpdate</a>, but refreshes the cached top-of-book (and notifies onTopOfBookUpdate if it changed)  <br /></td></tr>
+<tr class="separator:ab333f475f112a1278d8e475fa244c26f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:acb0d2950671539e8fb0bc604b92df700" id="r_acb0d2950671539e8fb0bc604b92df700"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1OrderBookL2.html#acb0d2950671539e8fb0bc604b92df700">clearSide</a> (<a class="el" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03f">Side</a> side, <a class="el" href="namespaceslick_1_1orderbook.html#aebb98158ca08961f915a92ef30c5a856">Timestamp</a> timestamp=0)</td></tr>
+<tr class="memdesc:acb0d2950671539e8fb0bc604b92df700"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear all levels on one side Refreshes the cached top-of-book (and notifies onTopOfBookUpdate if it changed)  <br /></td></tr>
+<tr class="separator:acb0d2950671539e8fb0bc604b92df700"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ae097a938ffc21019cea91ae9d691d042" id="r_ae097a938ffc21019cea91ae9d691d042"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1OrderBookL2.html#ae097a938ffc21019cea91ae9d691d042">clear</a> (<a class="el" href="namespaceslick_1_1orderbook.html#aebb98158ca08961f915a92ef30c5a856">Timestamp</a> timestamp=0)</td></tr>
+<tr class="memdesc:ae097a938ffc21019cea91ae9d691d042"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clear all levels (both sides) Refreshes the cached top-of-book (and notifies onTopOfBookUpdate if it changed)  <br /></td></tr>
+<tr class="separator:ae097a938ffc21019cea91ae9d691d042"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a5a15409327c93ad3a7786a5ba2e2097f" id="r_a5a15409327c93ad3a7786a5ba2e2097f"><td class="memItemLeft" align="right" valign="top">const <a class="el" href="structslick_1_1orderbook_1_1detail_1_1PriceLevelL2.html">detail::PriceLevelL2</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1OrderBookL2.html#a5a15409327c93ad3a7786a5ba2e2097f">getBestBid</a> () const noexcept</td></tr>
 <tr class="memdesc:a5a15409327c93ad3a7786a5ba2e2097f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get best bid (highest buy price)  <br /></td></tr>
 <tr class="separator:a5a15409327c93ad3a7786a5ba2e2097f"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -274,7 +274,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00012">12</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8hpp_source.html#l00036">slick::orderbook::Buy</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00167">cached_tob_</a>, <a class="el" href="types_8hpp_source.html#l00037">slick::orderbook::Sell</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00165">sides_</a>, <a class="el" href="events_8hpp_source.html#l00143">slick::orderbook::TopOfBook::symbol</a>, and <a class="el" href="orderbook__l2_8hpp_source.html#l00164">symbol_</a>.</p>
+<p class="reference">References <a class="el" href="types_8hpp_source.html#l00036">slick::orderbook::Buy</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00174">cached_tob_</a>, <a class="el" href="types_8hpp_source.html#l00037">slick::orderbook::Sell</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00172">sides_</a>, <a class="el" href="events_8hpp_source.html#l00143">slick::orderbook::TopOfBook::symbol</a>, and <a class="el" href="orderbook__l2_8hpp_source.html#l00171">symbol_</a>.</p>
 
 </div>
 </div>
@@ -386,12 +386,12 @@ Protected Attributes</h2></td></tr>
 
 <p>Observer management. </p>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00130">130</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00137">137</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
 
 </div>
 </div>
-<a id="af23d22bf0e3f29bcf2bf15aadb4001ec" name="af23d22bf0e3f29bcf2bf15aadb4001ec"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#af23d22bf0e3f29bcf2bf15aadb4001ec">&#9670;&#160;</a></span>clear()</h2>
+<a id="ae097a938ffc21019cea91ae9d691d042" name="ae097a938ffc21019cea91ae9d691d042"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ae097a938ffc21019cea91ae9d691d042">&#9670;&#160;</a></span>clear()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -402,22 +402,29 @@ Protected Attributes</h2></td></tr>
         <tr>
           <td class="memname">void slick::orderbook::OrderBookL2::clear </td>
           <td>(</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype"><a class="el" href="namespaceslick_1_1orderbook.html#aebb98158ca08961f915a92ef30c5a856">Timestamp</a>&#160;</td>
+          <td class="paramname"><em>timestamp</em> = <code>0</code></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Clear all levels (both sides) </p>
+<p>Clear all levels (both sides) Refreshes the cached top-of-book (and notifies onTopOfBookUpdate if it changed) </p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">timestamp</td><td>Timestamp for the top-of-book update (0 = unknown) </td></tr>
+  </table>
+  </dd>
+</dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00136">136</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00142">142</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8hpp_source.html#l00036">slick::orderbook::Buy</a>, <a class="el" href="types_8hpp_source.html#l00037">slick::orderbook::Sell</a>, and <a class="el" href="orderbook__l2_8hpp_source.html#l00165">sides_</a>.</p>
+<p class="reference">References <a class="el" href="types_8hpp_source.html#l00036">slick::orderbook::Buy</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00243">notifyTopOfBookIfChanged()</a>, <a class="el" href="types_8hpp_source.html#l00037">slick::orderbook::Sell</a>, and <a class="el" href="orderbook__l2_8hpp_source.html#l00172">sides_</a>.</p>
 
 </div>
 </div>
@@ -444,12 +451,12 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00138">138</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00145">145</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
 
 </div>
 </div>
-<a id="a8e97a67aed78a9c9ee98a43d8baae55d" name="a8e97a67aed78a9c9ee98a43d8baae55d"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a8e97a67aed78a9c9ee98a43d8baae55d">&#9670;&#160;</a></span>clearSide()</h2>
+<a id="acb0d2950671539e8fb0bc604b92df700" name="acb0d2950671539e8fb0bc604b92df700"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acb0d2950671539e8fb0bc604b92df700">&#9670;&#160;</a></span>clearSide()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -461,33 +468,44 @@ Protected Attributes</h2></td></tr>
           <td class="memname">void slick::orderbook::OrderBookL2::clearSide </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03f">Side</a>&#160;</td>
-          <td class="paramname"><em>side</em></td><td>)</td>
+          <td class="paramname"><em>side</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype"><a class="el" href="namespaceslick_1_1orderbook.html#aebb98158ca08961f915a92ef30c5a856">Timestamp</a>&#160;</td>
+          <td class="paramname"><em>timestamp</em> = <code>0</code>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Clear all levels on one side. </p>
+<p>Clear all levels on one side Refreshes the cached top-of-book (and notifies onTopOfBookUpdate if it changed) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">side</td><td>Buy or Sell </td></tr>
+    <tr><td class="paramname">timestamp</td><td>Timestamp for the top-of-book update (0 = unknown) </td></tr>
   </table>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00131">131</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00136">136</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8hpp_source.html#l00038">slick::orderbook::SideCount</a>, and <a class="el" href="config_8hpp_source.html#l00115">SLICK_ASSERT</a>.</p>
+<p class="reference">References <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00243">notifyTopOfBookIfChanged()</a>, <a class="el" href="types_8hpp_source.html#l00038">slick::orderbook::SideCount</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00172">sides_</a>, and <a class="el" href="config_8hpp_source.html#l00113">SLICK_ASSERT</a>.</p>
 
 </div>
 </div>
-<a id="a92faf069bffc184aca513b6211957563" name="a92faf069bffc184aca513b6211957563"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#a92faf069bffc184aca513b6211957563">&#9670;&#160;</a></span>deleteLevel()</h2>
+<a id="ab333f475f112a1278d8e475fa244c26f" name="ab333f475f112a1278d8e475fa244c26f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab333f475f112a1278d8e475fa244c26f">&#9670;&#160;</a></span>deleteLevel()</h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -505,7 +523,13 @@ Protected Attributes</h2></td></tr>
           <td class="paramkey"></td>
           <td></td>
           <td class="paramtype"><a class="el" href="namespaceslick_1_1orderbook.html#a25935d410087baa88ea8ec548e2a91ea">Price</a>&#160;</td>
-          <td class="paramname"><em>price</em>&#160;</td>
+          <td class="paramname"><em>price</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype"><a class="el" href="namespaceslick_1_1orderbook.html#aebb98158ca08961f915a92ef30c5a856">Timestamp</a>&#160;</td>
+          <td class="paramname"><em>timestamp</em> = <code>0</code>&#160;</td>
         </tr>
         <tr>
           <td></td>
@@ -515,16 +539,17 @@ Protected Attributes</h2></td></tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">inline</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">inline</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
 
-<p>Delete a price level. </p>
+<p>Delete a price level Does not emit a <a class="el" href="structslick_1_1orderbook_1_1PriceLevelUpdate.html" title="Level 2 price level update event Note: quantity = 0 implies the price level should be deleted.">PriceLevelUpdate</a>, but refreshes the cached top-of-book (and notifies onTopOfBookUpdate if it changed) </p>
 <dl class="params"><dt>Parameters</dt><dd>
   <table class="params">
     <tr><td class="paramname">side</td><td>Buy or Sell </td></tr>
     <tr><td class="paramname">price</td><td>Price level to delete </td></tr>
+    <tr><td class="paramname">timestamp</td><td>Timestamp for the top-of-book update (0 = unknown) </td></tr>
   </table>
   </dd>
 </dl>
@@ -532,7 +557,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00126">126</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8hpp_source.html#l00038">slick::orderbook::SideCount</a>, and <a class="el" href="config_8hpp_source.html#l00115">SLICK_ASSERT</a>.</p>
+<p class="reference">References <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00243">notifyTopOfBookIfChanged()</a>, <a class="el" href="types_8hpp_source.html#l00038">slick::orderbook::SideCount</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00172">sides_</a>, and <a class="el" href="config_8hpp_source.html#l00113">SLICK_ASSERT</a>.</p>
 
 </div>
 </div>
@@ -568,9 +593,9 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00287">287</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00294">294</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8hpp_source.html#l00036">slick::orderbook::Buy</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00171">last_seq_num_</a>, <a class="el" href="observer_8hpp_source.html#l00094">slick::orderbook::ObserverManager::notifyPriceLevelUpdate()</a>, <a class="el" href="observer_8hpp_source.html#l00122">slick::orderbook::ObserverManager::notifySnapshotBegin()</a>, <a class="el" href="observer_8hpp_source.html#l00129">slick::orderbook::ObserverManager::notifySnapshotEnd()</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00166">observers_</a>, <a class="el" href="events_8hpp_source.html#l00024">slick::orderbook::PriceLevelUpdate::price</a>, <a class="el" href="events_8hpp_source.html#l00014">slick::orderbook::PriceChanged</a>, <a class="el" href="events_8hpp_source.html#l00015">slick::orderbook::QuantityChanged</a>, <a class="el" href="types_8hpp_source.html#l00037">slick::orderbook::Sell</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00165">sides_</a>, and <a class="el" href="orderbook__l2_8hpp_source.html#l00164">symbol_</a>.</p>
+<p class="reference">References <a class="el" href="types_8hpp_source.html#l00036">slick::orderbook::Buy</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00178">last_seq_num_</a>, <a class="el" href="observer_8hpp_source.html#l00094">slick::orderbook::ObserverManager::notifyPriceLevelUpdate()</a>, <a class="el" href="observer_8hpp_source.html#l00122">slick::orderbook::ObserverManager::notifySnapshotBegin()</a>, <a class="el" href="observer_8hpp_source.html#l00129">slick::orderbook::ObserverManager::notifySnapshotEnd()</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00173">observers_</a>, <a class="el" href="events_8hpp_source.html#l00024">slick::orderbook::PriceLevelUpdate::price</a>, <a class="el" href="events_8hpp_source.html#l00014">slick::orderbook::PriceChanged</a>, <a class="el" href="events_8hpp_source.html#l00015">slick::orderbook::QuantityChanged</a>, <a class="el" href="types_8hpp_source.html#l00037">slick::orderbook::Sell</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00172">sides_</a>, and <a class="el" href="orderbook__l2_8hpp_source.html#l00171">symbol_</a>.</p>
 
 </div>
 </div>
@@ -600,9 +625,9 @@ Protected Attributes</h2></td></tr>
 <p>Get best ask (lowest sell price) </p>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to best ask level, or nullptr if no asks </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00163">163</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00170">170</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="events_8hpp_source.html#l00146">slick::orderbook::TopOfBook::best_ask</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00169">cached_best_ask_</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00167">cached_tob_</a>, and <a class="el" href="orderbook__l2_8hpp_source.html#l00170">tob_seq_</a>.</p>
+<p class="reference">References <a class="el" href="events_8hpp_source.html#l00146">slick::orderbook::TopOfBook::best_ask</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00176">cached_best_ask_</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00174">cached_tob_</a>, and <a class="el" href="orderbook__l2_8hpp_source.html#l00177">tob_seq_</a>.</p>
 
 </div>
 </div>
@@ -632,9 +657,9 @@ Protected Attributes</h2></td></tr>
 <p>Get best bid (highest buy price) </p>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to best bid level, or nullptr if no bids </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00141">141</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00148">148</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="events_8hpp_source.html#l00144">slick::orderbook::TopOfBook::best_bid</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00168">cached_best_bid_</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00167">cached_tob_</a>, and <a class="el" href="orderbook__l2_8hpp_source.html#l00170">tob_seq_</a>.</p>
+<p class="reference">References <a class="el" href="events_8hpp_source.html#l00144">slick::orderbook::TopOfBook::best_bid</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00175">cached_best_bid_</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00174">cached_tob_</a>, and <a class="el" href="orderbook__l2_8hpp_source.html#l00177">tob_seq_</a>.</p>
 
 </div>
 </div>
@@ -664,7 +689,7 @@ Protected Attributes</h2></td></tr>
 <p>Get last processed sequence number. </p>
 <dl class="section return"><dt>Returns</dt><dd>Last sequence number (0 if not tracking) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00148">148</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00155">155</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
 
 </div>
 </div>
@@ -712,9 +737,9 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to price level, or nullptr if not found </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00208">208</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00215">215</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8hpp_source.html#l00038">slick::orderbook::SideCount</a>, and <a class="el" href="config_8hpp_source.html#l00115">SLICK_ASSERT</a>.</p>
+<p class="reference">References <a class="el" href="types_8hpp_source.html#l00038">slick::orderbook::SideCount</a>, and <a class="el" href="config_8hpp_source.html#l00113">SLICK_ASSERT</a>.</p>
 
 </div>
 </div>
@@ -762,9 +787,9 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to price level, or nullptr if index out of range </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00213">213</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00220">220</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8hpp_source.html#l00038">slick::orderbook::SideCount</a>, and <a class="el" href="config_8hpp_source.html#l00115">SLICK_ASSERT</a>.</p>
+<p class="reference">References <a class="el" href="types_8hpp_source.html#l00038">slick::orderbook::SideCount</a>, and <a class="el" href="config_8hpp_source.html#l00113">SLICK_ASSERT</a>.</p>
 
 </div>
 </div>
@@ -812,9 +837,9 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Vector of price levels </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00203">203</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00210">210</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8hpp_source.html#l00038">slick::orderbook::SideCount</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00165">sides_</a>, and <a class="el" href="config_8hpp_source.html#l00115">SLICK_ASSERT</a>.</p>
+<p class="reference">References <a class="el" href="types_8hpp_source.html#l00038">slick::orderbook::SideCount</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00172">sides_</a>, and <a class="el" href="config_8hpp_source.html#l00113">SLICK_ASSERT</a>.</p>
 
 </div>
 </div>
@@ -844,9 +869,9 @@ Protected Attributes</h2></td></tr>
 <p>Get top-of-book snapshot. </p>
 <dl class="section return"><dt>Returns</dt><dd><a class="el" href="structslick_1_1orderbook_1_1TopOfBook.html" title="Top-of-book snapshot - best bid and ask.">TopOfBook</a> structure with best bid/ask </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00185">185</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00192">192</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="orderbook__l2_8hpp_source.html#l00167">cached_tob_</a>, and <a class="el" href="orderbook__l2_8hpp_source.html#l00170">tob_seq_</a>.</p>
+<p class="reference">References <a class="el" href="orderbook__l2_8hpp_source.html#l00174">cached_tob_</a>, and <a class="el" href="orderbook__l2_8hpp_source.html#l00177">tob_seq_</a>.</p>
 
 </div>
 </div>
@@ -876,9 +901,9 @@ Protected Attributes</h2></td></tr>
 <p>Check if book is empty (both sides) </p>
 <dl class="section return"><dt>Returns</dt><dd>true if both sides are empty </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00232">232</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00239">239</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8hpp_source.html#l00036">slick::orderbook::Buy</a>, <a class="el" href="types_8hpp_source.html#l00037">slick::orderbook::Sell</a>, and <a class="el" href="orderbook__l2_8hpp_source.html#l00165">sides_</a>.</p>
+<p class="reference">References <a class="el" href="types_8hpp_source.html#l00036">slick::orderbook::Buy</a>, <a class="el" href="types_8hpp_source.html#l00037">slick::orderbook::Sell</a>, and <a class="el" href="orderbook__l2_8hpp_source.html#l00172">sides_</a>.</p>
 
 </div>
 </div>
@@ -915,9 +940,9 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if side has no levels </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00227">227</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00234">234</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8hpp_source.html#l00038">slick::orderbook::SideCount</a>, and <a class="el" href="config_8hpp_source.html#l00115">SLICK_ASSERT</a>.</p>
+<p class="reference">References <a class="el" href="types_8hpp_source.html#l00038">slick::orderbook::SideCount</a>, and <a class="el" href="config_8hpp_source.html#l00113">SLICK_ASSERT</a>.</p>
 
 </div>
 </div>
@@ -954,9 +979,9 @@ Protected Attributes</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Number of levels </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00222">222</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00229">229</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="types_8hpp_source.html#l00038">slick::orderbook::SideCount</a>, and <a class="el" href="config_8hpp_source.html#l00115">SLICK_ASSERT</a>.</p>
+<p class="reference">References <a class="el" href="types_8hpp_source.html#l00038">slick::orderbook::SideCount</a>, and <a class="el" href="config_8hpp_source.html#l00113">SLICK_ASSERT</a>.</p>
 
 </div>
 </div>
@@ -992,11 +1017,11 @@ Protected Attributes</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00236">236</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00243">243</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="events_8hpp_source.html#l00147">slick::orderbook::TopOfBook::ask_quantity</a>, <a class="el" href="events_8hpp_source.html#l00146">slick::orderbook::TopOfBook::best_ask</a>, <a class="el" href="events_8hpp_source.html#l00144">slick::orderbook::TopOfBook::best_bid</a>, <a class="el" href="events_8hpp_source.html#l00145">slick::orderbook::TopOfBook::bid_quantity</a>, <a class="el" href="types_8hpp_source.html#l00036">slick::orderbook::Buy</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00169">cached_best_ask_</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00168">cached_best_bid_</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00167">cached_tob_</a>, <a class="el" href="events_8hpp_source.html#l00149">slick::orderbook::TopOfBook::change_flags</a>, <a class="el" href="observer_8hpp_source.html#l00115">slick::orderbook::ObserverManager::notifyTopOfBookUpdate()</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00166">observers_</a>, <a class="el" href="events_8hpp_source.html#l00014">slick::orderbook::PriceChanged</a>, <a class="el" href="events_8hpp_source.html#l00015">slick::orderbook::QuantityChanged</a>, <a class="el" href="types_8hpp_source.html#l00037">slick::orderbook::Sell</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00165">sides_</a>, <a class="el" href="events_8hpp_source.html#l00148">slick::orderbook::TopOfBook::timestamp</a>, and <a class="el" href="orderbook__l2_8hpp_source.html#l00170">tob_seq_</a>.</p>
+<p class="reference">References <a class="el" href="events_8hpp_source.html#l00147">slick::orderbook::TopOfBook::ask_quantity</a>, <a class="el" href="events_8hpp_source.html#l00146">slick::orderbook::TopOfBook::best_ask</a>, <a class="el" href="events_8hpp_source.html#l00144">slick::orderbook::TopOfBook::best_bid</a>, <a class="el" href="events_8hpp_source.html#l00145">slick::orderbook::TopOfBook::bid_quantity</a>, <a class="el" href="types_8hpp_source.html#l00036">slick::orderbook::Buy</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00176">cached_best_ask_</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00175">cached_best_bid_</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00174">cached_tob_</a>, <a class="el" href="events_8hpp_source.html#l00149">slick::orderbook::TopOfBook::change_flags</a>, <a class="el" href="observer_8hpp_source.html#l00115">slick::orderbook::ObserverManager::notifyTopOfBookUpdate()</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00173">observers_</a>, <a class="el" href="events_8hpp_source.html#l00014">slick::orderbook::PriceChanged</a>, <a class="el" href="events_8hpp_source.html#l00015">slick::orderbook::QuantityChanged</a>, <a class="el" href="types_8hpp_source.html#l00037">slick::orderbook::Sell</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00172">sides_</a>, <a class="el" href="events_8hpp_source.html#l00148">slick::orderbook::TopOfBook::timestamp</a>, and <a class="el" href="orderbook__l2_8hpp_source.html#l00177">tob_seq_</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00052">updateLevel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00142">clear()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00136">clearSide()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00126">deleteLevel()</a>, and <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00052">updateLevel()</a>.</p>
 
 </div>
 </div>
@@ -1023,7 +1048,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00142">142</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00149">149</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
 
 </div>
 </div>
@@ -1079,7 +1104,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00038">38</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="orderbook__l2_8hpp_source.html#l00164">symbol_</a>.</p>
+<p class="reference">References <a class="el" href="orderbook__l2_8hpp_source.html#l00171">symbol_</a>.</p>
 
 </div>
 </div>
@@ -1107,7 +1132,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00134">134</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00141">141</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
 
 </div>
 </div>
@@ -1213,7 +1238,7 @@ Protected Attributes</h2></td></tr>
 
 <p class="definition">Definition at line <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00052">52</a> of file <a class="el" href="orderbook__l2__impl_8hpp_source.html">orderbook_l2_impl.hpp</a>.</p>
 
-<p class="reference">References <a class="el" href="orderbook__l2_8hpp_source.html#l00172">change_starting_index_</a>, <a class="el" href="types_8hpp_source.html#l00032">slick::orderbook::INVALID_INDEX</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00171">last_seq_num_</a>, <a class="el" href="events_8hpp_source.html#l00016">slick::orderbook::LastInBatch</a>, <a class="el" href="observer_8hpp_source.html#l00094">slick::orderbook::ObserverManager::notifyPriceLevelUpdate()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00236">notifyTopOfBookIfChanged()</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00166">observers_</a>, <a class="el" href="events_8hpp_source.html#l00014">slick::orderbook::PriceChanged</a>, <a class="el" href="events_8hpp_source.html#l00015">slick::orderbook::QuantityChanged</a>, <a class="el" href="types_8hpp_source.html#l00038">slick::orderbook::SideCount</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00165">sides_</a>, <a class="el" href="config_8hpp_source.html#l00115">SLICK_ASSERT</a>, and <a class="el" href="orderbook__l2_8hpp_source.html#l00164">symbol_</a>.</p>
+<p class="reference">References <a class="el" href="orderbook__l2_8hpp_source.html#l00179">change_starting_index_</a>, <a class="el" href="types_8hpp_source.html#l00032">slick::orderbook::INVALID_INDEX</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00178">last_seq_num_</a>, <a class="el" href="events_8hpp_source.html#l00016">slick::orderbook::LastInBatch</a>, <a class="el" href="observer_8hpp_source.html#l00094">slick::orderbook::ObserverManager::notifyPriceLevelUpdate()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00243">notifyTopOfBookIfChanged()</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00173">observers_</a>, <a class="el" href="events_8hpp_source.html#l00014">slick::orderbook::PriceChanged</a>, <a class="el" href="events_8hpp_source.html#l00015">slick::orderbook::QuantityChanged</a>, <a class="el" href="types_8hpp_source.html#l00038">slick::orderbook::SideCount</a>, <a class="el" href="orderbook__l2_8hpp_source.html#l00172">sides_</a>, <a class="el" href="config_8hpp_source.html#l00113">SLICK_ASSERT</a>, and <a class="el" href="orderbook__l2_8hpp_source.html#l00171">symbol_</a>.</p>
 
 </div>
 </div>
@@ -1238,9 +1263,9 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00169">169</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00176">176</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00163">getBestAsk()</a>, and <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00236">notifyTopOfBookIfChanged()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00170">getBestAsk()</a>, and <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00243">notifyTopOfBookIfChanged()</a>.</p>
 
 </div>
 </div>
@@ -1264,9 +1289,9 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00168">168</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00175">175</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00141">getBestBid()</a>, and <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00236">notifyTopOfBookIfChanged()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00148">getBestBid()</a>, and <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00243">notifyTopOfBookIfChanged()</a>.</p>
 
 </div>
 </div>
@@ -1290,9 +1315,9 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00167">167</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00174">174</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00012">OrderBookL2()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00163">getBestAsk()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00141">getBestBid()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00185">getTopOfBook()</a>, and <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00236">notifyTopOfBookIfChanged()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00012">OrderBookL2()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00170">getBestAsk()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00148">getBestBid()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00192">getTopOfBook()</a>, and <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00243">notifyTopOfBookIfChanged()</a>.</p>
 
 </div>
 </div>
@@ -1316,7 +1341,7 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00172">172</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00179">179</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
 
 <p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00052">updateLevel()</a>.</p>
 
@@ -1342,9 +1367,9 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00171">171</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00178">178</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00287">emitSnapshot()</a>, and <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00052">updateLevel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00294">emitSnapshot()</a>, and <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00052">updateLevel()</a>.</p>
 
 </div>
 </div>
@@ -1368,9 +1393,9 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00166">166</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00173">173</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00287">emitSnapshot()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00236">notifyTopOfBookIfChanged()</a>, and <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00052">updateLevel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00294">emitSnapshot()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00243">notifyTopOfBookIfChanged()</a>, and <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00052">updateLevel()</a>.</p>
 
 </div>
 </div>
@@ -1394,9 +1419,9 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00165">165</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00172">172</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00012">OrderBookL2()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00136">clear()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00287">emitSnapshot()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00203">getLevels()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00232">isEmpty()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00236">notifyTopOfBookIfChanged()</a>, and <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00052">updateLevel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00012">OrderBookL2()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00142">clear()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00136">clearSide()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00126">deleteLevel()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00294">emitSnapshot()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00210">getLevels()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00239">isEmpty()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00243">notifyTopOfBookIfChanged()</a>, and <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00052">updateLevel()</a>.</p>
 
 </div>
 </div>
@@ -1420,9 +1445,9 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00164">164</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00171">171</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00012">OrderBookL2()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00287">emitSnapshot()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00038">operator=()</a>, and <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00052">updateLevel()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00012">OrderBookL2()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00294">emitSnapshot()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00038">operator=()</a>, and <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00052">updateLevel()</a>.</p>
 
 </div>
 </div>
@@ -1446,9 +1471,9 @@ Protected Attributes</h2></td></tr>
 </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00170">170</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__l2_8hpp_source.html#l00177">177</a> of file <a class="el" href="orderbook__l2_8hpp_source.html">orderbook_l2.hpp</a>.</p>
 
-<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00163">getBestAsk()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00141">getBestBid()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00185">getTopOfBook()</a>, and <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00236">notifyTopOfBookIfChanged()</a>.</p>
+<p class="reference">Referenced by <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00170">getBestAsk()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00148">getBestBid()</a>, <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00192">getTopOfBook()</a>, and <a class="el" href="orderbook__l2__impl_8hpp_source.html#l00243">notifyTopOfBookIfChanged()</a>.</p>
 
 </div>
 </div>

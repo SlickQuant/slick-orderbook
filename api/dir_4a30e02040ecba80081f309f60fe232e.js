@@ -9,5 +9,6 @@ var dir_4a30e02040ecba80081f309f60fe232e =
     [ "orderbook_l2.hpp", "orderbook__l2_8hpp.html", "orderbook__l2_8hpp" ],
     [ "orderbook_l3.hpp", "orderbook__l3_8hpp.html", "orderbook__l3_8hpp" ],
     [ "orderbook_manager.hpp", "orderbook__manager_8hpp.html", "orderbook__manager_8hpp" ],
-    [ "types.hpp", "types_8hpp.html", "types_8hpp" ]
+    [ "types.hpp", "types_8hpp.html", "types_8hpp" ],
+    [ "version.hpp", "version_8hpp.html", "version_8hpp" ]
 ];

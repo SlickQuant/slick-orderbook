@@ -1,6 +1,6 @@
 var classslick_1_1orderbook_1_1OrderBookManager =
 [
-    [ "OrderBookPtr", "classslick_1_1orderbook_1_1OrderBookManager.html#aec2b327b83d14dd89b746ac3560a568c", null ],
+    [ "OrderBookPtr", "classslick_1_1orderbook_1_1OrderBookManager.html#ae99a59e4c80d3954a690e12b04940fe4", null ],
     [ "SymbolMap", "classslick_1_1orderbook_1_1OrderBookManager.html#a069aa7072875651f975202c259a75fbd", null ],
     [ "OrderBookManager", "classslick_1_1orderbook_1_1OrderBookManager.html#acde75d715a8df4d592fbeb1492be52d0", null ],
     [ "~OrderBookManager", "classslick_1_1orderbook_1_1OrderBookManager.html#afc802d6daa3ff528dc059d8449de3328", null ],
@@ -8,8 +8,10 @@ var classslick_1_1orderbook_1_1OrderBookManager =
     [ "OrderBookManager", "classslick_1_1orderbook_1_1OrderBookManager.html#ae89fc171877eaa1dd390f0639b7b84b6", null ],
     [ "clear", "classslick_1_1orderbook_1_1OrderBookManager.html#ad38397363fb368adb2e80795007c4aef", null ],
     [ "getOrCreateOrderBook", "classslick_1_1orderbook_1_1OrderBookManager.html#a92a06af3d664ae4720b469c9b93ee3e2", null ],
+    [ "getOrCreateSharedOrderBook", "classslick_1_1orderbook_1_1OrderBookManager.html#aa143e8f0444f00472dd360f6a881da50", null ],
     [ "getOrderBook", "classslick_1_1orderbook_1_1OrderBookManager.html#a484d48c46140007af917fe0aae0ce769", null ],
     [ "getOrderBook", "classslick_1_1orderbook_1_1OrderBookManager.html#a884d6001116b799c9b86184a8af2f67e", null ],
+    [ "getSharedOrderBook", "classslick_1_1orderbook_1_1OrderBookManager.html#ad4d99dbb8724acab81b231568851027e", null ],
     [ "getSymbols", "classslick_1_1orderbook_1_1OrderBookManager.html#a7c49a540fe4b52c6538656c408080f70", null ],
     [ "hasSymbol", "classslick_1_1orderbook_1_1OrderBookManager.html#ad0e2594c852ca97ab2cf7213a2e48ade", null ],
     [ "operator=", "classslick_1_1orderbook_1_1OrderBookManager.html#a6e023f7d3234758948739f6139cf9d81", null ],
