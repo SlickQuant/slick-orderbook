@@ -25,7 +25,7 @@
  <tbody>
  <tr id="projectrow">
   <td id="projectalign">
-   <div id="projectname">Slick OrderBook<span id="projectnumber">&#160;1.0.5</span>
+   <div id="projectname">Slick OrderBook<span id="projectnumber">&#160;1.1.0</span>
    </div>
    <div id="projectbrief">High-Performance C++23 OrderBook Library</div>
   </td>
@@ -127,10 +127,10 @@ Public Member Functions</h2></td></tr>
 <tr class="separator:a4b121f8d89d05232b138087841c92948"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a6e023f7d3234758948739f6139cf9d81" id="r_a6e023f7d3234758948739f6139cf9d81"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html">OrderBookManager</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html#a6e023f7d3234758948739f6139cf9d81">operator=</a> (const <a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html">OrderBookManager</a> &amp;)=delete</td></tr>
 <tr class="separator:a6e023f7d3234758948739f6139cf9d81"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae89fc171877eaa1dd390f0639b7b84b6" id="r_ae89fc171877eaa1dd390f0639b7b84b6"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html#ae89fc171877eaa1dd390f0639b7b84b6">OrderBookManager</a> (<a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html">OrderBookManager</a> &amp;&amp;) noexcept=default</td></tr>
-<tr class="separator:ae89fc171877eaa1dd390f0639b7b84b6"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab3d57aa7b801e717fb479a22aac6d821" id="r_ab3d57aa7b801e717fb479a22aac6d821"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html">OrderBookManager</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html#ab3d57aa7b801e717fb479a22aac6d821">operator=</a> (<a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html">OrderBookManager</a> &amp;&amp;) noexcept=default</td></tr>
-<tr class="separator:ab3d57aa7b801e717fb479a22aac6d821"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afbbd4183e18ddad9a328b3337d7d5fcd" id="r_afbbd4183e18ddad9a328b3337d7d5fcd"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html#afbbd4183e18ddad9a328b3337d7d5fcd">OrderBookManager</a> (<a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html">OrderBookManager</a> &amp;&amp;other) noexcept</td></tr>
+<tr class="separator:afbbd4183e18ddad9a328b3337d7d5fcd"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a364b86024e4b9ba91c2819785dc57ebd" id="r_a364b86024e4b9ba91c2819785dc57ebd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html">OrderBookManager</a> &amp;&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html#a364b86024e4b9ba91c2819785dc57ebd">operator=</a> (<a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html">OrderBookManager</a> &amp;&amp;other) noexcept</td></tr>
+<tr class="separator:a364b86024e4b9ba91c2819785dc57ebd"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a92a06af3d664ae4720b469c9b93ee3e2" id="r_a92a06af3d664ae4720b469c9b93ee3e2"><td class="memItemLeft" align="right" valign="top">OrderBookT *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html#a92a06af3d664ae4720b469c9b93ee3e2">getOrCreateOrderBook</a> (<a class="el" href="namespaceslick_1_1orderbook.html#aa9f5216180c724765d97ba90dd859f53">SymbolId</a> symbol)</td></tr>
 <tr class="memdesc:a92a06af3d664ae4720b469c9b93ee3e2"><td class="mdescLeft">&#160;</td><td class="mdescRight">Get existing orderbook or create new one if it doesn't exist Thread-safe: Uses shared_mutex for symbol map access Lifetime: pointer is invalidated by removeOrderBook(symbol)/clear() (see class docs)  <br /></td></tr>
 <tr class="separator:a92a06af3d664ae4720b469c9b93ee3e2"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -200,11 +200,11 @@ class slick::orderbook::OrderBookManager&lt; OrderBookT &gt;</div><p>Multi-symbo
 <div class="line"><a class="code hl_class" href="classslick_1_1orderbook_1_1OrderBookManager.html">OrderBookManager&lt;OrderBookL3&gt;</a> l3_manager;</div>
 <div class="line"><span class="keyword">auto</span>* book = l3_manager.<a class="code hl_function" href="classslick_1_1orderbook_1_1OrderBookManager.html#a92a06af3d664ae4720b469c9b93ee3e2">getOrCreateOrderBook</a>(symbol_id);</div>
 <div class="line">book-&gt;addOrder(order_id, <a class="code hl_enumvalue" href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa0fdce9f0ade221c1e1341e11f6029a00">Side::Buy</a>, 10000, 100, timestamp);</div>
-<div class="ttc" id="aclassslick_1_1orderbook_1_1OrderBookManager_html"><div class="ttname"><a href="classslick_1_1orderbook_1_1OrderBookManager.html">slick::orderbook::OrderBookManager</a></div><div class="ttdoc">Multi-symbol OrderBook Manager.</div><div class="ttdef"><b>Definition</b> <a href="orderbook__manager_8hpp_source.html#l00060">orderbook_manager.hpp:60</a></div></div>
-<div class="ttc" id="aclassslick_1_1orderbook_1_1OrderBookManager_html_a92a06af3d664ae4720b469c9b93ee3e2"><div class="ttname"><a href="classslick_1_1orderbook_1_1OrderBookManager.html#a92a06af3d664ae4720b469c9b93ee3e2">slick::orderbook::OrderBookManager::getOrCreateOrderBook</a></div><div class="ttdeci">OrderBookT * getOrCreateOrderBook(SymbolId symbol)</div><div class="ttdoc">Get existing orderbook or create new one if it doesn't exist Thread-safe: Uses shared_mutex for symbo...</div><div class="ttdef"><b>Definition</b> <a href="orderbook__manager__impl_8hpp_source.html#l00051">orderbook_manager_impl.hpp:51</a></div></div>
+<div class="ttc" id="aclassslick_1_1orderbook_1_1OrderBookManager_html"><div class="ttname"><a href="classslick_1_1orderbook_1_1OrderBookManager.html">slick::orderbook::OrderBookManager</a></div><div class="ttdoc">Multi-symbol OrderBook Manager.</div><div class="ttdef"><b>Definition</b> <a href="orderbook__manager_8hpp_source.html#l00061">orderbook_manager.hpp:61</a></div></div>
+<div class="ttc" id="aclassslick_1_1orderbook_1_1OrderBookManager_html_a92a06af3d664ae4720b469c9b93ee3e2"><div class="ttname"><a href="classslick_1_1orderbook_1_1OrderBookManager.html#a92a06af3d664ae4720b469c9b93ee3e2">slick::orderbook::OrderBookManager::getOrCreateOrderBook</a></div><div class="ttdeci">OrderBookT * getOrCreateOrderBook(SymbolId symbol)</div><div class="ttdoc">Get existing orderbook or create new one if it doesn't exist Thread-safe: Uses shared_mutex for symbo...</div><div class="ttdef"><b>Definition</b> <a href="orderbook__manager__impl_8hpp_source.html#l00071">orderbook_manager_impl.hpp:71</a></div></div>
 <div class="ttc" id="anamespaceslick_1_1orderbook_html_a5355a0a7f10f6c2d6c9a27f9954cf03fa0fdce9f0ade221c1e1341e11f6029a00"><div class="ttname"><a href="namespaceslick_1_1orderbook.html#a5355a0a7f10f6c2d6c9a27f9954cf03fa0fdce9f0ade221c1e1341e11f6029a00">slick::orderbook::Buy</a></div><div class="ttdeci">@ Buy</div><div class="ttdef"><b>Definition</b> <a href="types_8hpp_source.html#l00036">types.hpp:36</a></div></div>
 </div><!-- fragment --> 
-<p class="definition">Definition at line <a class="el" href="orderbook__manager_8hpp_source.html#l00060">60</a> of file <a class="el" href="orderbook__manager_8hpp_source.html">orderbook_manager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__manager_8hpp_source.html#l00061">61</a> of file <a class="el" href="orderbook__manager_8hpp_source.html">orderbook_manager.hpp</a>.</p>
 </div><h2 class="groupheader">Member Typedef Documentation</h2>
 <a id="ae99a59e4c80d3954a690e12b04940fe4" name="ae99a59e4c80d3954a690e12b04940fe4"></a>
 <h2 class="memtitle"><span class="permalink"><a href="#ae99a59e4c80d3954a690e12b04940fe4">&#9670;&#160;</a></span>OrderBookPtr</h2>
@@ -220,7 +220,7 @@ template&lt;typename OrderBookT &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="orderbook__manager_8hpp_source.html#l00062">62</a> of file <a class="el" href="orderbook__manager_8hpp_source.html">orderbook_manager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__manager_8hpp_source.html#l00063">63</a> of file <a class="el" href="orderbook__manager_8hpp_source.html">orderbook_manager.hpp</a>.</p>
 
 </div>
 </div>
@@ -238,7 +238,7 @@ template&lt;typename OrderBookT &gt; </div>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definition at line <a class="el" href="orderbook__manager_8hpp_source.html#l00063">63</a> of file <a class="el" href="orderbook__manager_8hpp_source.html">orderbook_manager.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__manager_8hpp_source.html#l00064">64</a> of file <a class="el" href="orderbook__manager_8hpp_source.html">orderbook_manager.hpp</a>.</p>
 
 </div>
 </div>
@@ -338,8 +338,8 @@ template&lt;typename OrderBookT &gt; </div>
 
 </div>
 </div>
-<a id="ae89fc171877eaa1dd390f0639b7b84b6" name="ae89fc171877eaa1dd390f0639b7b84b6"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ae89fc171877eaa1dd390f0639b7b84b6">&#9670;&#160;</a></span>OrderBookManager() <span class="overload">[3/3]</span></h2>
+<a id="afbbd4183e18ddad9a328b3337d7d5fcd" name="afbbd4183e18ddad9a328b3337d7d5fcd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afbbd4183e18ddad9a328b3337d7d5fcd">&#9670;&#160;</a></span>OrderBookManager() <span class="overload">[3/3]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -353,16 +353,18 @@ template&lt;typename OrderBookT &gt; </div>
           <td class="memname"><a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html">slick::orderbook::OrderBookManager</a>&lt; OrderBookT &gt;::OrderBookManager </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html">OrderBookManager</a>&lt; OrderBookT &gt; &amp;&amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">default</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00020">20</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
 
 </div>
 </div>
@@ -386,7 +388,7 @@ template&lt;typename OrderBookT &gt; </div>
 
 <p>Clear all orderbooks Thread-safe: Uses exclusive lock. </p>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00107">107</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00127">127</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
 
 </div>
 </div>
@@ -417,7 +419,7 @@ template&lt;typename OrderBookT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to orderbook (never null) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00051">51</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00071">71</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
 
 </div>
 </div>
@@ -448,7 +450,7 @@ template&lt;typename OrderBookT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Shared pointer to orderbook (never null) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00056">56</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00076">76</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
 
 </div>
 </div>
@@ -479,7 +481,7 @@ template&lt;typename OrderBookT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to orderbook, or nullptr if symbol doesn't exist </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00066">66</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00086">86</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
 
 </div>
 </div>
@@ -510,7 +512,7 @@ template&lt;typename OrderBookT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Pointer to orderbook, or nullptr if symbol doesn't exist </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00061">61</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00081">81</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
 
 </div>
 </div>
@@ -541,7 +543,7 @@ template&lt;typename OrderBookT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>Shared pointer to orderbook, or nullptr if symbol doesn't exist </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00071">71</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00091">91</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
 
 </div>
 </div>
@@ -565,7 +567,7 @@ template&lt;typename OrderBookT &gt; </div>
 <p>Get all active symbol IDs Thread-safe: Uses shared lock. </p>
 <dl class="section return"><dt>Returns</dt><dd>Vector of symbol IDs (copy for thread safety) </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00088">88</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00108">108</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
 
 </div>
 </div>
@@ -596,7 +598,7 @@ template&lt;typename OrderBookT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if orderbook exists for this symbol </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00076">76</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00096">96</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
 
 </div>
 </div>
@@ -628,8 +630,8 @@ template&lt;typename OrderBookT &gt; </div>
 
 </div>
 </div>
-<a id="ab3d57aa7b801e717fb479a22aac6d821" name="ab3d57aa7b801e717fb479a22aac6d821"></a>
-<h2 class="memtitle"><span class="permalink"><a href="#ab3d57aa7b801e717fb479a22aac6d821">&#9670;&#160;</a></span>operator=() <span class="overload">[2/2]</span></h2>
+<a id="a364b86024e4b9ba91c2819785dc57ebd" name="a364b86024e4b9ba91c2819785dc57ebd"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a364b86024e4b9ba91c2819785dc57ebd">&#9670;&#160;</a></span>operator=() <span class="overload">[2/2]</span></h2>
 
 <div class="memitem">
 <div class="memproto">
@@ -640,19 +642,21 @@ template&lt;typename OrderBookT &gt; </div>
   <td class="mlabels-left">
       <table class="memname">
         <tr>
-          <td class="memname"><a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html">OrderBookManager</a> &amp; <a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html">slick::orderbook::OrderBookManager</a>&lt; OrderBookT &gt;::operator= </td>
+          <td class="memname"><a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html">OrderBookManager</a>&lt; OrderBookT &gt; &amp; <a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html">slick::orderbook::OrderBookManager</a>&lt; OrderBookT &gt;::operator= </td>
           <td>(</td>
           <td class="paramtype"><a class="el" href="classslick_1_1orderbook_1_1OrderBookManager.html">OrderBookManager</a>&lt; OrderBookT &gt; &amp;&amp;&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramname"><em>other</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
   </td>
   <td class="mlabels-right">
-<span class="mlabels"><span class="mlabel">default</span><span class="mlabel">noexcept</span></span>  </td>
+<span class="mlabels"><span class="mlabel">noexcept</span></span>  </td>
   </tr>
 </table>
 </div><div class="memdoc">
+
+<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00027">27</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
 
 </div>
 </div>
@@ -683,7 +687,7 @@ template&lt;typename OrderBookT &gt; </div>
 </dl>
 <dl class="section return"><dt>Returns</dt><dd>true if symbol was found and removed </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00082">82</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00102">102</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
 
 </div>
 </div>
@@ -713,7 +717,7 @@ template&lt;typename OrderBookT &gt; </div>
   </dd>
 </dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00113">113</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00133">133</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
 
 </div>
 </div>
@@ -737,7 +741,7 @@ template&lt;typename OrderBookT &gt; </div>
 <p>Get number of active symbols Thread-safe: Uses shared lock. </p>
 <dl class="section return"><dt>Returns</dt><dd>Number of orderbooks being managed </dd></dl>
 
-<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00101">101</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
+<p class="definition">Definition at line <a class="el" href="orderbook__manager__impl_8hpp_source.html#l00121">121</a> of file <a class="el" href="orderbook__manager__impl_8hpp_source.html">orderbook_manager_impl.hpp</a>.</p>
 
 </div>
 </div>
