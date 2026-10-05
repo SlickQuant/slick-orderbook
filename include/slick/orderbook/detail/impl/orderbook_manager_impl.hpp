@@ -17,6 +17,26 @@ OrderBookManager<OrderBookT>::OrderBookManager(std::size_t initial_symbol_capaci
 }
 
 template<typename OrderBookT>
+OrderBookManager<OrderBookT>::OrderBookManager(OrderBookManager&& other) noexcept {
+    std::unique_lock lock(other.mutex_);
+    symbol_map_ = std::move(other.symbol_map_);
+    other.symbol_map_.clear();
+}
+
+template<typename OrderBookT>
+OrderBookManager<OrderBookT>& OrderBookManager<OrderBookT>::operator=(OrderBookManager&& other) noexcept {
+    if (this != &other) [[likely]] {
+        SymbolMap released;  // Destroy the old orderbooks after both locks are released
+        {
+            std::scoped_lock lock(mutex_, other.mutex_);
+            released = std::exchange(symbol_map_, std::move(other.symbol_map_));
+            other.symbol_map_.clear();
+        }
+    }
+    return *this;
+}
+
+template<typename OrderBookT>
 template<typename Projection>
 auto OrderBookManager<OrderBookT>::find(SymbolId symbol, Projection&& proj) const {
     std::shared_lock lock(mutex_);

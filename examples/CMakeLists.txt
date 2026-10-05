@@ -48,38 +48,44 @@ target_include_directories(multi_symbol_orderbook
         ${CMAKE_SOURCE_DIR}/include
 )
 
-find_package(coinbase-advanced-cpp CONFIG QUIET)
-if(NOT coinbase-advanced-cpp_FOUND)
-    include(FetchContent)
-    message(STATUS "Fetching coinbase-advanced-cpp...")
-    set(BUILD_COINBASE_ADVANCED_TESTS OFF CACHE BOOL "" FORCE)
-    FetchContent_Declare(
-        coinbase-advanced-cpp
-        GIT_REPOSITORY https://github.com/SlickQuant/coinbase-advanced-cpp.git
-        GIT_TAG main
+set(SLICK_ORDERBOOK_EXAMPLE_TARGETS simple_l2_orderbook simple_l3_orderbook multi_symbol_orderbook)
+
+# Coinbase integration example (opt-in: pulls in network/crypto dependencies)
+if(SLICK_ORDERBOOK_BUILD_COINBASE_EXAMPLE)
+    find_package(coinbase-advanced-cpp CONFIG QUIET)
+    if(NOT coinbase-advanced-cpp_FOUND)
+        include(FetchContent)
+        message(STATUS "Fetching coinbase-advanced-cpp...")
+        set(BUILD_COINBASE_ADVANCED_TESTS OFF CACHE BOOL "" FORCE)
+        FetchContent_Declare(
+            coinbase-advanced-cpp
+            GIT_REPOSITORY https://github.com/SlickQuant/coinbase-advanced-cpp.git
+            GIT_TAG main
+        )
+        FetchContent_MakeAvailable(coinbase-advanced-cpp)
+    endif()
+
+    add_executable(coinbase_integration
+        coinbase_integration.cpp
     )
-    FetchContent_MakeAvailable(coinbase-advanced-cpp)
+
+    target_link_libraries(coinbase_integration
+        PRIVATE
+            slick::orderbook
+            slick::coinbase-advanced-cpp
+    )
+
+    target_include_directories(coinbase_integration
+        PRIVATE
+            ${CMAKE_SOURCE_DIR}/include
+    )
+
+    list(APPEND SLICK_ORDERBOOK_EXAMPLE_TARGETS coinbase_integration)
+    message(STATUS "Coinbase integration example enabled")
 endif()
 
-add_executable(coinbase_integration
-    coinbase_integration.cpp
-)
-
-target_link_libraries(coinbase_integration
-    PRIVATE
-        slick::orderbook
-        slick::coinbase-advanced-cpp
-)
-
-target_include_directories(coinbase_integration
-    PRIVATE
-        ${CMAKE_SOURCE_DIR}/include
-)
-
-message(STATUS "Coinbase integration example enabled")
-
-# Set output directory for examples (including coinbase_integration)
-set_target_properties(simple_l2_orderbook simple_l3_orderbook multi_symbol_orderbook coinbase_integration
+# Set output directory for examples
+set_target_properties(${SLICK_ORDERBOOK_EXAMPLE_TARGETS}
     PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR}/examples
     LINKER_LANGUAGE CXX

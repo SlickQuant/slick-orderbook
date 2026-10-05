@@ -4,33 +4,91 @@ on:
   push:
     tags:
       - 'v*.*.*'  # Trigger on version tags (v1.0.0, v1.2.3, etc.)
-  workflow_dispatch:
+  workflow_dispatch:  # Run on a tag ref to retry a release
+
+# Nothing is rebuilt here: the release publishes the packages that CI (ci.yml) built and tested
+# for the tagged commit. CI packages every push to main, so tag a commit that has been pushed to main.
 
 jobs:
-  # ============================================================================
-  # Create GitHub Release
-  # ============================================================================
-  create-release:
+  release:
     runs-on: ubuntu-latest
+    timeout-minutes: 120
     permissions:
       contents: write  # Required for creating releases
-    outputs:
-      version: ${{ steps.get_version.outputs.version }}
+      actions: read    # Required for finding the CI run and downloading its artifacts
 
     steps:
     - uses: actions/checkout@v4
-      with:
-        fetch-depth: 0  # Full history for changelog
 
     - name: Get Version
       id: get_version
       run: |
-        VERSION=${GITHUB_REF#refs/tags/v}
+        VERSION=${GITHUB_REF_NAME#v}
         echo "version=$VERSION" >> $GITHUB_OUTPUT
         echo "Version: $VERSION"
 
+        # Packages carry the project version from CMakeLists.txt; refuse a tag that disagrees
+        PROJECT_VERSION=$(sed -nE 's/^project\(slick-orderbook VERSION ([0-9.]+).*/\1/p' CMakeLists.txt)
+        if [ "$VERSION" != "$PROJECT_VERSION" ]; then
+          echo "::error::Tag '$GITHUB_REF_NAME' does not match project version '$PROJECT_VERSION' in CMakeLists.txt"
+          exit 1
+        fi
+
+    - name: Find CI Run
+      id: ci_run
+      env:
+        GH_TOKEN: ${{ github.token }}
+      run: |
+        # CI for this commit may still be running (tag pushed right after the merge), so wait for it
+        for attempt in $(seq 1 100); do
+          RUN=$(gh run list --repo "$GITHUB_REPOSITORY" --workflow ci.yml --branch main --event push \
+                  --commit "$GITHUB_SHA" --limit 1 --json databaseId,status,conclusion \
+                  --jq '.[0] // empty | "\(.databaseId) \(.status) \(.conclusion)"' || true)
+          read -r RUN_ID STATUS CONCLUSION <<< "$RUN"
+
+          if [ -z "$RUN_ID" ]; then
+            echo "No CI run on main for $GITHUB_SHA yet (attempt $attempt)"
+          elif [ "$STATUS" != "completed" ]; then
+            echo "CI run $RUN_ID is $STATUS (attempt $attempt)"
+          elif [ "$CONCLUSION" = "success" ]; then
+            echo "Using packages from CI run $RUN_ID"
+            echo "run_id=$RUN_ID" >> $GITHUB_OUTPUT
+            exit 0
+          else
+            echo "::error::CI run $RUN_ID for $GITHUB_SHA concluded '$CONCLUSION'; fix or re-run CI, then re-run this workflow"
+            exit 1
+          fi
+          sleep 60
+        done
+
+        echo "::error::No successful CI run on main for $GITHUB_SHA. Tag a commit that has been pushed to main."
+        exit 1
+
+    - name: Download Packages
+      uses: actions/download-artifact@v4
+      with:
+        pattern: package-*
+        path: packages
+        merge-multiple: true
+        run-id: ${{ steps.ci_run.outputs.run_id }}
+        github-token: ${{ github.token }}
+
+    - name: Name Packages
+      run: |
+        VERSION="${{ steps.get_version.outputs.version }}"
+        mkdir -p dist
+        for platform in linux-x64.tar.gz windows-x64.zip macos-arm64.tar.gz; do
+          mv "packages/slick-orderbook-$platform" "dist/slick-orderbook-$VERSION-$platform"
+        done
+
+    - name: Create Documentation Archive
+      run: |
+        tar -czf dist/slick-orderbook-${{ steps.get_version.outputs.version }}-docs.tar.gz \
+          README.md ARCHITECTURE.md CHANGELOG.md LICENSE \
+          docs/ examples/ benchmarks/PROFILING_GUIDE.md
+        ls -l dist
+
     - name: Extract Changelog
-      id: changelog
       run: |
         VERSION="${{ steps.get_version.outputs.version }}"
 
@@ -61,187 +119,12 @@ jobs:
         cat RELEASE_NOTES.md
 
     - name: Create Release
-      id: create_release
       uses: softprops/action-gh-release@v2
       with:
         tag_name: v${{ steps.get_version.outputs.version }}
         name: Release ${{ steps.get_version.outputs.version }}
         body_path: RELEASE_NOTES.md
+        files: dist/*
+        fail_on_unmatched_files: true
         draft: false
         prerelease: false
-
-  # ============================================================================
-  # Build Release Artifacts - Linux
-  # ============================================================================
-  build-linux:
-    needs: create-release
-    runs-on: ubuntu-24.04
-    permissions:
-      contents: write  # Required for uploading release assets
-    strategy:
-      matrix:
-        arch: [x64]
-
-    steps:
-    - uses: actions/checkout@v4
-      with:
-        submodules: recursive
-
-    - name: Setup vcpkg
-      uses: lukka/run-vcpkg@v11
-      with:
-        vcpkgGitCommitId: '66c0373dc7fca549e5803087b9487edfe3aca0a1'
-
-    - name: Install System Dependencies
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y cmake ninja-build gcc-14 g++-14
-
-    - name: Install vcpkg Dependencies
-      run: |
-        vcpkg install nlohmann-json openssl boost-beast jwt-cpp
-
-    - name: Build Release Package
-      run: |
-        VERSION=${{ needs.create-release.outputs.version }}
-        cmake -B build -G Ninja \
-          -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" \
-          -DCMAKE_BUILD_TYPE=Release \
-          -DCMAKE_CXX_COMPILER=g++-14 \
-          -DSLICK_ORDERBOOK_BUILD_TESTS=OFF \
-          -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON \
-          -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
-
-        cmake --build build -j $(nproc)
-
-        # Create installation
-        cmake --install build --prefix install
-
-        # Package
-        tar -czf slick-orderbook-${VERSION}-linux-${{ matrix.arch }}.tar.gz -C install .
-
-    - name: Upload Release Asset
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: v${{ needs.create-release.outputs.version }}
-        files: slick-orderbook-${{ needs.create-release.outputs.version }}-linux-${{ matrix.arch }}.tar.gz
-
-  # ============================================================================
-  # Build Release Artifacts - Windows
-  # ============================================================================
-  build-windows:
-    needs: create-release
-    runs-on: windows-2022
-    permissions:
-      contents: write  # Required for uploading release assets
-
-    steps:
-    - uses: actions/checkout@v4
-      with:
-        submodules: recursive
-
-    - name: Setup MSVC
-      uses: microsoft/setup-msbuild@v2
-
-    - name: Install vcpkg dependencies
-      run: |
-        vcpkg install nlohmann-json:x64-windows openssl:x64-windows boost-beast:x64-windows jwt-cpp:x64-windows
-
-    - name: Build Release Package
-      run: |
-        $VERSION = "${{ needs.create-release.outputs.version }}"
-        cmake -B build -G "Visual Studio 17 2022" -A x64 `
-          -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake" `
-          -DCMAKE_BUILD_TYPE=Release `
-          -DSLICK_ORDERBOOK_BUILD_TESTS=OFF `
-          -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON `
-          -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
-
-        cmake --build build --config Release -j
-
-        # Create installation
-        cmake --install build --prefix install --config Release
-
-        # Package
-        Compress-Archive -Path install\* -DestinationPath "slick-orderbook-${VERSION}-windows-x64.zip"
-
-    - name: Upload Release Asset
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: v${{ needs.create-release.outputs.version }}
-        files: slick-orderbook-${{ needs.create-release.outputs.version }}-windows-x64.zip
-
-  # ============================================================================
-  # Build Release Artifacts - macOS
-  # ============================================================================
-  build-macos:
-    needs: create-release
-    runs-on: macos-14
-    permissions:
-      contents: write  # Required for uploading release assets
-
-    steps:
-    - uses: actions/checkout@v4
-      with:
-        submodules: recursive
-
-    - name: Setup vcpkg
-      uses: lukka/run-vcpkg@v11
-      with:
-        vcpkgGitCommitId: '66c0373dc7fca549e5803087b9487edfe3aca0a1'
-
-    - name: Install System Dependencies
-      run: brew install cmake ninja
-
-    - name: Install vcpkg Dependencies
-      run: |
-        vcpkg install nlohmann-json openssl boost-beast jwt-cpp
-
-    - name: Build Release Package
-      run: |
-        VERSION=${{ needs.create-release.outputs.version }}
-        cmake -B build -G Ninja \
-          -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" \
-          -DCMAKE_BUILD_TYPE=Release \
-          -DSLICK_ORDERBOOK_BUILD_TESTS=OFF \
-          -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON \
-          -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
-
-        cmake --build build -j $(sysctl -n hw.ncpu)
-
-        # Create installation
-        cmake --install build --prefix install
-
-        # Package
-        tar -czf slick-orderbook-${VERSION}-macos-arm64.tar.gz -C install .
-
-    - name: Upload Release Asset
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: v${{ needs.create-release.outputs.version }}
-        files: slick-orderbook-${{ needs.create-release.outputs.version }}-macos-arm64.tar.gz
-
-  # ============================================================================
-  # Publish Documentation
-  # ============================================================================
-  publish-docs:
-    needs: create-release
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write  # Required for uploading release assets
-
-    steps:
-    - uses: actions/checkout@v4
-
-    - name: Create Documentation Archive
-      run: |
-        VERSION=${{ needs.create-release.outputs.version }}
-        tar -czf slick-orderbook-${VERSION}-docs.tar.gz \
-          README.md ARCHITECTURE.md CHANGELOG.md LICENSE \
-          docs/ examples/ benchmarks/PROFILING_GUIDE.md
-
-    - name: Upload Documentation
-      uses: softprops/action-gh-release@v2
-      with:
-        tag_name: v${{ needs.create-release.outputs.version }}
-        files: slick-orderbook-${{ needs.create-release.outputs.version }}-docs.tar.gz

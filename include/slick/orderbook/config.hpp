@@ -6,24 +6,46 @@
 // Version information (generated from CMakeLists.txt project version)
 #include <slick/orderbook/version.hpp>
 
-// API export/import macros
-#ifdef SLICK_ORDERBOOK_HEADER_ONLY
-    // Header-only mode: everything is inline
-    #define SLICK_API inline
-#else
-    // Compiled library mode: handle DLL export/import
-    #ifdef _WIN32
-        #ifdef SLICK_ORDERBOOK_BUILD
-            // Building the library
-            #define SLICK_API __declspec(dllexport)
-        #else
-            // Using the library
-            #define SLICK_API __declspec(dllimport)
-        #endif
+// API export/import macros (applied to exported classes)
+// SLICK_ORDERBOOK_SHARED is propagated by CMake to everything linking the shared library
+#if defined(SLICK_ORDERBOOK_HEADER_ONLY) || !defined(SLICK_ORDERBOOK_SHARED)
+    // Header-only or static library: nothing to export
+    #define SLICK_API
+#elif defined(_WIN32)
+    #ifdef SLICK_ORDERBOOK_BUILD
+        // Building the library
+        #define SLICK_API __declspec(dllexport)
     #else
-        // Unix-like systems
-        #define SLICK_API __attribute__((visibility("default")))
+        // Using the library
+        #define SLICK_API __declspec(dllimport)
     #endif
+#else
+    // Unix-like systems
+    #define SLICK_API __attribute__((visibility("default")))
+#endif
+
+// Explicit template instantiation exports:
+// MSVC needs dllexport on the instantiation definition (it is incompatible with `extern template`),
+// GCC/Clang take the visibility attribute on the `extern template` declaration instead.
+#if defined(_WIN32)
+    #define SLICK_TEMPLATE_INSTANTIATION_API SLICK_API
+    #if defined(SLICK_ORDERBOOK_BUILD) && defined(SLICK_ORDERBOOK_SHARED)
+        #define SLICK_EXTERN_TEMPLATE_DECLS 0
+    #else
+        #define SLICK_EXTERN_TEMPLATE_DECLS 1
+    #endif
+#else
+    #define SLICK_TEMPLATE_INSTANTIATION_API
+    #define SLICK_EXTERN_TEMPLATE_DECLS 1
+#endif
+
+// Exported classes hold STL members (C4251); clients must use a compatible toolset anyway
+#if defined(_MSC_VER)
+    #define SLICK_DLL_INTERFACE_WARNINGS_PUSH __pragma(warning(push)) __pragma(warning(disable: 4251))
+    #define SLICK_DLL_INTERFACE_WARNINGS_POP __pragma(warning(pop))
+#else
+    #define SLICK_DLL_INTERFACE_WARNINGS_PUSH
+    #define SLICK_DLL_INTERFACE_WARNINGS_POP
 #endif
 
 // Compiler feature detection

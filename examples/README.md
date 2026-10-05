@@ -24,6 +24,13 @@ cmake --build build -j
 ./build/examples/simple_l2_orderbook
 ```
 
+The Coinbase integration example is not built by default because of its extra dependencies.
+Install `nlohmann-json`, OpenSSL, Boost.Beast and jwt-cpp (e.g. with vcpkg), then enable it:
+
+```bash
+cmake -B build -DCMAKE_BUILD_TYPE=Release       -DSLICK_ORDERBOOK_BUILD_COINBASE_EXAMPLE=ON       -DCMAKE_TOOLCHAIN_FILE=<vcpkg>/scripts/buildsystems/vcpkg.cmake
+```
+
 ---
 
 ## Example Descriptions
@@ -242,7 +249,8 @@ cd build/examples
 **Requirements**:
 - Internet connection (connects to wss://ws-feed.exchange.coinbase.com)
 - No API keys needed (public WebSocket feed)
-- `slick-net` library (dependency for WebSocket)
+- Built only with `-DSLICK_ORDERBOOK_BUILD_COINBASE_EXAMPLE=ON`; its `coinbase-advanced-cpp`
+  dependency (fetched automatically) needs `nlohmann-json`, OpenSSL, Boost.Beast and jwt-cpp installed
 
 **Ctrl+C** to stop the feed gracefully.
 

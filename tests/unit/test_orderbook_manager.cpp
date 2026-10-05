@@ -8,6 +8,9 @@
 #include <vector>
 #include <algorithm>
 #include <chrono>
+#include <memory>
+#include <type_traits>
+#include <utility>
 #include <slick/orderbook/config.hpp>
 
 
@@ -185,6 +188,78 @@ TEST_F(OrderBookManagerL2Test, Reserve) {
     // Can still add symbols after reserve
     [[maybe_unused]] auto* book1 = manager.getOrCreateOrderBook(kSymbol1);
     EXPECT_EQ(manager.symbolCount(), 1);
+}
+
+// Regression: defaulted move operations were implicitly deleted by the std::shared_mutex member
+static_assert(std::is_nothrow_move_constructible_v<OrderBookManager<OrderBookL2>>);
+static_assert(std::is_nothrow_move_assignable_v<OrderBookManager<OrderBookL2>>);
+static_assert(std::is_nothrow_move_constructible_v<OrderBookManager<OrderBookL3>>);
+static_assert(std::is_nothrow_move_assignable_v<OrderBookManager<OrderBookL3>>);
+
+TEST_F(OrderBookManagerL2Test, MoveConstruct) {
+    OrderBookManager<OrderBookL2> source;
+    auto* book1 = source.getOrCreateOrderBook(kSymbol1);
+    book1->updateLevel(Side::Buy, kPrice100, kQty10, kTs1);
+    auto shared2 = source.getOrCreateSharedOrderBook(kSymbol2);
+
+    OrderBookManager<OrderBookL2> moved(std::move(source));
+
+    EXPECT_EQ(moved.symbolCount(), 2);
+    EXPECT_EQ(moved.getOrderBook(kSymbol1), book1);  // Orderbooks are transferred, not copied
+    EXPECT_EQ(moved.getSharedOrderBook(kSymbol2), shared2);
+    ASSERT_NE(moved.getOrderBook(kSymbol1)->getBestBid(), nullptr);
+    EXPECT_EQ(moved.getOrderBook(kSymbol1)->getBestBid()->quantity, kQty10);
+
+    // Moved-from manager is empty but still usable
+    EXPECT_EQ(source.symbolCount(), 0);
+    EXPECT_FALSE(source.hasSymbol(kSymbol1));
+    EXPECT_NE(source.getOrCreateOrderBook(kSymbol3), nullptr);
+    EXPECT_EQ(source.symbolCount(), 1);
+}
+
+TEST_F(OrderBookManagerL3Test, MoveAssign) {
+    OrderBookManager<OrderBookL3> source;
+    auto* book1 = source.getOrCreateOrderBook(kSymbol1);
+    ASSERT_TRUE(book1->addOrder(kOrder1, Side::Buy, kPrice100, kQty10, kTs1));
+
+    OrderBookManager<OrderBookL3> target;
+    auto old_book = target.getOrCreateSharedOrderBook(kSymbol2);
+
+    target = std::move(source);
+
+    EXPECT_EQ(target.symbolCount(), 1);
+    EXPECT_EQ(target.getOrderBook(kSymbol1), book1);
+    EXPECT_FALSE(target.hasSymbol(kSymbol2));  // Previous contents replaced
+    EXPECT_EQ(old_book.use_count(), 1);        // ...and released by the manager
+    EXPECT_NE(target.getOrderBook(kSymbol1)->findOrder(kOrder1), nullptr);
+    EXPECT_EQ(source.symbolCount(), 0);
+
+    // Self-move leaves the manager intact
+    auto& self = target;
+    target = std::move(self);
+    EXPECT_EQ(target.symbolCount(), 1);
+}
+
+// Regression: move assignment destroys the destination's previous orderbooks, so raw pointers
+// obtained from the destination dangle; only the source's orderbooks survive the move.
+// Lifetimes are observed through weak_ptr, never by dereferencing a possibly dangling pointer.
+TEST_F(OrderBookManagerL2Test, MoveAssignLifetime) {
+    OrderBookManager<OrderBookL2> source;
+    std::weak_ptr<OrderBookL2> source_book = source.getOrCreateSharedOrderBook(kSymbol1);
+    const OrderBookL2* source_raw = source.getOrderBook(kSymbol1);
+
+    OrderBookManager<OrderBookL2> target;
+    std::weak_ptr<OrderBookL2> target_book = target.getOrCreateSharedOrderBook(kSymbol2);  // Owned by target only
+    auto retained = target.getOrCreateSharedOrderBook(kSymbol3);                           // Also held by caller
+    ASSERT_FALSE(target_book.expired());
+
+    target = std::move(source);
+
+    EXPECT_TRUE(target_book.expired());             // Destination's raw pointers to it now dangle
+    EXPECT_EQ(retained.use_count(), 1);             // A retained handle keeps its orderbook alive
+    ASSERT_FALSE(source_book.expired());            // Source's orderbook is transferred, not destroyed
+    EXPECT_EQ(target.getOrderBook(kSymbol1), source_raw);
+    EXPECT_EQ(target.getSharedOrderBook(kSymbol1), source_book.lock());
 }
 
 TEST_F(OrderBookManagerL2Test, OrderBookOperations) {

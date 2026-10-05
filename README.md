@@ -79,10 +79,10 @@ int main() {
 
     // Query top of book
     auto tob = book.getTopOfBook();
-    std::cout << "Best Bid: " << tob.best_bid_price << " x " << tob.best_bid_quantity << "\n";
-    std::cout << "Best Ask: " << tob.best_ask_price << " x " << tob.best_ask_quantity << "\n";
-    std::cout << "Spread: " << tob.getSpread() << "\n";
-    std::cout << "Mid Price: " << tob.getMidPrice() << "\n";
+    std::cout << "Best Bid: " << tob.best_bid << " x " << tob.bid_quantity << "\n";
+    std::cout << "Best Ask: " << tob.best_ask << " x " << tob.ask_quantity << "\n";
+    std::cout << "Spread: " << tob.spread() << "\n";
+    std::cout << "Mid Price: " << tob.midPrice() << "\n";
 
     return 0;
 }
@@ -123,8 +123,8 @@ int main() {
     book.deleteOrder(1002, 0);  // Cancel order #1002
 
     // Query aggregated L2 view
-    const auto& bids = book.getLevelsL2(Side::Buy);
-    const auto& asks = book.getLevelsL2(Side::Sell);
+    auto bids = book.getLevelsL2(Side::Buy);   // std::vector<PriceLevelL2>, best first
+    auto asks = book.getLevelsL2(Side::Sell);
 
     return 0;
 }
@@ -134,6 +134,7 @@ int main() {
 
 ```cpp
 #include <slick/orderbook/orderbook.hpp>
+#include <iostream>
 
 using namespace slick::orderbook;
 
@@ -152,20 +153,19 @@ int main() {
     sol_book->updateLevel(Side::Buy, 10000, 10000, 0, 0);   // SOL: $100
 
     // Query all symbols
-    manager.forEachOrderBook([](SymbolId symbol_id, OrderBookL2* book) {
-        auto tob = book->getTopOfBook();
-        std::cout << "Symbol " << symbol_id
-                  << ": Best Bid=" << tob.best_bid_price << "\n";
-    });
+    for (SymbolId symbol_id : manager.getSymbols()) {
+        auto tob = manager.getOrderBook(symbol_id)->getTopOfBook();
+        std::cout << "Symbol " << symbol_id << ": Best Bid=" << tob.best_bid << "\n";
+    }
 
     return 0;
 }
 ```
 
 > **Lifetime:** raw pointers from `getOrCreateOrderBook()` / `getOrderBook()` are invalidated by
-> `removeOrderBook()` / `clear()`. If symbols can be removed while other threads use them, use
-> `getOrCreateSharedOrderBook()` / `getSharedOrderBook()`, whose `std::shared_ptr` keeps the
-> orderbook alive after removal.
+> `removeOrderBook()` / `clear()`, and by move-assigning another manager into this one. If symbols
+> can be removed while other threads use them, use `getOrCreateSharedOrderBook()` /
+> `getSharedOrderBook()`, whose `std::shared_ptr` keeps the orderbook alive after removal.
 
 ### Observer Pattern - Real-Time Notifications
 
@@ -186,15 +186,12 @@ public:
     }
 
     void onTopOfBookUpdate(const TopOfBook& tob) override {
-        std::cout << "ToB: " << tob.best_bid_price
-                  << " / " << tob.best_ask_price << "\n";
+        std::cout << "ToB: " << tob.best_bid
+                  << " / " << tob.best_ask << "\n";
     }
 
-    // Implement other required callbacks...
-    void onOrderUpdate(const OrderUpdate& update) override {}
-    void onTrade(const Trade& trade) override {}
-    void onSnapshotBegin(SymbolId, uint64_t, Timestamp) override {}
-    void onSnapshotEnd(SymbolId, uint64_t, Timestamp) override {}
+    // Other callbacks (onOrderUpdate, onTrade, onSnapshotBegin, onSnapshotEnd)
+    // default to no-ops; override only what you need.
 };
 
 int main() {
@@ -202,7 +199,7 @@ int main() {
     auto observer = std::make_shared<MyObserver>();
 
     // Register observer
-    book.registerObserver(observer);
+    book.addObserver(observer);
 
     // Updates will trigger notifications
     book.updateLevel(Side::Buy, 10000, 100, 0, 0);
@@ -216,6 +213,8 @@ int main() {
 ## 📚 Documentation
 
 - **[Examples](examples/)** - Usage examples
+- **[Architecture](ARCHITECTURE.md)** - Design and data structure overview
+- **[Performance Guide](docs/PERFORMANCE.md)** - Performance best practices and profiling
 - **[Benchmarks](benchmarks/)** - Performance benchmarking and profiling guides
 
 ## 🏗️ Architecture Highlights
@@ -243,19 +242,42 @@ int main() {
 -DSLICK_ORDERBOOK_BUILD_TESTS=ON    # Build tests (default: ON)
 -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=ON  # Build benchmarks (default: OFF)
 -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON    # Build examples (default: ON)
+-DSLICK_ORDERBOOK_BUILD_COINBASE_EXAMPLE=ON  # Build the Coinbase integration example (default: OFF)
+-DSLICK_ORDERBOOK_ENABLE_LTO=OFF           # LTO/IPO in Release builds (default: ON)
+-DSLICK_ORDERBOOK_ENABLE_NATIVE_ARCH=OFF   # -march=native in Release builds, GCC/Clang (default: ON)
 ```
+
+The Coinbase example is opt-in: it fetches `coinbase-advanced-cpp`, which requires `nlohmann-json`,
+OpenSSL, Boost.Beast and jwt-cpp to be installed (e.g. via vcpkg) before configuring.
+
+### Shared Library
+
+With `SLICK_ORDERBOOK_BUILD_SHARED=ON` the `OrderBookL2`/`OrderBookL3` classes and the
+`OrderBookManager<OrderBookL2>`/`OrderBookManager<OrderBookL3>` instantiations are exported
+(`__declspec(dllexport)` on Windows, default visibility elsewhere). Linking `slick::orderbook`
+propagates `SLICK_ORDERBOOK_SHARED` so consumers import them. On Windows, the DLL must be on
+`PATH` or next to the executable at runtime. The library's SOVERSION is `MAJOR.MINOR`: ABI
+compatibility is only kept within a minor version.
 
 ## 📦 Integration
 
 ### Installed Package (find_package)
 
 After `cmake --install`, the package config is installed to `<prefix>/lib/cmake/slick-orderbook`
-(for both compiled and header-only builds):
+(for both compiled and header-only builds). All of the library's install rules belong to the
+`slick-orderbook` component, so `cmake --install <build> --component slick-orderbook` installs
+only this library, without anything fetched dependencies install:
 
 ```cmake
-find_package(slick-orderbook 1.0 REQUIRED)
+find_package(slick-orderbook 1.1 REQUIRED)
 target_link_libraries(your_target PRIVATE slick::orderbook)
 ```
+
+Version matching follows the ABI policy: a compiled (static or shared) install only satisfies requests
+for the same `MAJOR.MINOR` (`find_package(slick-orderbook 1.0)` does not accept 1.1.x), while a
+header-only install satisfies any lower or equal version with the same major version.
+
+Linking `slick::orderbook` also applies the required C++23 mode (`cxx_std_23`) to `your_target`.
 
 ### CMake FetchContent
 
@@ -279,6 +301,7 @@ target_link_libraries(your_target PRIVATE slick::orderbook)
 # In your CMakeLists.txt
 add_compile_definitions(SLICK_ORDERBOOK_HEADER_ONLY)
 target_include_directories(your_target PRIVATE /path/to/slick-orderbook/include)
+target_compile_features(your_target PRIVATE cxx_std_23)
 ```
 
 > `include/slick/orderbook/version.hpp` is generated by CMake at configure time from the
@@ -292,8 +315,8 @@ cmake -B build -DCMAKE_BUILD_TYPE=Debug -DSLICK_ORDERBOOK_BUILD_TESTS=ON
 cmake --build build -j
 cd build && ctest --output-on-failure
 
-# Run specific test
-./build/tests/unit/test_orderbook_l2
+# Run specific tests (all unit tests are in one GoogleTest executable)
+./build/tests/slick_orderbook_tests --gtest_filter='OrderBookL2Test.*'
 
 # With sanitizers
 cmake -B build-asan -DCMAKE_CXX_FLAGS="-fsanitize=address -g"

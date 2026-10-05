@@ -58,7 +58,8 @@ SLICK_NAMESPACE_BEGIN
 ///
 /// book.deleteOrder(order_id);
 /// @endcode
-class SLICK_CACHE_ALIGNED OrderBookL3 {
+SLICK_DLL_INTERFACE_WARNINGS_PUSH
+class SLICK_API SLICK_CACHE_ALIGNED OrderBookL3 {
 public:
     struct PriceComparator {
         using Comparator = std::function<bool(Price, Price)>;
@@ -333,6 +334,7 @@ protected:
     uint16_t change_starting_index_ = INVALID_INDEX;            // The lowerest level had changed in a batch. The value reset to INVALID_INDEX after TopOfBook change notified
     std::size_t interested_num_levels_;                         // The top N levels to track for observer notifications (0 = all levels)
 };
+SLICK_DLL_INTERFACE_WARNINGS_POP
 
 template<>
 inline const detail::PriceLevelL3* OrderBookL3::getBestLevel<Side::Buy>() const noexcept {

@@ -7,6 +7,88 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2026-10-04
+
+### Breaking Changes
+
+- **ABI**: The compiled library is not ABI compatible with 1.0.x; rebuild code that links it.
+  - `OrderBookL2::deleteLevel()`, `OrderBookL2::clearSide()`, `OrderBookL2::clear()`,
+    `OrderBookL3::clearSide()` and `OrderBookL3::clear()` take a trailing `Timestamp timestamp = 0`
+    parameter (used for the top-of-book notification) and are no longer `noexcept`, since they may
+    now call observers. Existing calls still compile.
+  - `OrderBookManager` stores orderbooks in `std::shared_ptr` instead of `std::unique_ptr`.
+- **CMake package versioning**: A compiled (static or shared) install only satisfies `find_package`
+  requests for the same `MAJOR.MINOR` (`SameMinorVersion`), so `find_package(slick-orderbook 1.0)`
+  no longer resolves to a 1.1 install. Header-only installs accept any lower or equal version with
+  the same major version (`SameMajorVersion`).
+- **Shared library**: SOVERSION is now `MAJOR.MINOR` (e.g. `libslick-orderbook.so.1.1`).
+- **Examples**: The Coinbase integration example is no longer built by default; enable it with
+  `-DSLICK_ORDERBOOK_BUILD_COINBASE_EXAMPLE=ON` (needs nlohmann-json, OpenSSL, Boost.Beast and
+  jwt-cpp installed).
+
+### Added
+
+- **OrderBookManager**: `getOrCreateSharedOrderBook()` and `getSharedOrderBook()` return
+  `std::shared_ptr` handles that keep an orderbook alive after `removeOrderBook()`/`clear()`, for
+  symbols that may be removed while other threads use them. Raw-pointer getters are unchanged and
+  zero-overhead; their lifetime rules are now documented.
+- **CMake**: `SLICK_ORDERBOOK_ENABLE_NATIVE_ARCH` option (default `ON`) controls `-march=native` in
+  Release builds; turn it off for binaries that must run on other machines.
+- **CMake**: All install rules belong to the `slick-orderbook` component, so
+  `cmake --install <build> --component slick-orderbook` installs only this library.
+- **CMake**: `include/slick/orderbook/version.hpp` is generated from the `project(VERSION ...)` in
+  `CMakeLists.txt`, the single source of truth for the version.
+
+### Fixed
+
+- **OrderBookL2/L3**: `deleteLevel()`, `clearSide()` and `clear()` left the cached top-of-book stale,
+  so `getTopOfBook()` and (L2) `getBestBid()`/`getBestAsk()` kept reporting removed levels. They now
+  refresh the cache and call `onTopOfBookUpdate()` when the best bid/ask changes.
+- **OrderBookL3**: `PriceLevelUpdate::num_orders` reported the order count of the whole book instead
+  of the order count at that price level. It is also clamped instead of wrapping beyond 65535.
+- **Shared library (Windows)**: The DLL exported no symbols, so consumers could not link it.
+  `OrderBookL2`, `OrderBookL3` and the `OrderBookManager<OrderBookL2>`/`<OrderBookL3>`
+  instantiations are now exported, and `SLICK_ORDERBOOK_SHARED` is propagated to consumers so they
+  import them.
+- **CMake**: `find_package(slick-orderbook)` failed because no package config file was installed. The
+  package now installs `slick-orderbook-config.cmake` for compiled and header-only builds and exports
+  the target as `slick::orderbook`.
+- **CMake**: The exported target now requires C++23 (`cxx_std_23`); previously consumers had to set
+  the language standard themselves.
+- **CMake**: A clean default configure failed unless nlohmann_json was installed, because the
+  Coinbase example was always configured.
+- **CMake**: Building tests with a fetched googletest no longer installs gtest with `cmake --install`.
+- **Version macros**: `SLICK_ORDERBOOK_VERSION_*` reported 1.0.3; they now match the project version.
+- **OrderBookManager**: Move construction and move assignment were declared but implicitly deleted
+  (the class owns a `std::shared_mutex`). They are now implemented: the source's orderbooks are
+  transferred, and move assignment releases the destination's previous orderbooks.
+
+### CI
+
+- **Release**: The release workflow no longer rebuilds. It publishes the packages that CI built and
+  tested for the tagged commit, after waiting for that commit's CI run on `main` to succeed. The tag
+  must match the project version in `CMakeLists.txt`.
+- **Release**: Packages are built without LTO and `-march=native` so they run on any machine of the
+  target architecture, and contain only the library's install component.
+- **CI**: The `ci-success` gate checks every required job, including coverage and static analysis.
+- **CI**: Builds the Coinbase example explicitly now that it is opt-in.
+
+### Documentation
+
+- **README**: Fixed examples that did not compile (`forEachOrderBook`, `registerObserver` and the
+  `TopOfBook` member names do not exist), corrected the test command, and documented the shared
+  library, the install component and the version policy.
+
+### Tests
+
+- **OrderBookL2**: `DeleteBestLevelRefreshesTopOfBook`, `ClearSideRefreshesTopOfBook`,
+  `ClearRefreshesTopOfBookAndNotifies`.
+- **OrderBookL3**: `ClearSideRefreshesTopOfBook`, `ClearRefreshesTopOfBook`,
+  `LevelUpdateNumOrdersIsPerLevel`.
+- **OrderBookManager**: `SharedOrderBookOutlivesRemoval`, `ConcurrentRemoveWithSharedHandles`,
+  `MoveConstruct`, `MoveAssign`, `MoveAssignLifetime`, plus compile-time move-trait checks.
+- Shared-library builds on Windows copy the DLL next to the test executable so tests can run.
+
 ## [1.0.5] - 2026-08-09
 
 ### Fixed

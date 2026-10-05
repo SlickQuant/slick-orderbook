@@ -63,8 +63,11 @@ jobs:
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
           -DCMAKE_C_COMPILER=${{ matrix.compiler }} \
           -DCMAKE_CXX_COMPILER=g++-14 \
+          -DSLICK_ORDERBOOK_ENABLE_LTO=OFF \
+          -DSLICK_ORDERBOOK_ENABLE_NATIVE_ARCH=OFF \
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
           -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON \
+          -DSLICK_ORDERBOOK_BUILD_COINBASE_EXAMPLE=ON \
           -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
 
     - name: Configure CMake (Header-Only)
@@ -78,6 +81,7 @@ jobs:
           -DSLICK_ORDERBOOK_HEADER_ONLY=ON \
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
           -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON \
+          -DSLICK_ORDERBOOK_BUILD_COINBASE_EXAMPLE=ON \
           -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
 
     - name: Build
@@ -93,6 +97,23 @@ jobs:
       with:
         name: test-results-linux-${{ matrix.compiler }}-${{ matrix.build_mode }}-${{ matrix.build_type }}
         path: build/Testing/Temporary/LastTest.log
+
+    # Package the tested build for release.yml (compiled Release leg only; no rebuild at release time)
+    - name: Install
+      if: matrix.build_mode == 'compiled' && matrix.build_type == 'Release'
+      run: cmake --install build --prefix install --component slick-orderbook
+
+    - name: Package
+      if: matrix.build_mode == 'compiled' && matrix.build_type == 'Release' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: tar -czf slick-orderbook-linux-x64.tar.gz -C install .
+
+    - name: Upload Package
+      if: matrix.build_mode == 'compiled' && matrix.build_type == 'Release' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: actions/upload-artifact@v4
+      with:
+        name: package-linux-x64
+        path: slick-orderbook-linux-x64.tar.gz
+        if-no-files-found: error
 
   # ============================================================================
   # Linux Build & Test (Clang)
@@ -147,6 +168,7 @@ jobs:
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
           -DSLICK_ORDERBOOK_ENABLE_LTO=OFF \
           -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON \
+          -DSLICK_ORDERBOOK_BUILD_COINBASE_EXAMPLE=ON \
           -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
 
     - name: Build
@@ -195,8 +217,10 @@ jobs:
         cmake -B build -G "Visual Studio 17 2022" -A x64 `
           -DCMAKE_TOOLCHAIN_FILE="C:/vcpkg/scripts/buildsystems/vcpkg.cmake" `
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} `
+          -DSLICK_ORDERBOOK_ENABLE_LTO=OFF `
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON `
           -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON `
+          -DSLICK_ORDERBOOK_BUILD_COINBASE_EXAMPLE=ON `
           -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
 
     - name: Configure CMake (Header-Only)
@@ -208,6 +232,7 @@ jobs:
           -DSLICK_ORDERBOOK_HEADER_ONLY=ON `
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON `
           -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON `
+          -DSLICK_ORDERBOOK_BUILD_COINBASE_EXAMPLE=ON `
           -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
 
     - name: Build
@@ -216,6 +241,23 @@ jobs:
     - name: Test
       working-directory: ${{ github.workspace }}/build
       run: ctest --output-on-failure -C ${{ matrix.build_type }} -j
+
+    # Package the tested build for release.yml (compiled Release leg only; no rebuild at release time)
+    - name: Install
+      if: matrix.build_mode == 'compiled' && matrix.build_type == 'Release'
+      run: cmake --install build --prefix install --config Release --component slick-orderbook
+
+    - name: Package
+      if: matrix.build_mode == 'compiled' && matrix.build_type == 'Release' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: Compress-Archive -Path install\* -DestinationPath slick-orderbook-windows-x64.zip
+
+    - name: Upload Package
+      if: matrix.build_mode == 'compiled' && matrix.build_type == 'Release' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: actions/upload-artifact@v4
+      with:
+        name: package-windows-x64
+        path: slick-orderbook-windows-x64.zip
+        if-no-files-found: error
 
   # ============================================================================
   # macOS Build & Test
@@ -260,8 +302,11 @@ jobs:
         cmake -B build -G Ninja \
           -DCMAKE_TOOLCHAIN_FILE="${VCPKG_ROOT}/scripts/buildsystems/vcpkg.cmake" \
           -DCMAKE_BUILD_TYPE=${{ matrix.build_type }} \
+          -DSLICK_ORDERBOOK_ENABLE_LTO=OFF \
+          -DSLICK_ORDERBOOK_ENABLE_NATIVE_ARCH=OFF \
           -DSLICK_ORDERBOOK_BUILD_TESTS=ON \
           -DSLICK_ORDERBOOK_BUILD_EXAMPLES=ON \
+          -DSLICK_ORDERBOOK_BUILD_COINBASE_EXAMPLE=ON \
           -DSLICK_ORDERBOOK_BUILD_BENCHMARKS=OFF
 
     - name: Build
@@ -270,6 +315,23 @@ jobs:
     - name: Test
       working-directory: ${{ github.workspace }}/build
       run: ctest --output-on-failure -j $(sysctl -n hw.ncpu)
+
+    # Package the tested build for release.yml (Release leg only; no rebuild at release time)
+    - name: Install
+      if: matrix.build_type == 'Release'
+      run: cmake --install build --prefix install --component slick-orderbook
+
+    - name: Package
+      if: matrix.build_type == 'Release' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+      run: tar -czf slick-orderbook-macos-arm64.tar.gz -C install .
+
+    - name: Upload Package
+      if: matrix.build_type == 'Release' && github.event_name == 'push' && github.ref == 'refs/heads/main'
+      uses: actions/upload-artifact@v4
+      with:
+        name: package-macos-arm64
+        path: slick-orderbook-macos-arm64.tar.gz
+        if-no-files-found: error
 
   # ============================================================================
   # Sanitizer Builds
@@ -404,13 +466,15 @@ jobs:
     if: always()
 
     steps:
+    # Gate on every job in `needs` (no hand-maintained list that can drift from it)
     - name: Check CI Status
+      env:
+        NEEDS: ${{ toJSON(needs) }}
       run: |
-        if [ "${{ needs.linux-gcc.result }}" != "success" ] || \
-           [ "${{ needs.linux-clang.result }}" != "success" ] || \
-           [ "${{ needs.windows-msvc.result }}" != "success" ] || \
-           [ "${{ needs.macos.result }}" != "success" ] || \
-           [ "${{ needs.sanitizers.result }}" != "success" ]; then
+        echo "$NEEDS" | jq -r 'to_entries[] | "\(.key): \(.value.result)"'
+        # Fail closed: any jq error leaves FAILED != 0
+        FAILED=$(echo "$NEEDS" | jq '[.[] | select(.result != "success")] | length')
+        if [ "$FAILED" != "0" ]; then
           echo "CI failed"
           exit 1
         fi

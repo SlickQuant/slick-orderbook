@@ -14,6 +14,8 @@ if(NOT GTest_FOUND)
     )
     # For Windows: Prevent overriding the parent project's compiler/linker settings
     set(gtest_force_shared_crt ON CACHE BOOL "" FORCE)
+    # Test-only dependency: keep it out of `cmake --install`
+    set(INSTALL_GTEST OFF CACHE BOOL "" FORCE)
     FetchContent_MakeAvailable(googletest)
 endif()
 
@@ -47,6 +49,16 @@ set_target_properties(slick_orderbook_tests
     PROPERTIES
     LINKER_LANGUAGE CXX
 )
+
+# Shared library on Windows: copy the DLL next to the test executable so
+# test discovery (run as a post-build step) and ctest can load it
+get_target_property(SLICK_ORDERBOOK_TARGET_TYPE slick::orderbook TYPE)
+if(WIN32 AND SLICK_ORDERBOOK_TARGET_TYPE STREQUAL "SHARED_LIBRARY")
+    add_custom_command(TARGET slick_orderbook_tests POST_BUILD
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            $<TARGET_FILE:slick::orderbook> $<TARGET_FILE_DIR:slick_orderbook_tests>
+    )
+endif()
 
 # Discover tests for CTest
 include(GoogleTest)

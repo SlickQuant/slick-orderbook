@@ -13,6 +13,7 @@
 #include <string>
 #include <vector>
 #include <mutex>
+#include <utility>
 
 SLICK_NAMESPACE_BEGIN
 
@@ -69,11 +70,18 @@ public:
     /// Destructor
     ~OrderBookManager() = default;
 
-    // Non-copyable, movable
+    // Non-copyable, movable (manual implementation: std::shared_mutex is neither copyable nor movable)
+    // Moving transfers the orderbooks under the source's lock; the moved-from manager is left empty.
+    // Lifetime on move:
+    // - Orderbooks of the source are transferred, not copied: pointers/handles obtained from the
+    //   source stay valid and now refer to orderbooks owned by the destination.
+    // - Move assignment releases the destination's previous orderbooks, as clear() does: raw pointers
+    //   obtained from the destination before the assignment are invalidated, unless a shared handle
+    //   (getSharedOrderBook()/getOrCreateSharedOrderBook()) still retains that orderbook.
     OrderBookManager(const OrderBookManager&) = delete;
     OrderBookManager& operator=(const OrderBookManager&) = delete;
-    OrderBookManager(OrderBookManager&&) noexcept = default;
-    OrderBookManager& operator=(OrderBookManager&&) noexcept = default;
+    OrderBookManager(OrderBookManager&& other) noexcept;
+    OrderBookManager& operator=(OrderBookManager&& other) noexcept;
 
     /// Get existing orderbook or create new one if it doesn't exist
     /// Thread-safe: Uses shared_mutex for symbol map access
@@ -159,4 +167,12 @@ SLICK_NAMESPACE_END
 // Include implementation for header-only mode
 #ifdef SLICK_ORDERBOOK_HEADER_ONLY
 #include <slick/orderbook/detail/impl/orderbook_manager_impl.hpp>
+#elif SLICK_EXTERN_TEMPLATE_DECLS
+// Explicitly instantiated in the compiled library (src/core/orderbook_manager.cpp)
+SLICK_NAMESPACE_BEGIN
+SLICK_DLL_INTERFACE_WARNINGS_PUSH
+extern template class SLICK_API OrderBookManager<OrderBookL2>;
+extern template class SLICK_API OrderBookManager<OrderBookL3>;
+SLICK_DLL_INTERFACE_WARNINGS_POP
+SLICK_NAMESPACE_END
 #endif

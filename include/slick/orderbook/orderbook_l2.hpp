@@ -37,7 +37,8 @@ SLICK_NAMESPACE_BEGIN
 /// book.updateLevel(Side::Buy, 10000, 100, timestamp);
 /// auto best_bid = book.getBestBid();
 /// @endcode
-class SLICK_CACHE_ALIGNED OrderBookL2 {
+SLICK_DLL_INTERFACE_WARNINGS_PUSH
+class SLICK_API SLICK_CACHE_ALIGNED OrderBookL2 {
 public:
     /// Constructor
     /// @param symbol Symbol identifier
@@ -178,6 +179,7 @@ protected:
     uint64_t last_seq_num_;                                             // Last processed sequence number (0 = not tracking)
     uint16_t change_starting_index_ = INVALID_INDEX;                    // The lowerest level had changed in a batch. The value reset to INVALID_INDEX after TopOfBook change notified
 };
+SLICK_DLL_INTERFACE_WARNINGS_POP
 
 SLICK_NAMESPACE_END
 

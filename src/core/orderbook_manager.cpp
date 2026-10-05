@@ -8,7 +8,9 @@
 SLICK_NAMESPACE_BEGIN
 
 // Explicit template instantiations for compiled library mode
-template class OrderBookManager<OrderBookL2>;
-template class OrderBookManager<OrderBookL3>;
+SLICK_DLL_INTERFACE_WARNINGS_PUSH
+template class SLICK_TEMPLATE_INSTANTIATION_API OrderBookManager<OrderBookL2>;
+template class SLICK_TEMPLATE_INSTANTIATION_API OrderBookManager<OrderBookL3>;
+SLICK_DLL_INTERFACE_WARNINGS_POP
 
 SLICK_NAMESPACE_END

@@ -1,5 +1,5 @@
 cmake_minimum_required(VERSION 3.20)
-project(slick-orderbook VERSION 1.0.5 LANGUAGES CXX)
+project(slick-orderbook VERSION 1.1.0 LANGUAGES CXX)
 
 set(CMAKE_CXX_STANDARD 23)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
@@ -11,7 +11,9 @@ option(SLICK_ORDERBOOK_BUILD_SHARED "Build shared library" OFF)
 option(SLICK_ORDERBOOK_BUILD_TESTS "Build tests" ON)
 option(SLICK_ORDERBOOK_BUILD_BENCHMARKS "Build benchmarks" OFF)
 option(SLICK_ORDERBOOK_BUILD_EXAMPLES "Build examples" ON)
+option(SLICK_ORDERBOOK_BUILD_COINBASE_EXAMPLE "Build the Coinbase integration example (fetches coinbase-advanced-cpp; needs nlohmann-json, OpenSSL, Boost.Beast, jwt-cpp)" OFF)
 option(SLICK_ORDERBOOK_ENABLE_LTO "Enable LTO/IPO in Release builds" ON)
+option(SLICK_ORDERBOOK_ENABLE_NATIVE_ARCH "Tune Release builds for the build machine (-march=native, GCC/Clang)" ON)
 
 # Optimization flags
 if(NOT CMAKE_BUILD_TYPE)
@@ -23,7 +25,7 @@ if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     add_compile_options(
         -Wall -Wextra -Wpedantic
         $<$<CONFIG:Release>:-O3>
-        $<$<CONFIG:Release>:-march=native>
+        $<$<AND:$<CONFIG:Release>,$<BOOL:${SLICK_ORDERBOOK_ENABLE_NATIVE_ARCH}>>:-march=native>
         $<$<AND:$<CONFIG:Release>,$<BOOL:${SLICK_ORDERBOOK_ENABLE_LTO}>>:-flto>
     )
 elseif(MSVC)
@@ -97,7 +99,15 @@ else()
     # Compiled library (static or shared)
     if(SLICK_ORDERBOOK_BUILD_SHARED)
         add_library(slick-orderbook SHARED ${SLICK_ORDERBOOK_SOURCES})
-        target_compile_definitions(slick-orderbook PRIVATE SLICK_ORDERBOOK_BUILD)
+        target_compile_definitions(slick-orderbook
+            PUBLIC SLICK_ORDERBOOK_SHARED   # Selects dllimport/visibility in SLICK_API for consumers
+            PRIVATE SLICK_ORDERBOOK_BUILD
+        )
+        # The ABI may change between minor versions, so the soname tracks MAJOR.MINOR
+        set_target_properties(slick-orderbook PROPERTIES
+            VERSION ${PROJECT_VERSION}
+            SOVERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}
+        )
     else()
         add_library(slick-orderbook STATIC ${SLICK_ORDERBOOK_SOURCES})
     endif()
@@ -108,6 +118,9 @@ target_include_directories(slick-orderbook ${SLICK_ORDERBOOK_INCLUDE_SCOPE}
     $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>
     $<INSTALL_INTERFACE:include>
 )
+
+# Public headers require C++23 (std::flat_map); CMAKE_CXX_STANDARD is not transitive to consumers
+target_compile_features(slick-orderbook ${SLICK_ORDERBOOK_INCLUDE_SCOPE} cxx_std_23)
 
 # Add alias for consistent usage; installed/exported target is also slick::orderbook
 add_library(slick::orderbook ALIAS slick-orderbook)
@@ -147,15 +160,20 @@ if(CMAKE_SOURCE_DIR STREQUAL CMAKE_CURRENT_SOURCE_DIR)
 endif()
 
 # Installation rules
+# All rules belong to one component so packaging can install just this library
+# (`cmake --install <build> --component slick-orderbook`), excluding anything fetched dependencies install
+set(SLICK_ORDERBOOK_INSTALL_COMPONENT slick-orderbook)
+
 install(TARGETS slick-orderbook
     EXPORT slick-orderbook-targets
-    LIBRARY DESTINATION lib
-    ARCHIVE DESTINATION lib
-    RUNTIME DESTINATION bin
+    LIBRARY DESTINATION lib COMPONENT ${SLICK_ORDERBOOK_INSTALL_COMPONENT}
+    ARCHIVE DESTINATION lib COMPONENT ${SLICK_ORDERBOOK_INSTALL_COMPONENT}
+    RUNTIME DESTINATION bin COMPONENT ${SLICK_ORDERBOOK_INSTALL_COMPONENT}
 )
 
 install(DIRECTORY include/
     DESTINATION include
+    COMPONENT ${SLICK_ORDERBOOK_INSTALL_COMPONENT}
     FILES_MATCHING PATTERN "*.hpp"
 )
 
@@ -165,6 +183,7 @@ install(EXPORT slick-orderbook-targets
     FILE slick-orderbook-targets.cmake
     NAMESPACE slick::
     DESTINATION ${SLICK_ORDERBOOK_CMAKE_INSTALL_DIR}
+    COMPONENT ${SLICK_ORDERBOOK_INSTALL_COMPONENT}
 )
 
 # Package configuration
@@ -174,14 +193,23 @@ configure_package_config_file(
     "${CMAKE_CURRENT_BINARY_DIR}/slick-orderbook-config.cmake"
     INSTALL_DESTINATION ${SLICK_ORDERBOOK_CMAKE_INSTALL_DIR}
 )
+# Compiled library: ABI is only kept within a minor version (matches the MAJOR.MINOR SOVERSION),
+# so find_package(slick-orderbook 1.0) must not resolve to a 1.1 install.
+# Header-only: no binary ABI and minor releases stay source compatible, so any 1.x satisfies 1.y <= x.
+if(SLICK_ORDERBOOK_HEADER_ONLY)
+    set(SLICK_ORDERBOOK_VERSION_COMPATIBILITY SameMajorVersion ARCH_INDEPENDENT)
+else()
+    set(SLICK_ORDERBOOK_VERSION_COMPATIBILITY SameMinorVersion)
+endif()
 write_basic_package_version_file(
     "${CMAKE_CURRENT_BINARY_DIR}/slick-orderbook-config-version.cmake"
     VERSION ${PROJECT_VERSION}
-    COMPATIBILITY AnyNewerVersion
+    COMPATIBILITY ${SLICK_ORDERBOOK_VERSION_COMPATIBILITY}
 )
 
 install(FILES
     "${CMAKE_CURRENT_BINARY_DIR}/slick-orderbook-config.cmake"
     "${CMAKE_CURRENT_BINARY_DIR}/slick-orderbook-config-version.cmake"
     DESTINATION ${SLICK_ORDERBOOK_CMAKE_INSTALL_DIR}
+    COMPONENT ${SLICK_ORDERBOOK_INSTALL_COMPONENT}
 )

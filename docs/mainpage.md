@@ -97,7 +97,7 @@ Practical usage examples:
 - `simple_l2_orderbook.cpp` - L2 basics
 - `simple_l3_orderbook.cpp` - L3 order tracking
 - `multi_symbol_orderbook.cpp` - Managing multiple symbols
-- `coinbase_integration.cpp` - Real exchange integration
+- `coinbase_integration.cpp` - Real exchange integration (opt-in: `SLICK_ORDERBOOK_BUILD_COINBASE_EXAMPLE=ON`)
 
 See [examples/README.md](../../examples/README.md) for detailed descriptions.
 
@@ -137,4 +137,4 @@ This project is licensed under the MIT License. See [LICENSE](../../LICENSE) for
 
 **Organization**: Slick Quant
 
-**Version**: 1.0.5
+**Version**: 1.1.0
