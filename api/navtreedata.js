@@ -25,30 +25,30 @@
 var NAVTREE =
 [
   [ "Slick OrderBook", "index.html", [
-    [ "✨ Features", "index.html#autotoc_md1", null ],
-    [ "📈 Performance", "index.html#autotoc_md2", null ],
-    [ "🚀 Quick Start", "index.html#autotoc_md3", [
-      [ "Prerequisites", "index.html#autotoc_md4", null ],
-      [ "Installation", "index.html#autotoc_md5", null ],
-      [ "Basic Usage - Level 2 OrderBook", "index.html#autotoc_md6", null ],
-      [ "Basic Usage - Level 3 OrderBook", "index.html#autotoc_md7", null ],
-      [ "Multi-Symbol Management", "index.html#autotoc_md8", null ],
-      [ "Observer Pattern - Real-Time Notifications", "index.html#autotoc_md9", null ]
+    [ "✨ Features", "index.html#autotoc_md2", null ],
+    [ "📈 Performance", "index.html#autotoc_md3", null ],
+    [ "🚀 Quick Start", "index.html#autotoc_md4", [
+      [ "Prerequisites", "index.html#autotoc_md5", null ],
+      [ "Installation", "index.html#autotoc_md6", null ],
+      [ "Basic Usage - Level 2 OrderBook", "index.html#autotoc_md7", null ],
+      [ "Basic Usage - Level 3 OrderBook", "index.html#autotoc_md8", null ],
+      [ "Multi-Symbol Management", "index.html#autotoc_md9", null ],
+      [ "Observer Pattern - Real-Time Notifications", "index.html#autotoc_md10", null ]
     ] ],
-    [ "📚 Documentation", "index.html#autotoc_md10", null ],
-    [ "🏗️ Architecture Highlights", "index.html#autotoc_md11", [
-      [ "Cache-Optimized Data Structures", "index.html#autotoc_md12", null ],
-      [ "Zero-Cost Abstractions", "index.html#autotoc_md13", null ]
+    [ "📚 Documentation", "index.html#autotoc_md11", null ],
+    [ "🏗️ Architecture Highlights", "index.html#autotoc_md12", [
+      [ "Cache-Optimized Data Structures", "index.html#autotoc_md13", null ],
+      [ "Zero-Cost Abstractions", "index.html#autotoc_md14", null ]
     ] ],
-    [ "🔧 CMake Options", "index.html#autotoc_md14", [
-      [ "Shared Library", "index.html#autotoc_md15", null ]
+    [ "🔧 CMake Options", "index.html#autotoc_md15", [
+      [ "Shared Library", "index.html#autotoc_md16", null ]
     ] ],
-    [ "📦 Integration", "index.html#autotoc_md16", [
-      [ "Installed Package (find_package)", "index.html#autotoc_md17", null ],
-      [ "CMake FetchContent", "index.html#autotoc_md18", null ],
-      [ "Header-Only Mode", "index.html#autotoc_md19", null ]
+    [ "📦 Integration", "index.html#autotoc_md17", [
+      [ "Installed Package (find_package)", "index.html#autotoc_md18", null ],
+      [ "CMake FetchContent", "index.html#autotoc_md19", null ],
+      [ "Header-Only Mode", "index.html#autotoc_md20", null ]
     ] ],
-    [ "🧪 Testing", "index.html#autotoc_md20", null ],
+    [ "🧪 Testing", "index.html#autotoc_md21", null ],
     [ "📊 Benchmarking", "index.html#autotoc_md22", null ],
     [ "📄 License", "index.html#autotoc_md23", null ],
     [ "🙏 Acknowledgments", "index.html#autotoc_md24", null ],

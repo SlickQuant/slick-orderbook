@@ -5,5 +5,5 @@ var searchData=
   ['quantitychanged_2',['quantitychanged',['../structslick_1_1orderbook_1_1PriceLevelUpdate.html#a85516a34c4af2b918363bdf510c7562a',1,'slick::orderbook::PriceLevelUpdate::quantityChanged()'],['../structslick_1_1orderbook_1_1OrderUpdate.html#a0ef14cea0fc12e4d9ebf738d0b3d8dea',1,'slick::orderbook::OrderUpdate::quantityChanged()'],['../namespaceslick_1_1orderbook.html#a558cb9e311f7c290cd0cdc3d374389edaf310399218b95d363b483eb082c7f18a',1,'slick::orderbook::QuantityChanged']]],
   ['queries_3',['7. Cache TopOfBook Queries',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html#autotoc_md96',1,'']]],
   ['queue_4',['IntrusiveList - Zero-Allocation Order Queue',['../md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2ARCHITECTURE.html#autotoc_md39',1,'']]],
-  ['quick_20start_5',['🚀 Quick Start',['../index.html#autotoc_md3',1,'']]]
+  ['quick_20start_5',['🚀 Quick Start',['../index.html#autotoc_md4',1,'']]]
 ];

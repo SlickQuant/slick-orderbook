@@ -95,7 +95,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <div class="contents">
 <div class="textblock"><p><a class="anchor" id="md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2README"></a> <a href="https://github.com/SlickQuant/slick-orderbook/actions/workflows/ci.yml"><img src="https://github.com/SlickQuant/slick-orderbook/workflows/CI/badge.svg" alt="CI" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/SlickQuant/slick-orderbook/actions/workflows/documentation.yml"><img src="https://github.com/SlickQuant/slick-orderbook/workflows/Documentation/badge.svg" alt="Documentation" style="pointer-events: none;" class="inline"/></a> <a href="https://opensource.org/licenses/MIT"><img src="https://img.shields.io/badge/License-MIT-yellow.svg" alt="License: MIT" style="pointer-events: none;" class="inline"/></a> <a href="https://en.cppreference.com/w/cpp/23"><img src="https://img.shields.io/badge/C%2B%2B-23-blue.svg" alt="C++23" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/SlickQuant/slick-orderbook"><img src="https://img.shields.io/badge/platform-linux%20%7C%20macos%20%7C%20windows-lightgrey.svg" alt="Platform" style="pointer-events: none;" class="inline"/></a> <a href="https://github.com/SlickQuant/slick-orderbook/releases"><img src="https://img.shields.io/github/v/release/SlickQuant/slick-orderbook" alt="Release" class="inline"/></a></p>
 <p>A <b>high-performance, low-latency C++ library</b> for managing financial market order books. Optimized for microsecond-level performance in high-frequency trading systems.</p>
-<h1><a class="anchor" id="autotoc_md1"></a>
+<h1><a class="anchor" id="autotoc_md2"></a>
 ✨ Features</h1>
 <ul>
 <li><b>🚀 Blazing Fast</b>: Sub-100ns L2 operations, sub-200ns L3 operations (p99)</li>
@@ -106,7 +106,7 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <li><b>⚡ Zero Allocations</b>: Object pooling eliminates runtime allocations in hot paths</li>
 <li><b>📦 C++23</b>: Leverages modern C++ features (<code>std::flat_map</code>, concepts, etc.)</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md2"></a>
+<h1><a class="anchor" id="autotoc_md3"></a>
 📈 Performance</h1>
 <p>All performance targets exceeded by <b>2-40x</b>:</p>
 <table class="markdownTable">
@@ -125,16 +125,16 @@ $(document).ready(function(){initNavTree('index.html',''); initResizable(); });
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">Memory Footprint (L3)   </td><td class="markdownTableBodyNone">&lt;10KB/1000 orders   </td><td class="markdownTableBodyNone">&lt;10KB   </td><td class="markdownTableBodyNone">✅ <b>Meets target</b>   </td></tr>
 </table>
-<h1><a class="anchor" id="autotoc_md3"></a>
+<h1><a class="anchor" id="autotoc_md4"></a>
 🚀 Quick Start</h1>
-<h2><a class="anchor" id="autotoc_md4"></a>
+<h2><a class="anchor" id="autotoc_md5"></a>
 Prerequisites</h2>
 <ul>
 <li><b>C++23 compiler</b>: GCC 14+, Clang 18+, or MSVC 2022+ (17.6+)</li>
 <li><b>CMake</b>: 3.20 or higher</li>
 <li><b>Git</b>: For cloning the repository</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md5"></a>
+<h2><a class="anchor" id="autotoc_md6"></a>
 Installation</h2>
 <div class="fragment"><div class="line"># Clone the repository</div>
 <div class="line">git clone https://github.com/SlickQuant/slick-orderbook.git</div>
@@ -150,7 +150,7 @@ Installation</h2>
 <div class="line"> </div>
 <div class="line"># Install (optional)</div>
 <div class="line">sudo cmake --install .</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md6"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md7"></a>
 Basic Usage - Level 2 OrderBook</h2>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="orderbook_8hpp.html">slick/orderbook/orderbook.hpp</a>&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
@@ -184,7 +184,7 @@ Basic Usage - Level 2 OrderBook</h2>
 <div class="line">Best Ask: 10050 x 75</div>
 <div class="line">Spread: 50</div>
 <div class="line">Mid Price: 10025</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md7"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md8"></a>
 Basic Usage - Level 3 OrderBook</h2>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="orderbook_8hpp.html">slick/orderbook/orderbook.hpp</a>&gt;</span></div>
 <div class="line"> </div>
@@ -215,7 +215,7 @@ Basic Usage - Level 3 OrderBook</h2>
 <div class="line">    <span class="keywordflow">return</span> 0;</div>
 <div class="line">}</div>
 <div class="ttc" id="aclassslick_1_1orderbook_1_1OrderBookL3_html"><div class="ttname"><a href="classslick_1_1orderbook_1_1OrderBookL3.html">slick::orderbook::OrderBookL3</a></div><div class="ttdoc">Level 3 OrderBook - Individual order tracking with price-time priority.</div><div class="ttdef"><b>Definition</b> <a href="orderbook__l3_8hpp_source.html#l00062">orderbook_l3.hpp:62</a></div></div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md8"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md9"></a>
 Multi-Symbol Management</h2>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="orderbook_8hpp.html">slick/orderbook/orderbook.hpp</a>&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
@@ -251,7 +251,7 @@ Multi-Symbol Management</h2>
 </div><!-- fragment --><blockquote class="doxtable">
 <p>&zwj;<b>Lifetime:</b> raw pointers from <code>getOrCreateOrderBook()</code> / <code>getOrderBook()</code> are invalidated by <code>removeOrderBook()</code> / <code>clear()</code>, and by move-assigning another manager into this one. If symbols can be removed while other threads use them, use <code>getOrCreateSharedOrderBook()</code> / <code>getSharedOrderBook()</code>, whose <code>std::shared_ptr</code> keeps the orderbook alive after removal. </p>
 </blockquote>
-<h2><a class="anchor" id="autotoc_md9"></a>
+<h2><a class="anchor" id="autotoc_md10"></a>
 Observer Pattern - Real-Time Notifications</h2>
 <div class="fragment"><div class="line"><span class="preprocessor">#include &lt;<a class="code" href="orderbook_8hpp.html">slick/orderbook/orderbook.hpp</a>&gt;</span></div>
 <div class="line"><span class="preprocessor">#include &lt;iostream&gt;</span></div>
@@ -299,7 +299,7 @@ Observer Pattern - Real-Time Notifications</h2>
 <div class="ttc" id="astructslick_1_1orderbook_1_1TopOfBook_html"><div class="ttname"><a href="structslick_1_1orderbook_1_1TopOfBook.html">slick::orderbook::TopOfBook</a></div><div class="ttdoc">Top-of-book snapshot - best bid and ask.</div><div class="ttdef"><b>Definition</b> <a href="events_8hpp_source.html#l00142">events.hpp:142</a></div></div>
 <div class="ttc" id="astructslick_1_1orderbook_1_1TopOfBook_html_ac78b713a9d33563965ef95458202c8f7"><div class="ttname"><a href="structslick_1_1orderbook_1_1TopOfBook.html#ac78b713a9d33563965ef95458202c8f7">slick::orderbook::TopOfBook::best_ask</a></div><div class="ttdeci">Price best_ask</div><div class="ttdef"><b>Definition</b> <a href="events_8hpp_source.html#l00146">events.hpp:146</a></div></div>
 <div class="ttc" id="astructslick_1_1orderbook_1_1TopOfBook_html_aeb372c4d1e04cc29fe4990b3306b2f48"><div class="ttname"><a href="structslick_1_1orderbook_1_1TopOfBook.html#aeb372c4d1e04cc29fe4990b3306b2f48">slick::orderbook::TopOfBook::best_bid</a></div><div class="ttdeci">Price best_bid</div><div class="ttdef"><b>Definition</b> <a href="events_8hpp_source.html#l00144">events.hpp:144</a></div></div>
-</div><!-- fragment --><h1><a class="anchor" id="autotoc_md10"></a>
+</div><!-- fragment --><h1><a class="anchor" id="autotoc_md11"></a>
 📚 Documentation</h1>
 <ul>
 <li><b><a href="examples/">Examples</a></b> - Usage examples</li>
@@ -307,9 +307,9 @@ Observer Pattern - Real-Time Notifications</h2>
 <li><b><a class="el" href="md__2home_2runner_2work_2slick-orderbook_2slick-orderbook_2docs_2PERFORMANCE.html">Performance Guide</a></b> - Performance best practices and profiling</li>
 <li><b><a href="benchmarks/">Benchmarks</a></b> - Performance benchmarking and profiling guides</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md11"></a>
+<h1><a class="anchor" id="autotoc_md12"></a>
 🏗️ Architecture Highlights</h1>
-<h2><a class="anchor" id="autotoc_md12"></a>
+<h2><a class="anchor" id="autotoc_md13"></a>
 Cache-Optimized Data Structures</h2>
 <ul>
 <li><b>FlatMap</b>: Uses <code>std::flat_map</code> (C++23) for cache-friendly sorted price level storage</li>
@@ -317,14 +317,14 @@ Cache-Optimized Data Structures</h2>
 <li><b>Object Pool</b>: Pre-allocated memory eliminates runtime allocations</li>
 <li><b>Cache Alignment</b>: 64-byte alignment prevents false sharing in multi-symbol scenarios</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md13"></a>
+<h2><a class="anchor" id="autotoc_md14"></a>
 Zero-Cost Abstractions</h2>
 <ul>
 <li><b>Template-Based</b>: No virtual dispatch in hot paths</li>
 <li><b>Concepts</b>: C++23 concepts for compile-time type checking</li>
 <li><b>Inline Everything</b>: Aggressive inlining for sub-nanosecond operations</li>
 </ul>
-<h1><a class="anchor" id="autotoc_md14"></a>
+<h1><a class="anchor" id="autotoc_md15"></a>
 🔧 CMake Options</h1>
 <div class="fragment"><div class="line"># Build options</div>
 <div class="line">-DCMAKE_BUILD_TYPE=Release          # Release, Debug, RelWithDebInfo</div>
@@ -337,19 +337,19 @@ Zero-Cost Abstractions</h2>
 <div class="line">-DSLICK_ORDERBOOK_ENABLE_LTO=OFF           # LTO/IPO in Release builds (default: ON)</div>
 <div class="line">-DSLICK_ORDERBOOK_ENABLE_NATIVE_ARCH=OFF   # -march=native in Release builds, GCC/Clang (default: ON)</div>
 </div><!-- fragment --><p>The Coinbase example is opt-in: it fetches <code>coinbase-advanced-cpp</code>, which requires <code>nlohmann-json</code>, OpenSSL, Boost.Beast and jwt-cpp to be installed (e.g. via vcpkg) before configuring.</p>
-<h2><a class="anchor" id="autotoc_md15"></a>
+<h2><a class="anchor" id="autotoc_md16"></a>
 Shared Library</h2>
 <p>With <code>SLICK_ORDERBOOK_BUILD_SHARED=ON</code> the <code>OrderBookL2</code>/<code>OrderBookL3</code> classes and the <code>OrderBookManager&lt;OrderBookL2&gt;</code>/<code>OrderBookManager&lt;OrderBookL3&gt;</code> instantiations are exported (<code>__declspec(dllexport)</code> on Windows, default visibility elsewhere). Linking <code><a class="el" href="namespaceslick_1_1orderbook.html">slick::orderbook</a></code> propagates <code>SLICK_ORDERBOOK_SHARED</code> so consumers import them. On Windows, the DLL must be on <code>PATH</code> or next to the executable at runtime. The library's SOVERSION is <code>MAJOR.MINOR</code>: ABI compatibility is only kept within a minor version.</p>
-<h1><a class="anchor" id="autotoc_md16"></a>
+<h1><a class="anchor" id="autotoc_md17"></a>
 📦 Integration</h1>
-<h2><a class="anchor" id="autotoc_md17"></a>
+<h2><a class="anchor" id="autotoc_md18"></a>
 Installed Package (find_package)</h2>
 <p>After <code>cmake --install</code>, the package config is installed to <code>&lt;prefix&gt;/lib/cmake/slick-orderbook</code> (for both compiled and header-only builds). All of the library's install rules belong to the <code>slick-orderbook</code> component, so <code>cmake --install &lt;build&gt; --component slick-orderbook</code> installs only this library, without anything fetched dependencies install:</p>
 <div class="fragment"><div class="line">find_package(slick-orderbook 1.1 REQUIRED)</div>
 <div class="line">target_link_libraries(your_target PRIVATE slick::orderbook)</div>
 </div><!-- fragment --><p>Version matching follows the ABI policy: a compiled (static or shared) install only satisfies requests for the same <code>MAJOR.MINOR</code> (<code>find_package(slick-orderbook 1.0)</code> does not accept 1.1.x), while a header-only install satisfies any lower or equal version with the same major version.</p>
 <p>Linking <code><a class="el" href="namespaceslick_1_1orderbook.html">slick::orderbook</a></code> also applies the required C++23 mode (<code>cxx_std_23</code>) to <code>your_target</code>.</p>
-<h2><a class="anchor" id="autotoc_md18"></a>
+<h2><a class="anchor" id="autotoc_md19"></a>
 CMake FetchContent</h2>
 <div class="fragment"><div class="line">include(FetchContent)</div>
 <div class="line"> </div>
@@ -362,7 +362,7 @@ CMake FetchContent</h2>
 <div class="line">FetchContent_MakeAvailable(slick-orderbook)</div>
 <div class="line"> </div>
 <div class="line">target_link_libraries(your_target PRIVATE slick::orderbook)</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md19"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md20"></a>
 Header-Only Mode</h2>
 <div class="fragment"><div class="line"># In your CMakeLists.txt</div>
 <div class="line">add_compile_definitions(SLICK_ORDERBOOK_HEADER_ONLY)</div>
@@ -371,7 +371,7 @@ Header-Only Mode</h2>
 </div><!-- fragment --><blockquote class="doxtable">
 <p>&zwj;<code><a class="el" href="version_8hpp.html">include/slick/orderbook/version.hpp</a></code> is generated by CMake at configure time from the <code>project(VERSION ...)</code> in <code>CMakeLists.txt</code>; change the version there, not in the header. </p>
 </blockquote>
-<h1><a class="anchor" id="autotoc_md20"></a>
+<h1><a class="anchor" id="autotoc_md21"></a>
 🧪 Testing</h1>
 <div class="fragment"><div class="line"># Build and run all tests</div>
 <div class="line">cmake -B build -DCMAKE_BUILD_TYPE=Debug -DSLICK_ORDERBOOK_BUILD_TESTS=ON</div>
