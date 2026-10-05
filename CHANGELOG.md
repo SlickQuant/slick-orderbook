@@ -71,6 +71,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - **Release**: Packages are built without LTO and `-march=native` so they run on any machine of the
   target architecture, and contain only the library's install component.
 - **CI**: The `ci-success` gate checks every required job, including coverage and static analysis.
+- **CI**: Upgraded to `codecov/codecov-action@v5`; a failed Codecov upload (e.g. a TLS error reaching
+  Codecov) is reported as a warning instead of failing the coverage job.
 - **CI**: Builds the Coinbase example explicitly now that it is opt-in.
 
 ### Documentation
